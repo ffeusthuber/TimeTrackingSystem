@@ -1,13 +1,17 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
 
+import java.time.ZonedDateTime;
+
 public class TimeEntry {
 
     private final long employeeID;
-    private final TimeEntryType timeEntryType;
+    private final TimeEntryType entryType;
+    private final ZonedDateTime entryDateTime;
 
-    public TimeEntry(long employeeID, TimeEntryType timeEntryType) {
+    public TimeEntry(long employeeID, TimeEntryType entryType, ZonedDateTime entryDateTime) {
         this.employeeID = employeeID;
-        this.timeEntryType = timeEntryType;
+        this.entryType = entryType;
+        this.entryDateTime = entryDateTime;
     }
 
     public long getEmployeeID() {
@@ -15,6 +19,10 @@ public class TimeEntry {
     }
 
     public TimeEntryType getType() {
-        return this.timeEntryType;
+        return this.entryType;
+    }
+
+    public ZonedDateTime getEntryDateTime() {
+        return entryDateTime;
     }
 }

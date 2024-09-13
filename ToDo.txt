@@ -9,10 +9,19 @@
         [X] User can clock pause
         [ ] User can not pause if not clocked in
 
+[ ] TimeEntry
+    [X] entryDateTime gets correctly set when timeEntry is created
+
+[ ] TimeTrackingAdapter
+    [ ] Create POST endpoint for clocking in
+    [ ] Create POST endpoint for clocking out
+    [ ] Create POST endpoint for pausing
+
+
+
 [ ] check if UserId is valid / if user exists
 
 [ ] Check if UserStatus is valid
-
 
 [ ] Check UserStatus
     [ ] User is clocked in
