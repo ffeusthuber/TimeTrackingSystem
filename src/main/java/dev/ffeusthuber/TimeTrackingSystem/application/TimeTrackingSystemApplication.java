@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem;
+package dev.ffeusthuber.TimeTrackingSystem.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

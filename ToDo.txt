@@ -1,0 +1,5 @@
+[ ] TimeTrackingUseCase
+    [ ] User can clock in
+    [ ] User can clock out
+    [ ] User can clock pause
+    [ ] check if ID is valid
