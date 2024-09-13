@@ -1,5 +1,19 @@
 [ ] TimeTrackingUseCase
-    [ ] User can clock in
-    [ ] User can clock out
-    [ ] User can clock pause
-    [ ] check if ID is valid
+    [ ] Clock in
+        [X] User can clock in
+        [ ] User can not clock in if already clocked in
+    [ ] Clock out
+        [X] User can clock out
+        [ ] User can not clock out if not clocked in
+    [ ] Pause
+        [X] User can clock pause
+        [ ] User can not pause if not clocked in
+
+[ ] check if UserId is valid / if user exists
+
+[ ] Check if UserStatus is valid
+
+
+[ ] Check UserStatus
+    [ ] User is clocked in
+    [ ] User is clocked out
