@@ -1,28 +1,38 @@
-[ ] TimeTrackingUseCase
-    [ ] Clock in
-        [X] User can clock in
-        [ ] User can not clock in if already clocked in
-    [ ] Clock out
-        [X] User can clock out
-        [ ] User can not clock out if not clocked in
-    [ ] Pause
-        [X] User can clock pause
-        [ ] User can not pause if not clocked in
+    [ ] TimeTrackingUseCase
+        [ ] Clock in
+            [X] User can clock in
+            [ ] User can not clock in if already clocked in
+        [ ] Clock out
+            [X] User can clock out
+            [ ] User can not clock out if not clocked in
+        [ ] Pause
+            [X] User can clock pause
+            [ ] User can not pause if not clocked in
 
-[ ] TimeEntry
-    [X] entryDateTime gets correctly set when timeEntry is created
+    [ ] TimeEntry
+        [X] entryDateTime gets correctly set when timeEntry is created
 
-[ ] TimeTrackingAdapter
-    [ ] Create POST endpoint for clocking in
-    [ ] Create POST endpoint for clocking out
-    [ ] Create POST endpoint for pausing
+    [ ] TimeEntryRepository
+        [ ] Save timeEntry
+        [ ] Find last timeEntry by EmployeeID
+
+    [ ] EmployeeRepository
+        [ ] Find employee by employeeID
+
+    [ ] EmployeeRepositoryAdapter
+        [ ] Create GET endpoint for finding employee by employeeID
+
+    [ ] TimeTrackingAdapter
+        [ ] Create POST endpoint for clocking in
+        [ ] Create POST endpoint for clocking out
+        [ ] Create POST endpoint for pausing
 
 
 
-[ ] check if UserId is valid / if user exists
+    [ ] check if UserId is valid / if user exists
 
-[ ] Check if UserStatus is valid
+    [ ] Check if UserStatus is valid
 
-[ ] Check UserStatus
-    [ ] User is clocked in
-    [ ] User is clocked out
+    [ ] Check UserStatus
+        [ ] User is clocked in
+        [ ] User is clocked out
