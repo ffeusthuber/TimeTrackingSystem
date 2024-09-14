@@ -1,15 +1,14 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.port.in;
+package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.TimeTrackingService;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
 import org.junit.jupiter.api.Test;
-
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TimeTrackingUseCaseTest {
+public class TimeTrackingServiceTest {
 
     @Test
     void canClockInWithGivenEmployeeID() {
