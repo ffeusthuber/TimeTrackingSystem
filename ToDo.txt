@@ -1,13 +1,13 @@
     [ ] TimeTrackingUsecase
         [ ] Clock in
             [X] User can clock in
-            [ ] User can not clock in if already clocked in
+            [X] User can not clock in if already clocked in
         [ ] Clock out
             [X] User can clock out
-            [ ] User can not clock out if not clocked in
+            [X] User can not clock out if not clocked in
         [ ] Pause
             [X] User can clock pause
-            [ ] User can not pause if not clocked in
+            [X] User can not pause if not clocked in
 
     [ ] TimeEntry
         [X] entryDateTime gets correctly set when timeEntry is created

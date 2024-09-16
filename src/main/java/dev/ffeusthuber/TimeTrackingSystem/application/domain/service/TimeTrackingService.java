@@ -24,8 +24,8 @@ public class TimeTrackingService implements TimeTrackingUseCase {
 
     @Override
     public ClockResponse clockIn(long employeeID) {
-        if (isEmployeeAlreadyClockedIn(employeeID)) {
-            return ClockResponse.error(employeeID, ClockError.ALREADY_CLOCKED_IN);
+        if (isEmployeeClockedIn(employeeID)) {
+            return ClockResponse.error(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
         }
         // save time entry
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN);
@@ -33,11 +33,17 @@ public class TimeTrackingService implements TimeTrackingUseCase {
 
     @Override
     public ClockResponse clockOut(long employeeID) {
+        if (!isEmployeeClockedIn(employeeID)) {
+            return ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+        }
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_OUT);
     }
 
     @Override
     public ClockResponse clockPause(long employeeID) {
+        if(!isEmployeeClockedIn(employeeID)) {
+            return ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+        }
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_PAUSE);
     }
 
@@ -45,7 +51,8 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         return new TimeEntry(employeeID, timeEntryType, ZonedDateTime.now(ZoneOffset.UTC));
     }
 
-    private boolean isEmployeeAlreadyClockedIn(long employeeID) {
+    private boolean isEmployeeClockedIn(long employeeID) {
         return employeeClockStatusService.checkEmployeeClockStatus(employeeID) == TimeEntryType.CLOCK_IN;
     }
+
 }
