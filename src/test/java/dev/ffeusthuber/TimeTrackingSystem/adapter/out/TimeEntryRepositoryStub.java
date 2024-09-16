@@ -24,6 +24,10 @@ public class TimeEntryRepositoryStub implements TimeEntryRepository {
         this.timeEntries = List.of(timeEntry);
     }
 
+    private TimeEntryRepositoryStub(List<TimeEntry> timeEntries) {
+        this.timeEntries = timeEntries;
+    }
+
     @Override
     public TimeEntry getCurrentTimeEntryForEmployee(long employeeID) {
         return timeEntries.stream()
@@ -40,5 +44,9 @@ public class TimeEntryRepositoryStub implements TimeEntryRepository {
         return new TimeEntryRepositoryStub(
                 new TimeEntry(employeeIdOfClockedInEmployee, TimeEntryType.CLOCK_IN, ZonedDateTime.now(ZoneOffset.UTC))
         );
+    }
+
+    public static TimeEntryRepository withEntries(List<TimeEntry> timeEntries) {
+        return new TimeEntryRepositoryStub(timeEntries);
     }
 }
