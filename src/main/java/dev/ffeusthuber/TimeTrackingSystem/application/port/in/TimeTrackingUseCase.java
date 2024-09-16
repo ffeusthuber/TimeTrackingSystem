@@ -1,11 +1,11 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.port.in;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse;
 
 public interface TimeTrackingUseCase {
-    TimeEntry clockIn(long employeeID);
+    ClockResponse clockIn(long employeeID);
 
-    TimeEntry clockOut(long employeeID);
+    ClockResponse clockOut(long employeeID);
 
-    TimeEntry clockPause(long employeeID);
+    ClockResponse clockPause(long employeeID);
 }

@@ -1,5 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockError;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
@@ -19,22 +21,24 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         this.employeeClockStatusService = new EmployeeClockStatusService(timeEntryRepository);
     }
 
+
     @Override
-    public TimeEntry clockIn(long employeeID) {
+    public ClockResponse clockIn(long employeeID) {
         if (isEmployeeAlreadyClockedIn(employeeID)) {
-            return null;
+            return ClockResponse.error(employeeID, ClockError.ALREADY_CLOCKED_IN);
         }
-        return createTimeEntry(employeeID, TimeEntryType.CLOCK_IN);
+        // save time entry
+        return ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN);
     }
 
     @Override
-    public TimeEntry clockOut(long employeeID) {
-        return createTimeEntry(employeeID, TimeEntryType.CLOCK_OUT);
+    public ClockResponse clockOut(long employeeID) {
+        return ClockResponse.success(employeeID, TimeEntryType.CLOCK_OUT);
     }
 
     @Override
-    public TimeEntry clockPause(long employeeID) {
-        return createTimeEntry(employeeID, TimeEntryType.CLOCK_PAUSE);
+    public ClockResponse clockPause(long employeeID) {
+        return ClockResponse.success(employeeID, TimeEntryType.CLOCK_PAUSE);
     }
 
     private TimeEntry createTimeEntry(long employeeID, TimeEntryType timeEntryType) {
