@@ -2,7 +2,7 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
 
 import java.time.ZonedDateTime;
 
-public class TimeEntry {
+public class TimeEntry implements Comparable<TimeEntry>{
 
     private final long employeeID;
     private final TimeEntryType entryType;
@@ -24,5 +24,10 @@ public class TimeEntry {
 
     public ZonedDateTime getEntryDateTime() {
         return entryDateTime;
+    }
+
+    @Override
+    public int compareTo(TimeEntry timeEntry) {
+        return this.entryDateTime.compareTo(timeEntry.getEntryDateTime());
     }
 }

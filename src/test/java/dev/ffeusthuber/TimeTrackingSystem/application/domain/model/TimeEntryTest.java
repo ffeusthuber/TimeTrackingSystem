@@ -19,4 +19,16 @@ public class TimeEntryTest {
 
         assertThat(timeEntry.getEntryDateTime()).isEqualTo(entryDateTime);
     }
+
+    @Test
+    void timeEntryComparisonBasedOnEntryDateTime() {
+        long employeeID = 1L;
+        TimeEntryType entryType = TimeEntryType.CLOCK_IN;
+        ZonedDateTime entryDateTime = ZonedDateTime.now(ZoneOffset.UTC);
+
+        TimeEntry timeEntry1 = new TimeEntry(employeeID, entryType, entryDateTime);
+        TimeEntry timeEntry2 = new TimeEntry(employeeID, entryType, entryDateTime.plusMinutes(1));
+
+        assertThat(timeEntry1).isLessThan(timeEntry2);
+    }
 }
