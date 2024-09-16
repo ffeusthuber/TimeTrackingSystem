@@ -12,10 +12,10 @@
     [ ] TimeEntry
         [X] entryDateTime gets correctly set when timeEntry is created
 
-    [ ] EmployeeClockStatusService
+    [X] EmployeeClockStatusService
         [X] Check last TimeEntry for TimeEntryType
         [X] If no TimeEntry is found, return UserStatus.CLOCKED_OUT
-        [ ] add test for other status
+        [X] add test for other status
 
     [ ] TimeEntryRepository
         [ ] Save timeEntry

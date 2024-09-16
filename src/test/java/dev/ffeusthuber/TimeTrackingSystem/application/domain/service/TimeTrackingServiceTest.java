@@ -5,7 +5,6 @@ import dev.ffeusthuber.TimeTrackingSystem.adapter.out.TimeEntryRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +44,6 @@ public class TimeTrackingServiceTest {
         assertThat(clockPauseEntry.getType()).isEqualTo(TimeEntryType.CLOCK_PAUSE);
     }
 
-    @Disabled
     @Test
     void clockingInWhenAlreadyClockedInReturnsNull() {
         long employeeIDOfClockedInEmployee = 1L;
