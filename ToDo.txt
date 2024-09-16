@@ -1,4 +1,4 @@
-    [ ] TimeTrackingUseCase
+    [ ] TimeTrackingUsecase
         [ ] Clock in
             [X] User can clock in
             [ ] User can not clock in if already clocked in
@@ -12,9 +12,14 @@
     [ ] TimeEntry
         [X] entryDateTime gets correctly set when timeEntry is created
 
+    [ ] EmployeeClockStatusService
+        [X] Check last TimeEntry for TimeEntryType
+        [X] If no TimeEntry is found, return UserStatus.CLOCKED_OUT
+        [ ] add test for other status
+
     [ ] TimeEntryRepository
         [ ] Save timeEntry
-        [ ] Find last timeEntry by EmployeeID
+        [ ] Find last timeEntry by EmployeeID (could use map with id and stack of time entries for this)
 
     [ ] EmployeeRepository
         [ ] Find employee by employeeID

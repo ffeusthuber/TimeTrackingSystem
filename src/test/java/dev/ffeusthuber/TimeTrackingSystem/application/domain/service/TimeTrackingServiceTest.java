@@ -1,9 +1,11 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.out.TimeEntryRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,7 +15,7 @@ public class TimeTrackingServiceTest {
     @Test
     void canClockInWithGivenEmployeeID() {
         long employeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService();
+        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(TimeEntryRepositoryStub.withoutEntries());
 
         TimeEntry clockInEntry = timeTrackingUseCase.clockIn(employeeID);
 
@@ -24,7 +26,7 @@ public class TimeTrackingServiceTest {
     @Test
     void canClockOutWithGivenEmployeeID() {
         long employeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService();
+        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(TimeEntryRepositoryStub.withoutEntries());
 
         TimeEntry clockOutEntry = timeTrackingUseCase.clockOut(employeeID);
 
@@ -35,12 +37,24 @@ public class TimeTrackingServiceTest {
     @Test
     void canClockPauseWithGivenEmployeeID() {
         long employeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService();
+        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(TimeEntryRepositoryStub.withoutEntries());
 
         TimeEntry clockPauseEntry = timeTrackingUseCase.clockPause(employeeID);
 
         assertThat(clockPauseEntry.getEmployeeID()).isEqualTo(employeeID);
         assertThat(clockPauseEntry.getType()).isEqualTo(TimeEntryType.CLOCK_PAUSE);
+    }
+
+    @Disabled
+    @Test
+    void clockingInWhenAlreadyClockedInReturnsNull() {
+        long employeeIDOfClockedInEmployee = 1L;
+        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(TimeEntryRepositoryStub
+                                                                                  .withClockedInEmployee(employeeIDOfClockedInEmployee));
+
+        TimeEntry clockInEntry = timeTrackingUseCase.clockIn(employeeIDOfClockedInEmployee);
+
+        assertThat(clockInEntry).isNull();
     }
 
 }
