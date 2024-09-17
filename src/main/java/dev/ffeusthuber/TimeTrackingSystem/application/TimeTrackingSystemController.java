@@ -8,6 +8,6 @@ public class TimeTrackingSystemController {
 
     @GetMapping("/")
     public String homePage() {
-        return "index.html";
+        return "home";
     }
 }
