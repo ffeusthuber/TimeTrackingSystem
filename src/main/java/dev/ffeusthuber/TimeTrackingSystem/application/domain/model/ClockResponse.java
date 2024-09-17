@@ -1,32 +1,12 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
 
+import java.util.Objects;
+
 public class ClockResponse {
     private final ClockStatus clockStatus;
     private final long employeeId;
     private final TimeEntryType timeEntryType;
     private final ClockError clockError;
-
-    private ClockResponse(ClockStatus clockStatus, long employeeID, TimeEntryType timeEntryType, ClockError clockError) {
-        this.clockStatus = clockStatus;
-        this.employeeId = employeeID;
-        this.timeEntryType = timeEntryType;
-        this.clockError = clockError;
-    }
-    public ClockStatus getStatus() {
-        return this.clockStatus;
-    }
-
-    public long getEmployeeID() {
-        return this.employeeId;
-    }
-
-    public TimeEntryType getType() {
-        return this.timeEntryType;
-    }
-
-    public ClockError getError() {
-        return this.clockError;
-    }
 
     public static ClockResponse success(long employeeID, TimeEntryType timeEntryType) {
         return new ClockResponse(ClockStatus.SUCCESS, employeeID, timeEntryType, null);
@@ -36,4 +16,22 @@ public class ClockResponse {
         return new ClockResponse(ClockStatus.ERROR, employeeID, null, clockError);
     }
 
+    private ClockResponse(ClockStatus clockStatus, long employeeID, TimeEntryType timeEntryType, ClockError clockError) {
+        this.clockStatus = clockStatus;
+        this.employeeId = employeeID;
+        this.timeEntryType = timeEntryType;
+        this.clockError = clockError;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClockResponse that)) return false;
+        return employeeId == that.employeeId && clockStatus == that.clockStatus && timeEntryType == that.timeEntryType && clockError == that.clockError;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clockStatus, employeeId, timeEntryType, clockError);
+    }
 }

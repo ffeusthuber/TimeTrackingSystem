@@ -4,7 +4,6 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.TimeEntryRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockError;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
@@ -21,9 +20,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockIn(employeeID);
 
-        assertThat(clockResponse.getStatus()).isEqualTo(ClockStatus.SUCCESS);
-        assertThat(clockResponse.getEmployeeID()).isEqualTo(employeeID);
-        assertThat(clockResponse.getType()).isEqualTo(TimeEntryType.CLOCK_IN);
+        assertThat(clockResponse).isEqualTo(ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN));
     }
 
     @Test
@@ -33,9 +30,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockOut(clockedInEmployeeID);
 
-        assertThat(clockResponse.getStatus()).isEqualTo(ClockStatus.SUCCESS);
-        assertThat(clockResponse.getEmployeeID()).isEqualTo(clockedInEmployeeID);
-        assertThat(clockResponse.getType()).isEqualTo(TimeEntryType.CLOCK_OUT);
+        assertThat(clockResponse).isEqualTo(ClockResponse.success(clockedInEmployeeID, TimeEntryType.CLOCK_OUT));
     }
 
     @Test
@@ -45,9 +40,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockPause(clockedInEmployeeID);
 
-        assertThat(clockResponse.getStatus()).isEqualTo(ClockStatus.SUCCESS);
-        assertThat(clockResponse.getEmployeeID()).isEqualTo(clockedInEmployeeID);
-        assertThat(clockResponse.getType()).isEqualTo(TimeEntryType.CLOCK_PAUSE);
+        assertThat(clockResponse).isEqualTo(ClockResponse.success(clockedInEmployeeID, TimeEntryType.CLOCK_PAUSE));
     }
 
     @Test
@@ -58,10 +51,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockIn(employeeIDOfClockedInEmployee);
 
-        assertThat(clockResponse.getStatus()).isEqualTo(ClockStatus.ERROR);
-        assertThat(clockResponse.getEmployeeID()).isEqualTo(employeeIDOfClockedInEmployee);
-        assertThat(clockResponse.getType()).isEqualTo(null);
-        assertThat(clockResponse.getError()).isEqualTo(ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
+        assertThat(clockResponse).isEqualTo(ClockResponse.error(employeeIDOfClockedInEmployee, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN));
     }
 
     @Test
@@ -72,10 +62,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockOut(employeeID);
 
-        assertThat(clockResponse.getStatus()).isEqualTo(ClockStatus.ERROR);
-        assertThat(clockResponse.getEmployeeID()).isEqualTo(employeeID);
-        assertThat(clockResponse.getType()).isEqualTo(null);
-        assertThat(clockResponse.getError()).isEqualTo(ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+        assertThat(clockResponse).isEqualTo(ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN));
     }
 
     @Test
@@ -86,10 +73,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockPause(employeeID);
 
-        assertThat(clockResponse.getStatus()).isEqualTo(ClockStatus.ERROR);
-        assertThat(clockResponse.getEmployeeID()).isEqualTo(employeeID);
-        assertThat(clockResponse.getType()).isEqualTo(null);
-        assertThat(clockResponse.getError()).isEqualTo(ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+        assertThat(clockResponse).isEqualTo(ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN));
     }
 
     @Test
@@ -104,9 +88,7 @@ public class TimeTrackingServiceTest {
         timeTrackingUseCase.clockOut(employeeID);
         ClockResponse clockResponse = timeTrackingUseCase.clockIn(employeeID);
 
-        assertThat(clockResponse.getStatus()).isEqualTo(ClockStatus.SUCCESS);
-        assertThat(clockResponse.getEmployeeID()).isEqualTo(employeeID);
-        assertThat(clockResponse.getType()).isEqualTo(TimeEntryType.CLOCK_IN);
+        assertThat(clockResponse).isEqualTo(ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN));
     }
 
 
