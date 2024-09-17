@@ -7,46 +7,56 @@ import org.springframework.stereotype.Repository;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 @Repository
 public class TimeEntryRepositoryStub implements TimeEntryRepository {
 
-    private final List<TimeEntry> timeEntries;
+    private final List<TimeEntry> timeEntries = new ArrayList<>();
 
     private TimeEntryRepositoryStub() {
-        this.timeEntries = emptyList();
     }
 
     private TimeEntryRepositoryStub(TimeEntry timeEntry) {
-        this.timeEntries = List.of(timeEntry);
+        this.timeEntries.add(timeEntry);
     }
 
     private TimeEntryRepositoryStub(List<TimeEntry> timeEntries) {
-        this.timeEntries = timeEntries;
+       this.timeEntries.addAll(timeEntries);
     }
 
     @Override
     public TimeEntry getCurrentTimeEntryForEmployee(long employeeID) {
         return timeEntries.stream()
                 .filter(timeEntry -> timeEntry.getEmployeeID() == employeeID)
-                .findFirst()
+                .max(TimeEntry::compareTo)
                 .orElse(null);
     }
 
-    public static TimeEntryRepository withoutEntries() {
+    @Override
+    public List<TimeEntry> getTimeEntriesForEmployee(long employeeID) {
+        return timeEntries.stream()
+                .filter(timeEntry -> timeEntry.getEmployeeID() == employeeID)
+                .toList();
+    }
+
+    @Override
+    public void save(TimeEntry timeEntry) {
+        timeEntries.add(timeEntry);
+    }
+
+    public static TimeEntryRepositoryStub withoutEntries() {
         return new TimeEntryRepositoryStub();
     }
 
-    public static TimeEntryRepository withClockedInEmployee(long employeeIdOfClockedInEmployee) {
+    public static TimeEntryRepositoryStub withClockedInEmployee(long employeeIdOfClockedInEmployee) {
         return new TimeEntryRepositoryStub(
                 new TimeEntry(employeeIdOfClockedInEmployee, TimeEntryType.CLOCK_IN, ZonedDateTime.now(ZoneOffset.UTC))
         );
     }
 
-    public static TimeEntryRepository withEntries(List<TimeEntry> timeEntries) {
+    public static TimeEntryRepositoryStub withEntries(List<TimeEntry> timeEntries) {
         return new TimeEntryRepositoryStub(timeEntries);
     }
 }

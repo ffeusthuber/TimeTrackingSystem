@@ -7,6 +7,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -89,6 +90,50 @@ public class TimeTrackingServiceTest {
         assertThat(clockResponse.getEmployeeID()).isEqualTo(employeeID);
         assertThat(clockResponse.getType()).isEqualTo(null);
         assertThat(clockResponse.getError()).isEqualTo(ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+    }
+
+    @Test
+    void canClockInAfterClockingOut() throws InterruptedException {
+        long employeeID = 1L;
+        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(TimeEntryRepositoryStub.withoutEntries());
+
+        timeTrackingUseCase.clockIn(employeeID);
+        // wait to ensure that the clock in time is different from the clock out time for comparison
+        Thread.sleep(10);
+
+        timeTrackingUseCase.clockOut(employeeID);
+        ClockResponse clockResponse = timeTrackingUseCase.clockIn(employeeID);
+
+        assertThat(clockResponse.getStatus()).isEqualTo(ClockStatus.SUCCESS);
+        assertThat(clockResponse.getEmployeeID()).isEqualTo(employeeID);
+        assertThat(clockResponse.getType()).isEqualTo(TimeEntryType.CLOCK_IN);
+    }
+
+
+    @Test
+    void successfulClockingSavesTimeEntry() {
+        long employeeID = 1L;
+        TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
+        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(timeEntryRepository);
+
+        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).isEmpty();
+        timeTrackingUseCase.clockIn(employeeID);
+        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).hasSize(1);
+        timeTrackingUseCase.clockOut(employeeID);
+        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).hasSize(2);
+    }
+
+    @Test
+    void unsuccessfulClockingShouldNotSaveTimeEntry() {
+        long employeeID = 1L;
+        TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
+        TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(timeEntryRepository);
+
+        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).isEmpty();
+        timeTrackingUseCase.clockIn(employeeID);
+        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).hasSize(1);
+        timeTrackingUseCase.clockIn(employeeID);
+        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).hasSize(1);
     }
 
 }

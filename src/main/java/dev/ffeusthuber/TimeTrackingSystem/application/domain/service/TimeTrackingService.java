@@ -27,7 +27,8 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         if (isEmployeeClockedIn(employeeID)) {
             return ClockResponse.error(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
         }
-        // save time entry
+        TimeEntry timeEntry = createTimeEntry(employeeID, TimeEntryType.CLOCK_IN);
+        timeEntryRepository.save(timeEntry);
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN);
     }
 
@@ -36,6 +37,8 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         if (!isEmployeeClockedIn(employeeID)) {
             return ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         }
+        TimeEntry timeEntry = createTimeEntry(employeeID, TimeEntryType.CLOCK_OUT);
+        timeEntryRepository.save(timeEntry);
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_OUT);
     }
 
@@ -44,6 +47,8 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         if(!isEmployeeClockedIn(employeeID)) {
             return ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         }
+        TimeEntry timeEntry = createTimeEntry(employeeID, TimeEntryType.CLOCK_PAUSE);
+        timeEntryRepository.save(timeEntry);
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_PAUSE);
     }
 
