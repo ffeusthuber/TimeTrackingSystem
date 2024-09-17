@@ -98,11 +98,11 @@ public class TimeTrackingServiceTest {
         TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
         TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(timeEntryRepository);
 
-        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).isEmpty();
+        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).isEmpty();
         timeTrackingUseCase.clockIn(employeeID);
-        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).hasSize(1);
+        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
         timeTrackingUseCase.clockOut(employeeID);
-        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).hasSize(2);
+        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(2);
     }
 
     @Test
@@ -111,11 +111,11 @@ public class TimeTrackingServiceTest {
         TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
         TimeTrackingUseCase timeTrackingUseCase = new TimeTrackingService(timeEntryRepository);
 
-        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).isEmpty();
+        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).isEmpty();
         timeTrackingUseCase.clockIn(employeeID);
-        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).hasSize(1);
+        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
         timeTrackingUseCase.clockIn(employeeID);
-        assertThat(timeEntryRepository.getTimeEntriesForEmployee(employeeID)).hasSize(1);
+        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
     }
 
 }

@@ -14,7 +14,7 @@ public class EmployeeClockStatusService {
     }
 
     public TimeEntryType checkEmployeeClockStatus(long employeeID) {
-        return Optional.ofNullable(timeEntryRepository.getCurrentTimeEntryForEmployee(employeeID))
+        return Optional.ofNullable(timeEntryRepository.getLastEntryByEmployeeId(employeeID))
                        .map((TimeEntry::getType))
                        .orElse(TimeEntryType.CLOCK_OUT);
     }

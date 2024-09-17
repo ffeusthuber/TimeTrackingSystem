@@ -27,7 +27,7 @@ public class TimeEntryRepositoryStub implements TimeEntryRepository {
     }
 
     @Override
-    public TimeEntry getCurrentTimeEntryForEmployee(long employeeID) {
+    public TimeEntry getLastEntryByEmployeeId(long employeeID) {
         return timeEntries.stream()
                 .filter(timeEntry -> timeEntry.getEmployeeID() == employeeID)
                 .max(TimeEntry::compareTo)
@@ -35,7 +35,7 @@ public class TimeEntryRepositoryStub implements TimeEntryRepository {
     }
 
     @Override
-    public List<TimeEntry> getTimeEntriesForEmployee(long employeeID) {
+    public List<TimeEntry> getTimeEntriesByEmployeeId(long employeeID) {
         return timeEntries.stream()
                 .filter(timeEntry -> timeEntry.getEmployeeID() == employeeID)
                 .toList();

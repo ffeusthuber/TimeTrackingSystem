@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface TimeEntryRepository {
 
-    TimeEntry getCurrentTimeEntryForEmployee(long employeeID);
+    TimeEntry getLastEntryByEmployeeId(long employeeID);
 
-    List<TimeEntry> getTimeEntriesForEmployee(long employeeID);
+    List<TimeEntry> getTimeEntriesByEmployeeId(long employeeID);
 
     void save(TimeEntry timeEntry);
 }
