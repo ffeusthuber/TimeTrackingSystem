@@ -1,4 +1,4 @@
-    [ ] TimeTrackingUsecase
+    [ ] TimeTrackingUseCase
         [ ] Clock in
             [X] User can clock in
             [X] User can not clock in if already clocked in
@@ -9,35 +9,27 @@
             [X] User can clock pause
             [X] User can not pause if not clocked in
 
-    [ ] TimeEntry
-        [X] entryDateTime gets correctly set when timeEntry is created
+    [ ] GetTimeEntriesUseCase
+        [X] Get all TimeEntries for Employee
+        [ ] Get all TimeEntries for Employee between two dates
+
+    [ ] TimeTrackingSystemController
+        [ ] Create GET endpoint for finding all TimeEntries for Employee
+        [ ] Create GET endpoint for finding all TimeEntries for Employee between two dates
+
+        [ ] Create POST endpoint for clocking in
+        [ ] Create POST endpoint for clocking out
+        [ ] Create POST endpoint for pausing
 
     [X] EmployeeClockStatusService
         [X] Check last TimeEntry for TimeEntryType
         [X] If no TimeEntry is found, return UserStatus.CLOCKED_OUT
         [X] add test for other status
 
-    [ ] TimeEntryRepository
+    [ ] TimeEntryRepositoryAdapter
         [ ] Save timeEntry
-        [ ] Find last timeEntry by EmployeeID (could use map with id and stack of time entries for this)
+        [ ] Find last timeEntry by EmployeeID
 
     [ ] EmployeeRepository
         [ ] Find employee by employeeID
 
-    [ ] EmployeeRepositoryAdapter
-        [ ] Create GET endpoint for finding employee by employeeID
-
-    [ ] TimeTrackingAdapter
-        [ ] Create POST endpoint for clocking in
-        [ ] Create POST endpoint for clocking out
-        [ ] Create POST endpoint for pausing
-
-
-
-    [ ] check if UserId is valid / if user exists
-
-    [ ] Check if UserStatus is valid
-
-    [ ] Check UserStatus
-        [ ] User is clocked in
-        [ ] User is clocked out
