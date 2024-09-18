@@ -21,6 +21,8 @@
         [ ] Create POST endpoint for clocking out
         [ ] Create POST endpoint for pausing
 
+        [ ] redirect to login page when no id is in model
+
     [X] EmployeeClockStatusService
         [X] Check last TimeEntry for TimeEntryType
         [X] If no TimeEntry is found, return UserStatus.CLOCKED_OUT
