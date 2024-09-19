@@ -16,13 +16,13 @@ public class TimeTrackingSystemController {
         this.getTimeEntriesService = getTimeEntriesService;
     }
 
-    @GetMapping("/")
-    public String home() {
+    @GetMapping({"/","/home"})
+    public String home(Model model) {
         return "home";
     }
 
     @GetMapping("/timeEntries")
-    public String timeEntries(Model model) {
+    public String displayTimeEntriesForEmployee(Model model) {
         long employeeID = (long) model.getAttribute("employeeID");
         model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
         return "timeEntries";

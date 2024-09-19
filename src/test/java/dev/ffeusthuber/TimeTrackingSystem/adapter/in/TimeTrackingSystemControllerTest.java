@@ -38,7 +38,7 @@ public class TimeTrackingSystemControllerTest {
         Model model = new ExtendedModelMap();
         model.addAttribute("employeeID", employeeID);
 
-        timeTrackingSystemController.timeEntries(model);
+        timeTrackingSystemController.displayTimeEntriesForEmployee(model);
 
         assertThat(model.getAttribute("timeEntries")).isEqualTo(timeEntries);
     }

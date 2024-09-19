@@ -1,3 +1,13 @@
+In Work:
+
+    [ ] UserRepository
+        [ ] getEmployeeIDByUsername
+
+
+
+----------------------------------------------------------------------------------
+
+TO DO:
     [ ] TimeTrackingUseCase
         [ ] Clock in
             [X] User can clock in
@@ -31,7 +41,3 @@
     [ ] TimeEntryRepositoryAdapter
         [ ] Save timeEntry
         [ ] Find last timeEntry by EmployeeID
-
-    [ ] EmployeeRepository
-        [ ] Find employee by employeeID
-
