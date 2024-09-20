@@ -1,5 +1,5 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
 
-public enum ClockStatus {
-    ERROR, SUCCESS
+public enum ClockState {
+    CLOCKED_IN, CLOCKED_OUT, ON_PAUSE
 }

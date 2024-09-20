@@ -1,9 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockError;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.*;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
 import org.springframework.stereotype.Service;
@@ -14,11 +11,11 @@ import java.time.ZonedDateTime;
 @Service
 public class TimeTrackingService implements TimeTrackingUseCase {
     private final TimeEntryRepository timeEntryRepository;
-    private final EmployeeClockStatusService employeeClockStatusService;
+    private final EmployeeService employeeService;
 
-    public TimeTrackingService(TimeEntryRepository timeEntryRepository) {
+    public TimeTrackingService(TimeEntryRepository timeEntryRepository, EmployeeService employeeService) {
         this.timeEntryRepository = timeEntryRepository;
-        this.employeeClockStatusService = new EmployeeClockStatusService(timeEntryRepository);
+        this.employeeService = employeeService;
     }
 
 
@@ -29,6 +26,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         }
         TimeEntry timeEntry = createTimeEntry(employeeID, TimeEntryType.CLOCK_IN);
         timeEntryRepository.save(timeEntry);
+        employeeService.setClockStateForEmployee(employeeID, ClockState.CLOCKED_IN);
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN);
     }
 
@@ -39,6 +37,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         }
         TimeEntry timeEntry = createTimeEntry(employeeID, TimeEntryType.CLOCK_OUT);
         timeEntryRepository.save(timeEntry);
+        employeeService.setClockStateForEmployee(employeeID, ClockState.CLOCKED_OUT);
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_OUT);
     }
 
@@ -49,6 +48,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         }
         TimeEntry timeEntry = createTimeEntry(employeeID, TimeEntryType.CLOCK_PAUSE);
         timeEntryRepository.save(timeEntry);
+        employeeService.setClockStateForEmployee(employeeID, ClockState.CLOCKED_OUT);
         return ClockResponse.success(employeeID, TimeEntryType.CLOCK_PAUSE);
     }
 
@@ -57,7 +57,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
     }
 
     private boolean isEmployeeClockedIn(long employeeID) {
-        return employeeClockStatusService.checkEmployeeClockStatus(employeeID) == TimeEntryType.CLOCK_IN;
+        return employeeService.getClockStateForEmployee(employeeID) == ClockState.CLOCKED_IN;
     }
 
 }
