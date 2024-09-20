@@ -48,6 +48,13 @@ This project is a web application built with Spring. The main goal of the projec
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Features
+- Authentication
+- Role Based Authorization
+- ...
+- 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Built With
 - **Java**: The core programming language.
 - **Spring Boot**: ...
