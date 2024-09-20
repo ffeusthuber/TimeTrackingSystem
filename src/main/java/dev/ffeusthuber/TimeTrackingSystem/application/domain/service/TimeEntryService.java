@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GetTimeEntriesService implements GetTimeEntriesUseCase {
+public class TimeEntryService implements GetTimeEntriesUseCase {
     private final TimeEntryRepository timeEntryRepository;
 
-    public GetTimeEntriesService(TimeEntryRepository timeEntryRepository) {
+    public TimeEntryService(TimeEntryRepository timeEntryRepository) {
         this.timeEntryRepository = timeEntryRepository;
     }
 
