@@ -1,10 +1,13 @@
 In Work:
 
-    [ ] UserRepository
+    [ ] Admin can save new employee
 
-    [X] EmployeeService
-        [X] setClockStatus
-        [X] getClockStatus
+    [ ] Setup role based access control
+
+    [ ] User/Admin can change password
+        [ ] default password when creating employee
+        [ ] User can change password
+            [ ] NEXT STEP: User has to change password from default
 
 ----------------------------------------------------------------------------------
 

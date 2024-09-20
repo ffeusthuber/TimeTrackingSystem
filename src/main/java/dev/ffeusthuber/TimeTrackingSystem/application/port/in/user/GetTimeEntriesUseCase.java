@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.port.in;
+package dev.ffeusthuber.TimeTrackingSystem.application.port.in.user;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
 

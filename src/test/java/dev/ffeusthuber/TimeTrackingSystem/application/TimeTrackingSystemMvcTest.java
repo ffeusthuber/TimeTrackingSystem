@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.application;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.GetTimeEntriesUseCase;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

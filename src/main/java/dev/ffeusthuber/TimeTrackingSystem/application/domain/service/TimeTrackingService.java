@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.*;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
 import org.springframework.stereotype.Service;
 
