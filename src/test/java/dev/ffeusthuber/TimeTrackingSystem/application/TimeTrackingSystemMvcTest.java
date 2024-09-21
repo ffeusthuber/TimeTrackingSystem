@@ -55,4 +55,19 @@ public class TimeTrackingSystemMvcTest {
                .andExpect(status().isOk())
                .andExpect(view().name("timeEntries"));
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void whenGetToCreateEmployeeAsAdminReturnCreateEmployeeView() throws Exception {
+        mockMvc.perform(get("/createEmployee"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("createEmployee"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void whenGetToCreateEmployeeAsUserStatusForbidden() throws Exception {
+        mockMvc.perform(get("/createEmployee"))
+               .andExpect(status().isForbidden());
+    }
 }

@@ -27,4 +27,9 @@ public class TimeTrackingSystemController {
         model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
         return "timeEntries";
     }
+
+    @GetMapping("/createEmployee")
+    public String createEmployee() {
+        return "createEmployee";
+    }
 }

@@ -23,7 +23,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorizeRequests -> {
                     authorizeRequests.requestMatchers("/").permitAll();
                     authorizeRequests.requestMatchers("/home").permitAll();
-                    //ToDo: add role-based access control
+                    authorizeRequests.requestMatchers("/createEmployee").hasRole("ADMIN");
                     authorizeRequests.anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
