@@ -1,10 +1,10 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.TimeEntryRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.*;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
 import org.junit.jupiter.api.Test;
 

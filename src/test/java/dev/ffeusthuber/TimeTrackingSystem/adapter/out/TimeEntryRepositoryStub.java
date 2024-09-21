@@ -3,14 +3,12 @@ package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
-import org.springframework.stereotype.Repository;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 public class TimeEntryRepositoryStub implements TimeEntryRepository {
 
     private final List<TimeEntry> timeEntries = new ArrayList<>();
