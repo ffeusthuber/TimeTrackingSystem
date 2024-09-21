@@ -5,11 +5,23 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepositor
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @Primary
 public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public Employee getEmployeeById(long employeeID) {
         return null;
+    }
+
+    @Override
+    public void save(Employee employee) {
+
+    }
+
+    @Override
+    public List<Employee> getEmployees() {
+        return List.of();
     }
 }

@@ -2,6 +2,7 @@ package dev.ffeusthuber.TimeTrackingSystem.application.port.out;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeRepositoryStub implements EmployeeRepository {
@@ -16,7 +17,7 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     public static EmployeeRepository withoutEmployees() {
-        return new EmployeeRepositoryStub(List.of());
+        return new EmployeeRepositoryStub(new ArrayList<>());
     }
 
     public static EmployeeRepository withEmployee(Employee employee) {
@@ -28,5 +29,15 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
         return employees.stream().filter((employee -> employee.getEmployeeID().equals(employeeID)))
                  .findFirst()
                  .orElseThrow();
+    }
+
+    @Override
+    public void save(Employee employee) {
+        employees.add(employee);
+    }
+
+    @Override
+    public List<Employee> getEmployees() {
+        return employees;
     }
 }
