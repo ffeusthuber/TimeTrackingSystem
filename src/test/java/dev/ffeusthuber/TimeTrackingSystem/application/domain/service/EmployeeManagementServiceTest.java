@@ -2,7 +2,6 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ public class EmployeeManagementServiceTest {
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService);
 
-        Employee employee = employeeManagementService.createEmployee(1L,"Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER);
+        Employee employee = employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
 
         assertThat(employeeRepository.getEmployees()).isEqualTo(List.of(employee));
     }

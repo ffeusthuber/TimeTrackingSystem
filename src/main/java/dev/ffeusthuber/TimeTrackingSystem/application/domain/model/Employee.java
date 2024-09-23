@@ -1,9 +1,10 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
 
 public class Employee {
-    private final Long employeeID;
-    private String firstname;
-    private String lastname;
+
+    private Long employeeID;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private EmployeeRole role;
@@ -19,10 +20,10 @@ public class Employee {
         this.clockState = clockState;
     }
 
-    public Employee(Long employeeID, String firstname, String lastname, String email, String password, EmployeeRole role) {
+    public Employee(Long employeeID, String firstName, String lastName, String email, String password, EmployeeRole role) {
         this.employeeID = employeeID;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.role = role;

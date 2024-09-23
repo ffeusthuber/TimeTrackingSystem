@@ -1,5 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.application;
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.in.EmployeeController;
+import dev.ffeusthuber.TimeTrackingSystem.adapter.in.TimeTrackingSystemController;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
@@ -12,10 +15,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(TimeTrackingSystemController.class)
+@WebMvcTest({TimeTrackingSystemController.class, EmployeeController.class})
 @Import(SecurityConfiguration.class)
 @Tag("io")
 public class TimeTrackingSystemMvcTest {
@@ -25,6 +30,10 @@ public class TimeTrackingSystemMvcTest {
 
     @MockBean
     GetTimeEntriesUseCase getTimeEntriesService;
+
+    @MockBean
+    EmployeeService employeeService;
+
 
     @Autowired
     MockMvc mockMvc;
@@ -43,14 +52,14 @@ public class TimeTrackingSystemMvcTest {
 
     @Test
     void whenGetToTimeEntriesWithOutLoggedInUserRedirectToLogin() throws Exception {
-        mockMvc.perform(get("/timeEntries"))
+        mockMvc.perform(get("/time-entries"))
                .andExpect(redirectedUrlPattern("**/login"));
     }
 
     @Test
     @WithMockUser
     void whenGetTimeEntriesWithEmployeeIDInModelReturnTimeEntriesView() throws Exception {
-        mockMvc.perform(get("/timeEntries")
+        mockMvc.perform(get("/time-entries")
                                 .flashAttr("employeeID", 1L))
                .andExpect(status().isOk())
                .andExpect(view().name("timeEntries"));
@@ -59,7 +68,7 @@ public class TimeTrackingSystemMvcTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void whenGetToCreateEmployeeAsAdminReturnCreateEmployeeView() throws Exception {
-        mockMvc.perform(get("/createEmployee"))
+        mockMvc.perform(get("/create-employee"))
                .andExpect(status().isOk())
                .andExpect(view().name("createEmployee"));
     }
@@ -67,7 +76,21 @@ public class TimeTrackingSystemMvcTest {
     @Test
     @WithMockUser(roles = "USER")
     void whenGetToCreateEmployeeAsUserStatusForbidden() throws Exception {
-        mockMvc.perform(get("/createEmployee"))
+        mockMvc.perform(get("/create-employee"))
                .andExpect(status().isForbidden());
+    }
+
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void successfulPostToCreateEmployeeLeadsToSuccessPage() throws Exception {
+        mockMvc.perform(post("/create-employee")
+                                .with(csrf())
+                                .param("firstName", "Jane")
+                                .param("lastName", "Doe")
+                                .param("email", "j.doe@test-mail.com")
+                                .param("password", "password")
+                                .param("role", "USER"))
+               .andExpect(redirectedUrl("/createEmployee?success"));
     }
 }

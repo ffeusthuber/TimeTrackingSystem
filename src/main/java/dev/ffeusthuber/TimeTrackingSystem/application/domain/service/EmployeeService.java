@@ -40,8 +40,9 @@ public class EmployeeService {
         }
     }
 
-    public Employee createEmployee(Long employeeID, String firstname, String lastname, String email, String password, EmployeeRole role) {
-        Employee employee = new Employee(employeeID, firstname, lastname, email, password, role);
+    public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
+        EmployeeRole employeeRole = EmployeeRole.valueOf(role);
+        Employee employee = new Employee(null, firstname, lastname, email, password, employeeRole);
         employeeRepository.save(employee);
         return employee;
     }

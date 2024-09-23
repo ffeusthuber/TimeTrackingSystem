@@ -1,6 +1,8 @@
 In Work:
 
     [ ] Admin can save new employee
+        [ ] Implement EmployeeRepositoryAdapter
+        [ ] Add POST endpoint to save new employee from form
 
     [ ] Setup role based access control
 

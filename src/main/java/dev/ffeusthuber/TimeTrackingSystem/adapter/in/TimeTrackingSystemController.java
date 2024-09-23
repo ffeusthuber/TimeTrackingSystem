@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application;
+package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,11 @@ public class TimeTrackingSystemController {
         return "home";
     }
 
-    @GetMapping("/timeEntries")
+    @GetMapping("/time-entries")
     public String displayTimeEntriesForEmployee(Model model) {
         long employeeID = (long) model.getAttribute("employeeID");
         model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
         return "timeEntries";
     }
 
-    @GetMapping("/createEmployee")
-    public String createEmployee() {
-        return "createEmployee";
-    }
 }

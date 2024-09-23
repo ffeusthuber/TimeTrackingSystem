@@ -1,6 +1,5 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.TimeTrackingSystemController;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.GetTimeEntriesServiceStub;

@@ -1,7 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 
 public class EmployeeManagementService implements EmployeeManagementUseCase {
@@ -12,8 +11,7 @@ public class EmployeeManagementService implements EmployeeManagementUseCase {
     }
 
     @Override
-    public Employee createEmployee(Long employeeID, String firstname, String lastname, String email, String password, EmployeeRole role) {
-        Employee employee = employeeService.createEmployee(employeeID, firstname, lastname, email, password, role);
-        return employee;
+    public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
+        return employeeService.createEmployee(firstname, lastname, email, password, role);
     }
 }
