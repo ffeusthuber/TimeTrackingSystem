@@ -2,18 +2,13 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
 
 public class Employee {
 
-    private Long employeeID;
+    private final Long employeeID;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private EmployeeRole role;
     private ClockState clockState;
-
-    public Employee(Long employeeID) {
-        this.employeeID = employeeID;
-        this.clockState = ClockState.CLOCKED_OUT;
-    }
 
     public Employee(Long employeeID, ClockState clockState) {
         this.employeeID = employeeID;
@@ -49,5 +44,21 @@ public class Employee {
 
     public void clockPause() {
         this.clockState = ClockState.ON_PAUSE;
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public EmployeeRole getRole() {
+        return this.role;
     }
 }

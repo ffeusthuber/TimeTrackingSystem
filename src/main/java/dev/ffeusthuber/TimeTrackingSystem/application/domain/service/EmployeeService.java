@@ -4,6 +4,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockState;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,8 +43,13 @@ public class EmployeeService {
 
     public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
         EmployeeRole employeeRole = EmployeeRole.valueOf(role);
-        Employee employee = new Employee(null, firstname, lastname, email, password, employeeRole);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String encryptedPassword = bCryptPasswordEncoder.encode(password);
+        Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole);
+
         employeeRepository.save(employee);
-        return employee;
+        Long employeeId = employeeRepository.getEmployeeIdByEmail(email);
+
+        return new Employee(employeeId, firstname, lastname, email, encryptedPassword, employeeRole);
     }
 }

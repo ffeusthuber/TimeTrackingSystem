@@ -5,7 +5,9 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockState;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,5 +41,32 @@ public class EmployeeServiceTest {
         employeeService.setClockStateForEmployee(employeeId, ClockState.CLOCKED_IN);
 
         assertThat(employee.getClockState()).isEqualTo(ClockState.CLOCKED_IN);
+    }
+
+    @Test
+    void createdEmployeeGetsAssignedId() {
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withoutEmployees();
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+
+        Employee createdEmployee = employeeService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
+
+        assertThat(createdEmployee.getEmployeeID()).isNotNull();
+    }
+
+    @Test
+    void createdEmployeePasswordIsEncrypted() throws NoSuchFieldException, IllegalAccessException {
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withoutEmployees();
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+
+        String rawPassword = "password";
+        Employee createdEmployee = employeeService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", rawPassword, "USER");
+
+        // Use reflection to access the private password field to avoid password exposure
+        Field passwordField = Employee.class.getDeclaredField("password");
+        passwordField.setAccessible(true);
+        String encryptedPassword = (String) passwordField.get(createdEmployee);
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        assertThat(passwordEncoder.matches(rawPassword, encryptedPassword)).isTrue();
     }
 }

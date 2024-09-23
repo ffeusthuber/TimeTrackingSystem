@@ -10,7 +10,7 @@ public class EmployeeTest {
     void newEmployeeGetsAssignedClockedOutState() {
         Long employeeID = 1L;
 
-        Employee employee = new Employee(employeeID);
+        Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER);
 
         assertThat(employee.getClockState()).isEqualTo(ClockState.CLOCKED_OUT);
     }
