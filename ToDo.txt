@@ -1,19 +1,25 @@
 In Work:
 
-    [ ] Admin can save new employee
-        [ ] Implement EmployeeRepositoryAdapter
-        [ ] Add POST endpoint to save new employee from form
+[ ] setup links from homepage
+    [ ] hide links based on role
 
-    [ ] Setup role based access control
+----------------------------------------------------------------------------------
+
+[ ] Admin can save new employee
+        [X] Implement EmployeeRepositoryAdapter
+        [X] Add POST endpoint to save new employee from form
+        [ ] Save multiple employees at once (from CSV)
+
+    [X] Setup role based access control
+        [ ] Display message cant access endpoint
+            [ ] redirect to homepage
 
     [ ] User/Admin can change own password
         [ ] default password when creating employee
         [ ] User can change password
             [ ] NEXT STEP: User has to change password from default
 
-----------------------------------------------------------------------------------
 
-TO DO:
     [ ] TimeTrackingUseCase
         [ ] Clock in
             [X] User can clock in

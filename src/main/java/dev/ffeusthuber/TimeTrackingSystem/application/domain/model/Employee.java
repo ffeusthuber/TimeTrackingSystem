@@ -1,5 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
 
+import java.util.Objects;
+
 public class Employee {
 
     private final Long employeeID;
@@ -73,5 +75,17 @@ public class Employee {
 
     public EmployeeRole getRole() {
         return this.role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Employee employee)) return false;
+        return Objects.equals(employeeID, employee.employeeID) && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(email, employee.email) && Objects.equals(password, employee.password) && role == employee.role && clockState == employee.clockState;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employeeID, firstName, lastName, email, password, role, clockState);
     }
 }

@@ -8,8 +8,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Repository
@@ -23,11 +24,6 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public Employee getEmployeeById(long employeeID) {
-        return null;
-    }
-
-    @Override
     public void save(Employee employee) {
         String sql = "INSERT INTO Employee (first_name, last_name, email, password, role, clock_state) VALUES (?, ?, ?, ?, ?,?)";
         jdbcTemplate.update(sql, employee.getFirstName(), employee.getLastName(), employee.getEmail(), employee.getPassword(), employee.getRole().name(), employee.getClockState().name());
@@ -36,21 +32,30 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     @Override
     public List<Employee> getEmployees() {
         String sql = "SELECT * FROM Employee";
-        return jdbcTemplate.queryForList(sql).stream()
-                           .map(row -> new Employee(
-                                   ((Number) row.get("employee_id")).longValue(),
-                                   (String) row.get("first_name"),
-                                   (String) row.get("last_name"),
-                                   (String) row.get("email"),
-                                   (String) row.get("password"),
-                                   EmployeeRole.valueOf((String) row.get("role")),
-                                   ClockState.valueOf((String) row.get("clock_state"))
-                           ))
-                           .collect(Collectors.toList());
+        return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToEmployee(rs));
     }
 
     @Override
     public Long getEmployeeIdByEmail(String email) {
-        return 0L;
+        String sql = "SELECT employee_id FROM Employee WHERE email = ?";
+        return jdbcTemplate.queryForObject(sql, Long.class, email);
+    }
+
+    @Override
+    public Employee getEmployeeById(long employeeID) {
+        String sql = "SELECT * FROM Employee WHERE employee_id = ?";
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), employeeID);
+    }
+
+    private Employee mapRowToEmployee(ResultSet rs) throws SQLException {
+        return new Employee(
+                rs.getLong("employee_id"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("email"),
+                rs.getString("password"),
+                EmployeeRole.valueOf(rs.getString("role")),
+                ClockState.valueOf(rs.getString("clock_state"))
+        );
     }
 }

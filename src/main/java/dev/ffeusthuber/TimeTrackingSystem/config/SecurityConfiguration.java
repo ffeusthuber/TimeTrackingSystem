@@ -39,7 +39,7 @@ public class SecurityConfiguration {
         UserDetails user = User.builder()
                 .username("test-user")
                 .password("$2a$12$tOPP9KYxMf9JVE7DcP.roO1HTy6uJ54LirxAe4vhwinqXL7IbMOxO")
-                .roles("USER")
+                .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user);
     }

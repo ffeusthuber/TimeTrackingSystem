@@ -1,7 +1,10 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +25,43 @@ public class JdbcEmployeeRepositoryTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    private EmployeeService employeeService;
+
+    @BeforeEach
+    void setUp() {
+        employeeService = new EmployeeService(employeeRepository);
+    }
+
+    @AfterEach
+    void clearDatabase() {
+        jdbcTemplate.execute("DELETE FROM Employee");
+    }
+
     @Test
     void employeeCanBeSaved() {
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
-
         employeeService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
 
-        assertThat(employeeRepository.getEmployees().size()).isEqualTo(1);
+        assertThat(employeeRepository.getEmployees()).hasSize(1);
+    }
+
+    @Test
+    void canGetEmployeeIdFromEmail(){
+        String email = "j.doe@test-mail.com";
+        employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
+
+        Long employeeId = employeeRepository.getEmployeeIdByEmail(email);
+
+        assertThat(employeeId).isNotNull();
+    }
+
+    @Test
+    void canGetEmployeeById(){
+        String email = "j.doe@test-mail.com";
+        Employee expectedEmployee = employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
+        Long employeeId = employeeRepository.getEmployeeIdByEmail(email);
+
+        Employee actualEmployee = employeeRepository.getEmployeeById(employeeId);
+
+        assertThat(actualEmployee).isEqualTo(expectedEmployee);
     }
 }
