@@ -25,6 +25,15 @@ public class Employee {
         this.clockState = ClockState.CLOCKED_OUT;
     }
 
+    public Employee(Long employeeID, String firstName, String lastName, String email, String password, EmployeeRole role, ClockState clockState) {
+        this.employeeID = employeeID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.clockState = clockState;
+    }
 
     public Long getEmployeeID() {
         return this.employeeID;
@@ -56,6 +65,10 @@ public class Employee {
 
     public String getEmail() {
         return this.email;
+    }
+
+    public String getPassword() {
+        return this.password;
     }
 
     public EmployeeRole getRole() {

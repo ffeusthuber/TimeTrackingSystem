@@ -7,7 +7,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepositor
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,17 +53,14 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void createdEmployeePasswordIsEncrypted() throws NoSuchFieldException, IllegalAccessException {
+    void createdEmployeePasswordIsEncrypted() {
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withoutEmployees();
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 
         String rawPassword = "password";
         Employee createdEmployee = employeeService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", rawPassword, "USER");
 
-        // Use reflection to access the private password field to avoid password exposure
-        Field passwordField = Employee.class.getDeclaredField("password");
-        passwordField.setAccessible(true);
-        String encryptedPassword = (String) passwordField.get(createdEmployee);
+        String encryptedPassword = createdEmployee.getPassword();
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         assertThat(passwordEncoder.matches(rawPassword, encryptedPassword)).isTrue();
