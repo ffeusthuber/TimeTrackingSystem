@@ -1,14 +1,19 @@
 In Work:
 
-[ ] setup links from homepage
-    [ ] hide links based on role
+
+
 
 ----------------------------------------------------------------------------------
+[X] setup links from homepage
+    [ ] hide links based on role
+
 
 [ ] Admin can save new employee
         [X] Implement EmployeeRepositoryAdapter
         [X] Add POST endpoint to save new employee from form
         [ ] Save multiple employees at once (from CSV)
+        [ ] implement success page
+        [ ] implement failure page
 
     [X] Setup role based access control
         [ ] Display message cant access endpoint

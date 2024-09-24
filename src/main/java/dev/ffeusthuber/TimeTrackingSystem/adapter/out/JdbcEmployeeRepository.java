@@ -5,6 +5,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.springframework.context.annotation.Primary;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -37,14 +38,33 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
 
     @Override
     public Long getEmployeeIdByEmail(String email) {
-        String sql = "SELECT employee_id FROM Employee WHERE email = ?";
-        return jdbcTemplate.queryForObject(sql, Long.class, email);
+        try {
+            String sql = "SELECT employee_id FROM Employee WHERE email = ?";
+            return jdbcTemplate.queryForObject(sql, Long.class, email);
+        } catch (EmptyResultDataAccessException e ){
+            return null;
+        }
+
+    }
+
+    @Override
+    public Employee getEmployeeByEmail(String email) {
+        try {
+            String sql = "SELECT * FROM Employee WHERE email = ?";
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), email);
+        } catch (EmptyResultDataAccessException e ){
+            return null;
+        }
     }
 
     @Override
     public Employee getEmployeeById(long employeeID) {
-        String sql = "SELECT * FROM Employee WHERE employee_id = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), employeeID);
+        try {
+            String sql = "SELECT * FROM Employee WHERE employee_id = ?";
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), employeeID);
+        } catch (EmptyResultDataAccessException e ){
+            return null;
+        }
     }
 
     private Employee mapRowToEmployee(ResultSet rs) throws SQLException {

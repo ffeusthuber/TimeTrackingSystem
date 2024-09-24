@@ -44,9 +44,24 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
 
     @Override
     public Long getEmployeeIdByEmail(String email) {
-        return employees.stream().filter((employee -> employee.getEmail().equals(email)))
+        return employees.stream().filter(employee -> employee.getEmail().equals(email))
                  .findFirst()
                  .map(Employee::getEmployeeID)
                  .orElse(1L);
+    }
+
+    @Override
+    public Employee getEmployeeByEmail(String email) {
+        return employees.stream().filter(employee -> employee.getEmail().equals(email))
+                .findFirst()
+                .map(employee -> new Employee(
+                        employee.getEmployeeID(),
+                        employee.getFirstName(),
+                        employee.getLastName(),
+                        employee.getEmail(),
+                        employee.getPassword(),
+                        employee.getRole(),
+                        employee.getClockState()))
+                .orElse(null);
     }
 }

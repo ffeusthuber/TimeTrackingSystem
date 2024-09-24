@@ -13,4 +13,6 @@ public interface EmployeeRepository {
     Employee getEmployeeById(long employeeID);
 
     Long getEmployeeIdByEmail(String email);
+
+    Employee getEmployeeByEmail(String email);
 }

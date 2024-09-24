@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -52,6 +54,32 @@ public class JdbcEmployeeRepositoryTest {
         Long employeeId = employeeRepository.getEmployeeIdByEmail(email);
 
         assertThat(employeeId).isNotNull();
+    }
+
+    @Test
+    void canGetEmployeeFromEmail(){
+        String email = "j.doe@test-mail.com";
+        employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
+
+        Employee employee = employeeRepository.getEmployeeByEmail(email);
+
+        assertThat(employee).isNotNull();
+    }
+
+    @Test
+    void emptySearchResultsGetHandledCorrectly(){
+        String notExistingEmail = "not existing email";
+        long notExistingEmployeeId = -1L;
+
+        Employee employee1 = employeeRepository.getEmployeeByEmail(notExistingEmail);
+        Employee employee2 = employeeRepository.getEmployeeById(notExistingEmployeeId);
+        List<Employee> employees = employeeRepository.getEmployees();
+        Long employeeId = employeeRepository.getEmployeeIdByEmail(notExistingEmail);
+
+        assertThat(employee1).isNull();
+        assertThat(employee2).isNull();
+        assertThat(employees).isEmpty();
+        assertThat(employeeId).isNull();
     }
 
     @Test
