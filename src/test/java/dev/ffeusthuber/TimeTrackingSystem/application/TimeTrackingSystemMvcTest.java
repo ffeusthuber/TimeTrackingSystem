@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -83,7 +85,7 @@ public class TimeTrackingSystemMvcTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void successfulPostToCreateEmployeeLeadsToSuccessPage() throws Exception {
+    void successfulPostToCreateEmployeeLeadsToSuccess() throws Exception {
         mockMvc.perform(post("/create-employee")
                                 .with(csrf())
                                 .param("firstName", "Jane")
@@ -91,6 +93,29 @@ public class TimeTrackingSystemMvcTest {
                                 .param("email", "j.doe@test-mail.com")
                                 .param("password", "password")
                                 .param("role", "USER"))
-               .andExpect(redirectedUrl("/createEmployee?success"));
+               .andExpect(redirectedUrl("/create-employee?success"))
+               .andExpect(flash().attribute("alertClass", "alert-success"));
+
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void postToCreateEmployeeWithDuplicateEmailRedirectsToError() throws Exception {
+        String duplicateEmail = "duplicateEmail@test-mail.com";
+        doThrow(new DuplicateKeyException("Duplicate email"))
+                .when(employeeService)
+                .createEmployee("Jane", "Doe", duplicateEmail, "password", "USER");
+
+        mockMvc.perform(post("/create-employee")
+                                .with(csrf())
+                                .param("firstName", "Jane")
+                                .param("lastName", "Doe")
+                                .param("email", duplicateEmail)
+                                .param("password", "password")
+                                .param("role", "USER"))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/create-employee?error"))
+               .andExpect(flash().attribute("alertClass", "alert-danger"));
+    }
+
 }

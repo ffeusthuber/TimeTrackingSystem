@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -91,5 +93,15 @@ public class JdbcEmployeeRepositoryTest {
         Employee actualEmployee = employeeRepository.getEmployeeById(employeeId);
 
         assertThat(actualEmployee).isEqualTo(expectedEmployee);
+    }
+
+    @Test
+    void tryingToCreateEmployeeWithTheSameEmailAsAnotherThrowsDuplicateKeyException() {
+        String email = "j.doe@test-mail.com";
+
+        employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
+
+        assertThatThrownBy(() -> employeeService.createEmployee("John", "Doe", email, "password", "USER"))
+                .isInstanceOf(DuplicateKeyException.class);
     }
 }

@@ -1,10 +1,12 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class EmployeeController {
@@ -26,10 +28,19 @@ public class EmployeeController {
             @RequestParam String lastName,
             @RequestParam String email,
             @RequestParam String password,
-            @RequestParam String role) {
+            @RequestParam String role,
+            RedirectAttributes redirectAttributes) {
 
-        employeeService.createEmployee(firstName, lastName, email, password, role);
+        try {
+            employeeService.createEmployee(firstName, lastName, email, password, role);
+        } catch (DuplicateKeyException e) {
+            redirectAttributes.addFlashAttribute("message", "Email already in use!");
+            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            return "redirect:/create-employee?error";
+        }
+        redirectAttributes.addFlashAttribute("message", "Employee created successfully!");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 
-        return "redirect:/createEmployee?success";
+        return "redirect:/create-employee?success";
     }
 }
