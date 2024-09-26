@@ -25,14 +25,6 @@ public class TimeEntryRepositoryStub implements TimeEntryRepository {
     }
 
     @Override
-    public TimeEntry getLastEntryByEmployeeId(long employeeID) {
-        return timeEntries.stream()
-                .filter(timeEntry -> timeEntry.getEmployeeID() == employeeID)
-                .max(TimeEntry::compareTo)
-                .orElse(null);
-    }
-
-    @Override
     public List<TimeEntry> getTimeEntriesByEmployeeId(long employeeID) {
         return timeEntries.stream()
                 .filter(timeEntry -> timeEntry.getEmployeeID() == employeeID)

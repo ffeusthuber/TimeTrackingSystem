@@ -8,6 +8,8 @@ In Work:
         [ ] Create POST endpoint for clocking out
         [ ] Create POST endpoint for pausing
 
+        [ ] setup format date to local
+
     [ ] TimeEntryRepositoryAdapter
         [ ] Save timeEntry
         [ ] Find all timEntries for employee

@@ -39,6 +39,8 @@ public class EmployeeService {
                 employee.clockPause();
                 break;
         }
+
+        employeeRepository.updateClockState(employeeID, clockState.toString());
     }
 
     public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
@@ -47,7 +49,7 @@ public class EmployeeService {
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
         Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole);
 
-        employeeRepository.save(employee);
+        employeeRepository.create(employee);
         Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
         return new Employee(employeeId, firstname, lastname, email, encryptedPassword, employeeRole);

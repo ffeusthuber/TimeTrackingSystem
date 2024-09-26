@@ -39,7 +39,7 @@ public class EmployeeServiceTest {
 
         employeeService.setClockStateForEmployee(employeeId, ClockState.CLOCKED_IN);
 
-        assertThat(employee.getClockState()).isEqualTo(ClockState.CLOCKED_IN);
+        assertThat(employeeRepository.getEmployeeByID(employeeId).getClockState()).isEqualTo(ClockState.CLOCKED_IN);
     }
 
     @Test

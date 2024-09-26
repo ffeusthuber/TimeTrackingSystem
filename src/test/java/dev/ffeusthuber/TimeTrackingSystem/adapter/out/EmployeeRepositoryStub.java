@@ -33,8 +33,13 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     @Override
-    public void save(Employee employee) {
+    public void create(Employee employee) {
         employees.add(employee);
+    }
+
+    @Override
+    public void updateClockState(Long employeeID, String clockState) {
+        System.out.println("Update clock state for employee with ID: " + employeeID + " to " + clockState);
     }
 
     @Override

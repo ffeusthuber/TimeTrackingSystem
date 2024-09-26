@@ -7,3 +7,10 @@ CREATE TABLE IF NOT EXISTS Employee (
     role VARCHAR(255) NOT NULL,
     clock_state VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS Time_entry (
+    time_entry_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    employee_id BIGINT NOT NULL,
+    entry_type VARCHAR(255) NOT NULL,
+    entry_date_time DATETIME  NOT NULL
+);

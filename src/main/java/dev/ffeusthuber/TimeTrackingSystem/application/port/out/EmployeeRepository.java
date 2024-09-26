@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface EmployeeRepository {
 
-    void save(Employee employee);
+    void create(Employee employee);
+
+    void updateClockState(Long employeeID, String clockState);
 
     List<Employee> getEmployees();
 
@@ -15,4 +17,6 @@ public interface EmployeeRepository {
     Long getEmployeeIDByEmail(String email);
 
     Employee getEmployeeByEmail(String email);
+
+
 }
