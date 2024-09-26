@@ -19,5 +19,4 @@ public class TimeEntriesControllerTest {
         TimeEntry timeEntry2 = new  TimeEntry(employeeID, TimeEntryType.CLOCK_OUT, ZonedDateTime.of(2021, 1, 1, 8, 0, 0, 0, ZoneOffset.UTC));
         timeEntries = List.of(timeEntry1, timeEntry2);
     }
-
 }

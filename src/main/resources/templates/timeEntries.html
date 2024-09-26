@@ -16,6 +16,12 @@
 <form th:action ="@{/time-entries/clock-in}" method="post">
     <button type="submit" name="clockInButton">Clock in</button>
 </form>
+<form th:action ="@{/time-entries/clock-out}" method="post">
+    <button type="submit" name="clockIOutButton">Clock out</button>
+</form>
+<form th:action ="@{/time-entries/clock-pause}" method="post">
+    <button type="submit" name="clockPauseButton">Clock pause</button>
+</form>
 
 </body>
 </html>

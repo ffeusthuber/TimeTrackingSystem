@@ -43,6 +43,24 @@ public class TimeEntriesController {
         return "timeEntries";
     }
 
+    @PostMapping("/time-entries/clock-out")
+    public String clockOut(Model model) {
+        long employeeID = getAuthenticatedEmployeeID();
+        timeTrackingService.clockOut(employeeID);
+        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
+        //handle clocking Error
+        return "timeEntries";
+    }
+
+    @PostMapping("/time-entries/clock-pause")
+    public String clockPause(Model model) {
+        long employeeID = getAuthenticatedEmployeeID();
+        timeTrackingService.clockPause(employeeID);
+        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
+        //handle clocking Error
+        return "timeEntries";
+    }
+
     private long getAuthenticatedEmployeeID() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

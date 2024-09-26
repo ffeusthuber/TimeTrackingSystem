@@ -81,6 +81,26 @@ public class TimeTrackingSystemMvcTest {
     }
 
     @Test
+    @WithMockUser
+    void whenPostToClockOutEmployeeThenStatusOk() throws Exception {
+        mockMvc.perform(post("/time-entries/clock-out")
+                                .with(csrf()))
+               .andExpect(status().isOk())
+               .andExpect(view().name("timeEntries"))
+               .andExpect(model().attributeExists("timeEntries"));
+    }
+
+    @Test
+    @WithMockUser
+    void whenPostToClockPauseEmployeeThenStatusOk() throws Exception {
+        mockMvc.perform(post("/time-entries/clock-pause")
+                                .with(csrf()))
+               .andExpect(status().isOk())
+               .andExpect(view().name("timeEntries"))
+               .andExpect(model().attributeExists("timeEntries"));
+    }
+
+    @Test
     @WithMockUser(roles = "ADMIN")
     void whenGetToCreateEmployeeAsAdminReturnCreateEmployeeView() throws Exception {
         mockMvc.perform(get("/create-employee"))
