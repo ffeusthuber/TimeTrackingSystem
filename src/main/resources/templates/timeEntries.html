@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Time Tracking System</title>
 </head>
 <body>
 <h1>Time Entries:</h1>
+<ul>
+    <li th:each="timeEntry : ${timeEntries}">
+        <span th:text="${timeEntry.getEntryDateTime}">Date</span>
+        <span th:text="${timeEntry.getType}">Type</span>
+    </li>
+</ul>
+
+<form th:action ="@{/time-entries/clock-in}" method="post">
+    <button type="submit" name="clockInButton">Clock in</button>
+</form>
+
 </body>
 </html>

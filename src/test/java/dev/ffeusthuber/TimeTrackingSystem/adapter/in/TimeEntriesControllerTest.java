@@ -3,15 +3,12 @@ package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.fail;
-
-public class TimeTrackingSystemControllerTest {
+public class TimeEntriesControllerTest {
 
     private final long employeeID = 1L;
     private List<TimeEntry> timeEntries;
@@ -23,8 +20,4 @@ public class TimeTrackingSystemControllerTest {
         timeEntries = List.of(timeEntry1, timeEntry2);
     }
 
-    @Test
-    void timeEntriesGetDisplayed() {
-        fail("Not yet implemented");
-    }
 }

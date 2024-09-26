@@ -1,7 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.application;
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.in.EmployeeController;
-import dev.ffeusthuber.TimeTrackingSystem.adapter.in.TimeTrackingSystemController;
+import dev.ffeusthuber.TimeTrackingSystem.adapter.in.HomeController;
+import dev.ffeusthuber.TimeTrackingSystem.adapter.in.TimeEntriesController;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest({TimeTrackingSystemController.class, EmployeeController.class})
+@WebMvcTest({TimeEntriesController.class, EmployeeController.class, HomeController.class})
 @Import(SecurityConfiguration.class)
 @Tag("io")
 public class TimeTrackingSystemMvcTest {
@@ -40,10 +41,8 @@ public class TimeTrackingSystemMvcTest {
     @MockBean
     EmployeeRepository employeeRepository;
 
-
     @Autowired
     MockMvc mockMvc;
-
 
     @Test
     void whenGetToHomeReturnHomeView() throws Exception {
@@ -64,8 +63,18 @@ public class TimeTrackingSystemMvcTest {
 
     @Test
     @WithMockUser
-    void whenGetTimeEntriesReturnTimeEntriesView() throws Exception {
+    void whenGetTimeEntriesReturnViewWithTimeEntriesInModel() throws Exception {
         mockMvc.perform(get("/time-entries"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("timeEntries"))
+               .andExpect(model().attributeExists("timeEntries"));
+    }
+
+    @Test
+    @WithMockUser
+    void whenPostToClockInEmployeeThenStatusOk() throws Exception {
+        mockMvc.perform(post("/time-entries/clock-in")
+                                .with(csrf()))
                .andExpect(status().isOk())
                .andExpect(view().name("timeEntries"))
                .andExpect(model().attributeExists("timeEntries"));
@@ -85,7 +94,6 @@ public class TimeTrackingSystemMvcTest {
         mockMvc.perform(get("/create-employee"))
                .andExpect(status().isForbidden());
     }
-
 
     @Test
     @WithMockUser(roles = "ADMIN")
