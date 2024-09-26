@@ -18,7 +18,7 @@ import java.util.List;
 @Primary
 public class JdbcEmployeeRepository implements EmployeeRepository {
 
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     public JdbcEmployeeRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

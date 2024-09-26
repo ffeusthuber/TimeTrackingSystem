@@ -1,7 +1,9 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,11 +31,12 @@ public class JdbcEmployeeRepositoryTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    private EmployeeService employeeService;
+    private EmployeeManagementUseCase employeeManagementService;
 
     @BeforeEach
     void setUp() {
-        employeeService = new EmployeeService(employeeRepository);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        employeeManagementService = new EmployeeManagementService(employeeService);
     }
 
     @AfterEach
@@ -43,7 +46,7 @@ public class JdbcEmployeeRepositoryTest {
 
     @Test
     void employeeCanBeSaved() {
-        employeeService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
+        employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
 
         assertThat(employeeRepository.getEmployees()).hasSize(1);
     }
@@ -51,7 +54,7 @@ public class JdbcEmployeeRepositoryTest {
     @Test
     void canGetEmployeeIdFromEmail(){
         String email = "j.doe@test-mail.com";
-        employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
+        employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
 
         Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
@@ -61,7 +64,7 @@ public class JdbcEmployeeRepositoryTest {
     @Test
     void canGetEmployeeFromEmail(){
         String email = "j.doe@test-mail.com";
-        employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
+        employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
 
         Employee employee = employeeRepository.getEmployeeByEmail(email);
 
@@ -87,7 +90,7 @@ public class JdbcEmployeeRepositoryTest {
     @Test
     void canGetEmployeeByID(){
         String email = "j.doe@test-mail.com";
-        Employee expectedEmployee = employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
+        Employee expectedEmployee = employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
         Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
         Employee actualEmployee = employeeRepository.getEmployeeByID(employeeId);
@@ -99,9 +102,9 @@ public class JdbcEmployeeRepositoryTest {
     void tryingToCreateEmployeeWithTheSameEmailAsAnotherThrowsDuplicateKeyException() {
         String email = "j.doe@test-mail.com";
 
-        employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
+        employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
 
-        assertThatThrownBy(() -> employeeService.createEmployee("John", "Doe", email, "password", "USER"))
+        assertThatThrownBy(() -> employeeManagementService.createEmployee("John", "Doe", email, "password", "USER"))
                 .isInstanceOf(DuplicateKeyException.class);
     }
 }
