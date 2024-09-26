@@ -17,7 +17,7 @@ public class EmployeeService {
     }
 
     public ClockState getClockStateForEmployee(Long employeeID) {
-        Employee employee = employeeRepository.getEmployeeById(employeeID);
+        Employee employee = employeeRepository.getEmployeeByID(employeeID);
         return employee.getClockState();
     }
 
@@ -26,7 +26,7 @@ public class EmployeeService {
     }
 
     public void setClockStateForEmployee(long employeeID, ClockState clockState) {
-        Employee employee = employeeRepository.getEmployeeById(employeeID);
+        Employee employee = employeeRepository.getEmployeeByID(employeeID);
 
         switch(clockState) {
             case CLOCKED_IN:
@@ -48,7 +48,7 @@ public class EmployeeService {
         Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole);
 
         employeeRepository.save(employee);
-        Long employeeId = employeeRepository.getEmployeeIdByEmail(email);
+        Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
         return new Employee(employeeId, firstname, lastname, email, encryptedPassword, employeeRole);
     }

@@ -26,7 +26,7 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     @Override
-    public Employee getEmployeeById(long employeeID) {
+    public Employee getEmployeeByID(long employeeID) {
         return employees.stream().filter((employee -> employee.getEmployeeID().equals(employeeID)))
                  .findFirst()
                  .orElseThrow();
@@ -43,7 +43,7 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     @Override
-    public Long getEmployeeIdByEmail(String email) {
+    public Long getEmployeeIDByEmail(String email) {
         return employees.stream().filter(employee -> employee.getEmail().equals(email))
                  .findFirst()
                  .map(Employee::getEmployeeID)

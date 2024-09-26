@@ -53,7 +53,7 @@ public class JdbcEmployeeRepositoryTest {
         String email = "j.doe@test-mail.com";
         employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
 
-        Long employeeId = employeeRepository.getEmployeeIdByEmail(email);
+        Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
         assertThat(employeeId).isNotNull();
     }
@@ -74,9 +74,9 @@ public class JdbcEmployeeRepositoryTest {
         long notExistingEmployeeId = -1L;
 
         Employee employee1 = employeeRepository.getEmployeeByEmail(notExistingEmail);
-        Employee employee2 = employeeRepository.getEmployeeById(notExistingEmployeeId);
+        Employee employee2 = employeeRepository.getEmployeeByID(notExistingEmployeeId);
         List<Employee> employees = employeeRepository.getEmployees();
-        Long employeeId = employeeRepository.getEmployeeIdByEmail(notExistingEmail);
+        Long employeeId = employeeRepository.getEmployeeIDByEmail(notExistingEmail);
 
         assertThat(employee1).isNull();
         assertThat(employee2).isNull();
@@ -85,12 +85,12 @@ public class JdbcEmployeeRepositoryTest {
     }
 
     @Test
-    void canGetEmployeeById(){
+    void canGetEmployeeByID(){
         String email = "j.doe@test-mail.com";
         Employee expectedEmployee = employeeService.createEmployee("Jane", "Doe", email, "password", "USER");
-        Long employeeId = employeeRepository.getEmployeeIdByEmail(email);
+        Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
-        Employee actualEmployee = employeeRepository.getEmployeeById(employeeId);
+        Employee actualEmployee = employeeRepository.getEmployeeByID(employeeId);
 
         assertThat(actualEmployee).isEqualTo(expectedEmployee);
     }

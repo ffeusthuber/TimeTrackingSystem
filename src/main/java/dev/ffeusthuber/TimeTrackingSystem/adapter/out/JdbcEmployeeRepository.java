@@ -37,7 +37,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public Long getEmployeeIdByEmail(String email) {
+    public Long getEmployeeIDByEmail(String email) {
         try {
             String sql = "SELECT employee_id FROM Employee WHERE email = ?";
             return jdbcTemplate.queryForObject(sql, Long.class, email);
@@ -58,7 +58,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public Employee getEmployeeById(long employeeID) {
+    public Employee getEmployeeByID(long employeeID) {
         try {
             String sql = "SELECT * FROM Employee WHERE employee_id = ?";
             return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), employeeID);

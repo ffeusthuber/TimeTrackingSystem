@@ -10,9 +10,9 @@ public interface EmployeeRepository {
 
     List<Employee> getEmployees();
 
-    Employee getEmployeeById(long employeeID);
+    Employee getEmployeeByID(long employeeID);
 
-    Long getEmployeeIdByEmail(String email);
+    Long getEmployeeIDByEmail(String email);
 
     Employee getEmployeeByEmail(String email);
 }

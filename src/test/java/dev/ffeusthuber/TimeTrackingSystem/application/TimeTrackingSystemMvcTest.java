@@ -5,6 +5,7 @@ import dev.ffeusthuber.TimeTrackingSystem.adapter.in.TimeTrackingSystemControlle
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,9 @@ public class TimeTrackingSystemMvcTest {
     @MockBean
     EmployeeService employeeService;
 
+    @MockBean
+    EmployeeRepository employeeRepository;
+
 
     @Autowired
     MockMvc mockMvc;
@@ -60,11 +64,11 @@ public class TimeTrackingSystemMvcTest {
 
     @Test
     @WithMockUser
-    void whenGetTimeEntriesWithEmployeeIDInModelReturnTimeEntriesView() throws Exception {
-        mockMvc.perform(get("/time-entries")
-                                .flashAttr("employeeID", 1L))
+    void whenGetTimeEntriesReturnTimeEntriesView() throws Exception {
+        mockMvc.perform(get("/time-entries"))
                .andExpect(status().isOk())
-               .andExpect(view().name("timeEntries"));
+               .andExpect(view().name("timeEntries"))
+               .andExpect(model().attributeExists("timeEntries"));
     }
 
     @Test
