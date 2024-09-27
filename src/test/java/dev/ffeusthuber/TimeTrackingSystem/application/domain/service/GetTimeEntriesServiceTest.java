@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TimeEntryServiceTest {
+public class GetTimeEntriesServiceTest {
 
     @Test
     void returnsAllTimeEntriesForEmployee() {
@@ -26,9 +26,9 @@ public class TimeEntryServiceTest {
 
         List<TimeEntry> timeEntries = List.of(timeEntry1,timeEntry2,timeEntry3);
 
-        TimeEntryService timeEntryService = new TimeEntryService(TimeEntryRepositoryStub.withEntries(timeEntries));
+        GetTimeEntriesService getTimeEntriesService = new GetTimeEntriesService(TimeEntryRepositoryStub.withEntries(timeEntries));
 
-        List<TimeEntry> timeEntriesForEmployee1 = timeEntryService.getTimeEntriesForEmployee(employeeID1);
+        List<TimeEntry> timeEntriesForEmployee1 = getTimeEntriesService.getTimeEntriesForEmployee(employeeID1);
 
         assertThat(timeEntriesForEmployee1).isEqualTo(List.of(timeEntry1, timeEntry2));
     }

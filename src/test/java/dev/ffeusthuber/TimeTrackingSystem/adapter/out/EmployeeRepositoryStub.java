@@ -39,7 +39,7 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
 
     @Override
     public void updateClockState(Long employeeID, String clockState) {
-        System.out.println("Update clock state for employee with ID: " + employeeID + " to " + clockState);
+        // not needed for stub
     }
 
     @Override
