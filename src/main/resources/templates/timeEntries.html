@@ -8,8 +8,10 @@
 <h1>Time Entries:</h1>
 <ul>
     <li th:each="timeEntry : ${timeEntries}">
-        <span th:text="${timeEntry.getEntryDateTime}">Date</span>
-        <span th:text="${timeEntry.getType}">Type</span>
+        <span th:text="${timeEntry.getWeekday}">Weekday</span>
+        <span th:text="${timeEntry.getDate}">Date</span>
+        <span th:text="${timeEntry.getTime}">Time</span>
+        <span th:text="${timeEntry.getTimeEntryType}">Entry Type</span>
     </li>
 </ul>
 

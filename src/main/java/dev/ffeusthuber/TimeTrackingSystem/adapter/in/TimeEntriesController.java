@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.ZoneId;
+
 @Controller
 public class TimeEntriesController {
 
@@ -28,9 +30,9 @@ public class TimeEntriesController {
     }
 
     @GetMapping("/time-entries")
-    public String displayTimeEntriesForEmployee(Model model) {
+    public String displayTimeEntriesForEmployee(Model model, ZoneId zoneId) {
         long employeeID = getAuthenticatedEmployeeID();
-        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
+        addTimeEntriesToModel(model,employeeID);
         return "timeEntries";
     }
 
@@ -38,8 +40,8 @@ public class TimeEntriesController {
     public String clockIn(Model model) {
         long employeeID = getAuthenticatedEmployeeID();
         timeTrackingService.clockIn(employeeID);
-        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
         //handle clocking Error
+        addTimeEntriesToModel(model,employeeID);
         return "timeEntries";
     }
 
@@ -47,8 +49,8 @@ public class TimeEntriesController {
     public String clockOut(Model model) {
         long employeeID = getAuthenticatedEmployeeID();
         timeTrackingService.clockOut(employeeID);
-        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
         //handle clocking Error
+        addTimeEntriesToModel(model,employeeID);
         return "timeEntries";
     }
 
@@ -56,8 +58,8 @@ public class TimeEntriesController {
     public String clockPause(Model model) {
         long employeeID = getAuthenticatedEmployeeID();
         timeTrackingService.clockPause(employeeID);
-        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID));
         //handle clocking Error
+        addTimeEntriesToModel(model,employeeID);
         return "timeEntries";
     }
 
@@ -67,4 +69,7 @@ public class TimeEntriesController {
         return employeeRepository.getEmployeeIDByEmail(email);
     }
 
+    private void addTimeEntriesToModel(Model model, Long employeeID) {
+        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID,ZoneId.of("UTC")));
+    }
 }

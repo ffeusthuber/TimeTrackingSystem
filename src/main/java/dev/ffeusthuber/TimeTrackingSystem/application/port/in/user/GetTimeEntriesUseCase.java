@@ -1,9 +1,10 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.port.in.user;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryDTO;
 
+import java.time.ZoneId;
 import java.util.List;
 
 public interface GetTimeEntriesUseCase {
-    List<TimeEntry> getTimeEntriesForEmployee(long employeeID);
+    List<TimeEntryDTO> getTimeEntriesForEmployee(long employeeID, ZoneId zoneId);
 }

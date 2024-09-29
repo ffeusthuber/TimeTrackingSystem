@@ -1,8 +1,10 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 
+import java.time.ZoneId;
 import java.util.List;
 
 public class GetTimeEntriesServiceStub implements GetTimeEntriesUseCase {
@@ -12,8 +14,10 @@ public class GetTimeEntriesServiceStub implements GetTimeEntriesUseCase {
         this.timeEntriesToReturn = timeEntriesToReturn;
     }
 
-    public List<TimeEntry> getTimeEntriesForEmployee(long employeeID) {
-        return timeEntriesToReturn;
+    public List<TimeEntryDTO> getTimeEntriesForEmployee(long employeeID, ZoneId zoneId) {
+        return timeEntriesToReturn.stream()
+                .map(timeEntry -> new TimeEntryDTO(timeEntry,zoneId))
+                .toList();
     }
 
     public static GetTimeEntriesServiceStub withTimeEntriesToReturn(List<TimeEntry> timeEntriesToReturn) {

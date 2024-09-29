@@ -1,5 +1,7 @@
 In Work:
 
+[ ] handle zonedDateTime conversion with ZoneID
+
 [ ] check clock response and display fitting message on timeEntries.html
 
 [ ] TimeEntriesController
