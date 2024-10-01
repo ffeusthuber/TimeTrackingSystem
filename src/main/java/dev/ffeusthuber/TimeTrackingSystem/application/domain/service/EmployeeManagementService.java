@@ -2,7 +2,9 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmployeeManagementService implements EmployeeManagementUseCase {
     private final EmployeeService employeeService;
 
