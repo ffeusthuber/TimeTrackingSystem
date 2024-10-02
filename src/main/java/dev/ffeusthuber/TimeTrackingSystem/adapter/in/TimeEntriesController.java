@@ -20,6 +20,7 @@ public class TimeEntriesController {
     private final GetTimeEntriesUseCase getTimeEntriesService;
     private final TimeTrackingUseCase timeTrackingService;
     private final EmployeeRepository employeeRepository;
+    private ZoneId zoneId;
 
 
     @Autowired
@@ -29,9 +30,11 @@ public class TimeEntriesController {
         this.employeeRepository = employeeRepository;
     }
 
-    @GetMapping("/time-entries")
+
+    @GetMapping({"/time-entries","/"})
     public String displayTimeEntriesForEmployee(Model model, ZoneId zoneId) {
         long employeeID = getAuthenticatedEmployeeID();
+        this.zoneId = zoneId;
         addTimeEntriesToModel(model,employeeID);
         return "timeEntries";
     }
@@ -70,6 +73,6 @@ public class TimeEntriesController {
     }
 
     private void addTimeEntriesToModel(Model model, Long employeeID) {
-        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID,ZoneId.of("UTC")));
+        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID,zoneId));
     }
 }

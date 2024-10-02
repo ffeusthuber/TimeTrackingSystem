@@ -1,9 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.application;
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.in.EmployeeController;
-import dev.ffeusthuber.TimeTrackingSystem.adapter.in.HomeController;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.in.TimeEntriesController;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
@@ -24,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest({TimeEntriesController.class, EmployeeController.class, HomeController.class})
+@WebMvcTest({TimeEntriesController.class, EmployeeController.class})
 @Import(SecurityConfiguration.class)
 @Tag("io")
 public class TimeTrackingSystemMvcTest {
@@ -36,7 +35,7 @@ public class TimeTrackingSystemMvcTest {
     GetTimeEntriesUseCase getTimeEntriesService;
 
     @MockBean
-    EmployeeService employeeService;
+    EmployeeManagementService employeeManagementService;
 
     @MockBean
     EmployeeRepository employeeRepository;
@@ -45,14 +44,10 @@ public class TimeTrackingSystemMvcTest {
     MockMvc mockMvc;
 
     @Test
-    void whenGetToHomeReturnHomeView() throws Exception {
+    void whenGetToHomeReturnTimeEntriesView() throws Exception {
         mockMvc.perform(get("/"))
                .andExpect(status().isOk())
-               .andExpect(view().name("home"));
-
-        mockMvc.perform(get("/home"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("home"));
+               .andExpect(view().name("timeEntries"));
     }
 
     @Test
@@ -135,7 +130,7 @@ public class TimeTrackingSystemMvcTest {
     void postToCreateEmployeeWithDuplicateEmailRedirectsToError() throws Exception {
         String duplicateEmail = "duplicateEmail@test-mail.com";
         doThrow(new DuplicateKeyException("Duplicate email"))
-                .when(employeeService)
+                .when(employeeManagementService)
                 .createEmployee("Jane", "Doe", duplicateEmail, "password", "USER");
 
         mockMvc.perform(post("/create-employee")

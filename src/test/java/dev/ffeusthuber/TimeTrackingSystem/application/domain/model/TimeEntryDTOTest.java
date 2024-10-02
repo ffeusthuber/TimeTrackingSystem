@@ -17,7 +17,7 @@ public class TimeEntryDTOTest {
 
         assertThat(timeEntryDTO.getWeekday()).isEqualTo("FRIDAY");
         assertThat(timeEntryDTO.getDate()).isEqualTo("27.SEPTEMBER.2024");
-        assertThat(timeEntryDTO.getTime()).isEqualTo("20:00");
+        assertThat(timeEntryDTO.getTime()).isEqualTo("20:00:00");
         assertThat(timeEntryDTO.getTimeEntryType()).isEqualTo("Clocked in");
     }
 }
