@@ -3,27 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <title>Time Tracking System</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link th:href="@{/style.css}" rel="stylesheet" />
 </head>
 <body>
-<h1>Time Entries:</h1>
-<ul>
-    <li th:each="timeEntry : ${timeEntries}">
-        <span th:text="${timeEntry.getWeekday}">Weekday</span>
-        <span th:text="${timeEntry.getDate}">Date</span>
-        <span th:text="${timeEntry.getTime}">Time</span>
-        <span th:text="${timeEntry.getTimeEntryType}">Entry Type</span>
-    </li>
-</ul>
 
-<form th:action ="@{/time-entries/clock-in}" method="post">
-    <button type="submit" name="clockInButton">Clock in</button>
-</form>
-<form th:action ="@{/time-entries/clock-out}" method="post">
-    <button type="submit" name="clockIOutButton">Clock out</button>
-</form>
-<form th:action ="@{/time-entries/clock-pause}" method="post">
-    <button type="submit" name="clockPauseButton">Clock pause</button>
-</form>
+<div class="sidebar">
+    <div class="top">
+        <div class="logo">
+            <i class='bx bxs-time-five'></i>
+            <span>TimeTrack</span>
+        </div>
+        <i class="bx bx-menu" id="btn"></i>
+    </div>
+    <div class="user">
+        <img th:src="@{/standard_user_img.png}" alt="user" class="user-img">
+        <div>
+            <p class="bold">Username</p>
+            <p>Admin</p>
+        </div>
+    </div>
+    <ul>
+        <li>
+            <a href = "/time-entries">
+                <i class='bx bx-time-five'></i>
+                <span class="nav-item">TimeTracking</span>
+            </a>
+            <span class="tooltip">TimeTracking</span>
+        </li>
+        <li>
+            <a href = "#">
+                <i class='bx bxs-report'></i>
+                <span class="nav-item">Reports</span>
+            </a>
+            <span class="tooltip">Reports</span>
+        </li>
+        <li>
+            <a href = "/create-employee">
+                <i class='bx bx-body'></i>
+                <span class="nav-item">Employees</span>
+            </a>
+            <span class="tooltip">Employees</span>
+        </li>
+        <li>
+            <a href = "#">
+                <i class='bx bx-cog'></i>
+                <span class="nav-item">Settings</span>
+            </a>
+            <span class="tooltip">Settings</span>
+        </li>
+        <li>
+            <a href = "/logout">
+                <i class='bx bx-log-out'></i>
+                <span class="nav-item">Logout</span>
+            </a>
+            <span class="tooltip">Logout</span>
+        </li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <h1>Time Entries</h1>
+        <div th:if="${message}" th:class="'alert ' + ${alertClass}" role="alert">
+            <span th:text="${message}"></span>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Weekday</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Entry Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="timeEntry : ${timeEntries}">
+                    <td th:text="${timeEntry.getWeekday}">Weekday</td>
+                    <td th:text="${timeEntry.getDate}">Date</td>
+                    <td th:text="${timeEntry.getTime}">Time</td>
+                    <td th:text="${timeEntry.getTimeEntryType}">Entry Type</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="buttons">
+            <form th:action ="@{/time-entries/clock-in}" method="post">
+                <button type="submit" name="clockInButton">
+                    <i class='bx bx-log-in-circle'></i>
+                    <span>Clock in</span>
+                </button>
+            </form>
+            <form th:action ="@{/time-entries/clock-pause}" method="post">
+                <button type="submit" name="clockPauseButton">
+                    <i class='bx bxs-coffee'></i>
+                    <span>Clock pause</span>
+                </button>
+            </form>
+            <form th:action ="@{/time-entries/clock-out}" method="post">
+                <button type="submit" name="clockOutButton">
+                    <i class='bx bx-log-out-circle'></i>
+                    <span>Clock Out</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
+<script>
+    let sidebar = document.querySelector(".sidebar");
+    let btn = document.querySelector("#btn");
+
+    btn.onclick = function() {
+        sidebar.classList.toggle("active");
+    }
+</script>
+
 </html>
