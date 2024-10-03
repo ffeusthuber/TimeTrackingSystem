@@ -20,8 +20,9 @@
         <li><a href="#running-tests">Running Tests</a></li>
       </ul>
     </li>
-   <li><a href="#screenshots">Screenshots</a></li>
-   <li><a href="#license">License</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#attribution">Attribution</a></li>
   </ol>
 </details>
 
@@ -35,7 +36,7 @@
 ⚠️ The software is currently being developed. New features, enhancements, and bug fixes are continually being added.⚠️
 
 This project is a web application built with Spring, aimed at providing a comprehensive time-tracking solution for employees.
-The main goal of the project was to practice several key software development principles and techniques, including:
+The main goal of the project is to practice several key software development principles and techniques, including:
 
 - **Test-Driven Development (TDD)**: Guiding design by writing tests first before implementing functionality.
 - **Object-Oriented Programming (OOP)**: Applying OOP principles for a modular and reusable codebase.
@@ -80,12 +81,10 @@ To get a local copy of the project up and running, follow these steps:
     ```sh
     mvn clean install
     ```
-
 3. Run the application:
     ```sh
     mvn spring-boot:run
     ```
-
 
 ### Running Tests
 
