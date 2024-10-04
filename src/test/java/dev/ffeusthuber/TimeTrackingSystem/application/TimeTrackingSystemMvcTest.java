@@ -44,6 +44,7 @@ public class TimeTrackingSystemMvcTest {
     MockMvc mockMvc;
 
     @Test
+    @WithMockUser
     void whenGetToHomeReturnTimeEntriesView() throws Exception {
         mockMvc.perform(get("/"))
                .andExpect(status().isOk())

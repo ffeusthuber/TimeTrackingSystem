@@ -19,8 +19,6 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf( csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .authorizeHttpRequests(authorizeRequests -> {
-                    authorizeRequests.requestMatchers("/").permitAll();
-                    authorizeRequests.requestMatchers("/home").permitAll();
                     authorizeRequests.requestMatchers("/create-employee").hasRole("ADMIN");
                     authorizeRequests.requestMatchers("/h2-console/**").permitAll();
                     authorizeRequests.anyRequest().authenticated();
