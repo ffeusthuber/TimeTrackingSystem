@@ -23,6 +23,18 @@ public class ClockResponse {
         this.clockError = clockError;
     }
 
+    public ClockResponseStatus getStatus() {
+        return this.clockResponseStatus;
+    }
+
+    public TimeEntryType getTimEntryType() {
+        return this.timeEntryType;
+    }
+
+    public ClockError getClockError() {
+        return this.clockError;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

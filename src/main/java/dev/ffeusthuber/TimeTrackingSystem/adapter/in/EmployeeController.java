@@ -35,7 +35,7 @@ public class EmployeeController {
             employeeManagementService.createEmployee(firstName, lastName, email, password, role);
         } catch (DuplicateKeyException e) {
             redirectAttributes.addFlashAttribute("message", "Email already in use!");
-            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            redirectAttributes.addFlashAttribute("alertClass", "alert-failure");
             return "redirect:/create-employee?error";
         }
         redirectAttributes.addFlashAttribute("message", "Employee created successfully!");

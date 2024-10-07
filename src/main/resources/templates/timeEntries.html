@@ -64,10 +64,15 @@
 
 <div class="main-content">
     <div class="container">
-        <h1>Time Entries</h1>
-        <div th:if="${message}" th:class="'alert ' + ${alertClass}" role="alert">
-            <span th:text="${message}"></span>
+        <div class="top">
+            <h1>Time Entries</h1>
+            <div class="alert-message">
+                <div th:if="${message}" th:class="'alert ' + ${alertClass}" role="alert">
+                    <span th:text="${message}"></span>
+                </div>
+            </div>
         </div>
+
         <div class="table-wrapper">
             <table>
                 <thead>

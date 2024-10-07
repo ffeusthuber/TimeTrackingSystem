@@ -2,6 +2,9 @@ package dev.ffeusthuber.TimeTrackingSystem.application;
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.in.EmployeeController;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.in.TimeEntriesController;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockError;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
@@ -18,6 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,18 +47,19 @@ public class TimeTrackingSystemMvcTest {
     @Autowired
     MockMvc mockMvc;
 
+
+    @Test
+    void whenGetToTimeEntriesWithOutLoggedInUserRedirectToLogin() throws Exception {
+        mockMvc.perform(get("/time-entries"))
+               .andExpect(redirectedUrlPattern("**/login"));
+    }
+
     @Test
     @WithMockUser
     void whenGetToHomeReturnTimeEntriesView() throws Exception {
         mockMvc.perform(get("/"))
                .andExpect(status().isOk())
                .andExpect(view().name("timeEntries"));
-    }
-
-    @Test
-    void whenGetToTimeEntriesWithOutLoggedInUserRedirectToLogin() throws Exception {
-        mockMvc.perform(get("/time-entries"))
-               .andExpect(redirectedUrlPattern("**/login"));
     }
 
     @Test
@@ -68,32 +73,96 @@ public class TimeTrackingSystemMvcTest {
 
     @Test
     @WithMockUser
-    void whenPostToClockInEmployeeThenStatusOk() throws Exception {
+    void whenPostToClockInEmployeeThenClockInEmployee() throws Exception {
+        Long employeeID = 0L;
+        ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN);
+        when(timeTrackingUseCase.clockIn(employeeID)).thenReturn(clockResponse);
+
         mockMvc.perform(post("/time-entries/clock-in")
                                 .with(csrf()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("timeEntries"))
-               .andExpect(model().attributeExists("timeEntries"));
+               .andExpect(status().is3xxRedirection())
+               .andExpect(flash().attributeExists("timeEntries"))
+               .andExpect(redirectedUrl("/time-entries?success"))
+               .andExpect(flash().attribute("alertClass", "alert-success"))
+               .andExpect(flash().attributeExists("message"));
     }
 
     @Test
     @WithMockUser
-    void whenPostToClockOutEmployeeThenStatusOk() throws Exception {
+    void whenUnsuccessfullyClockingInDisplayWarning() throws Exception {
+        Long employeeID = 0L;
+        ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
+        when(timeTrackingUseCase.clockIn(employeeID)).thenReturn(clockResponse);
+
+        mockMvc.perform(post("/time-entries/clock-in")
+                                .with(csrf()))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(flash().attributeExists("timeEntries"))
+               .andExpect(redirectedUrl("/time-entries?error"))
+               .andExpect(flash().attribute("alertClass", "alert-failure"))
+               .andExpect(flash().attributeExists("message"));
+    }
+
+    @Test
+    @WithMockUser
+    void whenPostToClockOutEmployeeThenClockOutEmployee() throws Exception {
+        Long employeeID = 0L;
+        ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_OUT);
+        when(timeTrackingUseCase.clockOut(employeeID)).thenReturn(clockResponse);
         mockMvc.perform(post("/time-entries/clock-out")
                                 .with(csrf()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("timeEntries"))
-               .andExpect(model().attributeExists("timeEntries"));
+               .andExpect(status().is3xxRedirection())
+               .andExpect(flash().attributeExists("timeEntries"))
+               .andExpect(redirectedUrl("/time-entries?success"))
+               .andExpect(flash().attribute("alertClass", "alert-success"))
+               .andExpect(flash().attributeExists("message"));
     }
 
     @Test
     @WithMockUser
-    void whenPostToClockPauseEmployeeThenStatusOk() throws Exception {
+    void whenUnsuccessfullyClockingOutDisplayWarning() throws Exception {
+        Long employeeID = 0L;
+        ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+        when(timeTrackingUseCase.clockOut(employeeID)).thenReturn(clockResponse);
+
+        mockMvc.perform(post("/time-entries/clock-out")
+                                .with(csrf()))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(flash().attributeExists("timeEntries"))
+               .andExpect(redirectedUrl("/time-entries?error"))
+               .andExpect(flash().attribute("alertClass", "alert-failure"))
+               .andExpect(flash().attributeExists("message"));
+    }
+
+    @Test
+    @WithMockUser
+    void whenPostToClockPauseEmployeeThenClockPauseForEmployee() throws Exception {
+        Long employeeID = 0L;
+        ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_PAUSE);
+        when(timeTrackingUseCase.clockPause(employeeID)).thenReturn(clockResponse);
         mockMvc.perform(post("/time-entries/clock-pause")
                                 .with(csrf()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("timeEntries"))
-               .andExpect(model().attributeExists("timeEntries"));
+               .andExpect(status().is3xxRedirection())
+               .andExpect(flash().attributeExists("timeEntries"))
+               .andExpect(redirectedUrl("/time-entries?success"))
+               .andExpect(flash().attribute("alertClass", "alert-success"))
+               .andExpect(flash().attributeExists("message"));
+    }
+
+    @Test
+    @WithMockUser
+    void whenUnsuccessfullyClockingPauseDisplayWarning() throws Exception {
+        Long employeeID = 0L;
+        ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+        when(timeTrackingUseCase.clockPause(employeeID)).thenReturn(clockResponse);
+
+        mockMvc.perform(post("/time-entries/clock-pause")
+                                .with(csrf()))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(flash().attributeExists("timeEntries"))
+               .andExpect(redirectedUrl("/time-entries?error"))
+               .andExpect(flash().attribute("alertClass", "alert-failure"))
+               .andExpect(flash().attributeExists("message"));
     }
 
     @Test
@@ -122,7 +191,8 @@ public class TimeTrackingSystemMvcTest {
                                 .param("password", "password")
                                 .param("role", "USER"))
                .andExpect(redirectedUrl("/create-employee?success"))
-               .andExpect(flash().attribute("alertClass", "alert-success"));
+               .andExpect(flash().attribute("alertClass", "alert-success"))
+               .andExpect(flash().attributeExists("message"));
 
     }
 
@@ -143,7 +213,7 @@ public class TimeTrackingSystemMvcTest {
                                 .param("role", "USER"))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/create-employee?error"))
-               .andExpect(flash().attribute("alertClass", "alert-danger"));
+               .andExpect(flash().attribute("alertClass", "alert-failure"))
+               .andExpect(flash().attributeExists("message"));
     }
-
 }

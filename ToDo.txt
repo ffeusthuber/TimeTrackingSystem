@@ -1,11 +1,25 @@
 In Work:
 
+[ ] Report
+    [ ] Display worked hours of employee
+        [ ] per week
+        [ ] overall for this month
+    [ ] Display remaining flextime
+
+   [ ] Display regular working time
+   [ ] Display overtime
+
+    Date	    Pause (min)	    Worktime    Overtime
+    01.10.2024	60	            8h	        0h
+    02.10.2024	45	            9h 35min	1h 35min
+
 
 
 
 ----------------------------------------------------------------------------------
 
-[ ] Add icons to buttons (in out coffee)
+[ ] validate input to employee creation
+
 [ ] Fill userdata in sidebar
     [ ] Username
     [ ] Role
@@ -31,8 +45,6 @@ In Work:
         [X] Find all timEntries for employee
         [ ] Find all timeEntries for employee between two dates
 
-[X] setup links from homepage
-    [ ] hide links based on role
 
 [ ] Admin can save new employee
         [X] Implement EmployeeRepositoryAdapter
@@ -42,9 +54,9 @@ In Work:
         [ ] Save multiple employees at once (from CSV)
 
 
-    [X] Setup role based access control
+    [ ] Setup role based access control
+        [ ] Only admin can access employee management
         [ ] Display message cant access endpoint
-            [ ] redirect to homepage
 
     [ ] User/Admin can change own password
         [ ] default password when creating employee
