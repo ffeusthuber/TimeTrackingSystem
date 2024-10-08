@@ -6,6 +6,7 @@
     <title>Time Tracking System</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link th:href="@{/style.css}" rel="stylesheet" />
+
 </head>
 <body>
 
@@ -76,21 +77,21 @@
 
         <form autocomplete="off" th:action="@{/create-employee}" method="post">
             <label for="firstName">First Name:</label><br>
-            <input type="text" id="firstName" name="firstName" autocomplete="off"><br>
+            <input type="text" id="firstName" name="firstName" autocomplete="off" required><br>
 
             <label for="lastName">Last Name:</label><br>
-            <input type="text" id="lastName" name="lastName" autocomplete="off"><br>
+            <input type="text" id="lastName" name="lastName" autocomplete="off" required><br>
 
             <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" autocomplete="off"><br>
+            <input type="email" id="email" name="email" autocomplete="off" required><br>
 
             <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" autocomplete="new-password"><br>
+            <input type="password" id="password" name="password" autocomplete="new-password" required><br>
 
             <label for="role">Role:</label><br>
-            <select id="role" name="role">
-                <option value="ADMIN">ADMIN</option>
+            <select id="role" name="role" required>
                 <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
             </select><br>
 
             <input type="submit" value="Submit">
@@ -98,17 +99,8 @@
     </div>
 
 </div>
-
 </body>
-<script>
-    let sidebar = document.querySelector(".sidebar");
-    let btn = document.querySelector("#btn");
-
-    btn.onclick = function() {
-        sidebar.classList.toggle("active");
-    }
-</script>
-
+<script th:src="@{/sidebarToggle.js}"></script>
 </html>
 
 </body>
