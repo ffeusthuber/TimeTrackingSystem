@@ -8,59 +8,7 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="top">
-        <div class="logo">
-            <i class='bx bxs-time-five'></i>
-            <span>TimeTrack</span>
-        </div>
-        <i class="bx bx-menu" id="btn"></i>
-    </div>
-    <div class="user">
-        <img th:src="@{/standard_user_img.png}" alt="user" class="user-img">
-        <div>
-            <p class="bold">Username</p>
-            <p>Admin</p>
-        </div>
-    </div>
-    <ul>
-        <li>
-            <a href = "/time-entries">
-                <i class='bx bx-time-five'></i>
-                <span class="nav-item">TimeTracking</span>
-            </a>
-            <span class="tooltip">TimeTracking</span>
-        </li>
-        <li>
-            <a href = "#">
-                <i class='bx bxs-report'></i>
-                <span class="nav-item">Reports</span>
-            </a>
-            <span class="tooltip">Reports</span>
-        </li>
-        <li>
-            <a href = "/create-employee">
-                <i class='bx bx-body'></i>
-                <span class="nav-item">Employees</span>
-            </a>
-            <span class="tooltip">Employees</span>
-        </li>
-        <li>
-            <a href = "#">
-                <i class='bx bx-cog'></i>
-                <span class="nav-item">Settings</span>
-            </a>
-            <span class="tooltip">Settings</span>
-        </li>
-        <li>
-            <a href = "/logout">
-                <i class='bx bx-log-out'></i>
-                <span class="nav-item">Logout</span>
-            </a>
-            <span class="tooltip">Logout</span>
-        </li>
-    </ul>
-</div>
+<div th:replace="sidebar.html"></div>
 
 <div class="main-content">
     <div class="container">
@@ -117,8 +65,5 @@
         </div>
     </div>
 </div>
-
 </body>
-<script th:src="@{/sidebarToggle.js}"></script>
-
 </html>

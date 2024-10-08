@@ -18,7 +18,9 @@ In Work:
 
 ----------------------------------------------------------------------------------
 
-[ ] validate input to employee creation
+[X] validate input to employee creation
+    [X] check if username is unique
+    [X] check if form is filled out correctly
 
 [ ] Fill userdata in sidebar
     [ ] Username
