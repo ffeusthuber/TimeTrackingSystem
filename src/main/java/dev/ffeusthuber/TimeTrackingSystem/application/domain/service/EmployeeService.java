@@ -54,4 +54,8 @@ public class EmployeeService {
 
         return new Employee(employeeId, firstname, lastname, email, encryptedPassword, employeeRole);
     }
+
+    public Employee getEmployeeById(long employeeID) {
+        return employeeRepository.getEmployeeByID(employeeID);
+    }
 }

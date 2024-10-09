@@ -3,6 +3,7 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockState;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -64,5 +65,16 @@ public class EmployeeServiceTest {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         assertThat(passwordEncoder.matches(rawPassword, encryptedPassword)).isTrue();
+    }
+
+    @Test
+    void canGetEmployeeById() {
+        Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER);
+        EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
+        EmployeeService employeeService = new EmployeeService(employeeRepositoryStub);
+
+        Employee foundEmployee = employeeService.getEmployeeById(1L);
+
+        assertThat(foundEmployee).isEqualTo(employee);
     }
 }

@@ -1,6 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.EmployeeDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +16,10 @@ public class EmployeeManagementService implements EmployeeManagementUseCase {
     @Override
     public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
         return employeeService.createEmployee(firstname, lastname, email, password, role);
+    }
+
+    @Override
+    public EmployeeDTO getEmployee(long employeeID) {
+        return new EmployeeDTO(employeeService.getEmployeeById(employeeID));
     }
 }

@@ -21,8 +21,8 @@
     <div class="user">
         <img th:src="@{/standard_user_img.png}" alt="user" class="user-img">
         <div>
-            <p class="bold">Username</p>
-            <p>Admin</p>
+            <p class="bold" th:text="${fullName}">Username</p>
+            <p th:text="${role}">Role</p>
         </div>
     </div>
     <ul>
