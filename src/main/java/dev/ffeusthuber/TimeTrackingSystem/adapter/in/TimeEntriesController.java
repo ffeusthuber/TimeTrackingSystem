@@ -4,10 +4,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponseStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
+import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,15 +20,15 @@ public class TimeEntriesController {
 
     private final GetTimeEntriesUseCase getTimeEntriesService;
     private final TimeTrackingUseCase timeTrackingService;
-    private final EmployeeRepository employeeRepository;
+    private final AuthenticationUtils authenticationUtils;
     private ZoneId zoneId;
 
 
     @Autowired
-    public TimeEntriesController(GetTimeEntriesUseCase getTimeEntriesService, TimeTrackingUseCase timeTrackingService, EmployeeRepository employeeRepository) {
+    public TimeEntriesController(GetTimeEntriesUseCase getTimeEntriesService, TimeTrackingUseCase timeTrackingService, AuthenticationUtils authenticationUtils) {
         this.getTimeEntriesService = getTimeEntriesService;
         this.timeTrackingService = timeTrackingService;
-        this.employeeRepository = employeeRepository;
+        this.authenticationUtils = authenticationUtils;
     }
 
 
@@ -64,9 +62,7 @@ public class TimeEntriesController {
     }
 
     private long getAuthenticatedEmployeeID() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        return employeeRepository.getEmployeeIDByEmail(email);
+       return authenticationUtils.getAuthenticatedEmployeeID();
     }
 
     private void addModelAttributes(Model model, long employeeID) {

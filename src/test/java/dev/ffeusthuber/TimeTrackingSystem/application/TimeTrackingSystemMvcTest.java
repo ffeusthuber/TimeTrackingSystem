@@ -8,8 +8,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
+import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class TimeTrackingSystemMvcTest {
     EmployeeManagementService employeeManagementService;
 
     @MockBean
-    EmployeeRepository employeeRepository;
+    AuthenticationUtils authenticationUtils;
 
     @Autowired
     MockMvc mockMvc;
@@ -74,7 +74,7 @@ public class TimeTrackingSystemMvcTest {
     @Test
     @WithMockUser
     void whenPostToClockInEmployeeThenClockInEmployee() throws Exception {
-        Long employeeID = 0L;
+        long employeeID = 0L;
         ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN);
         when(timeTrackingUseCase.clockIn(employeeID)).thenReturn(clockResponse);
 
@@ -90,7 +90,7 @@ public class TimeTrackingSystemMvcTest {
     @Test
     @WithMockUser
     void whenUnsuccessfullyClockingInDisplayWarning() throws Exception {
-        Long employeeID = 0L;
+        long employeeID = 0L;
         ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
         when(timeTrackingUseCase.clockIn(employeeID)).thenReturn(clockResponse);
 
@@ -106,7 +106,7 @@ public class TimeTrackingSystemMvcTest {
     @Test
     @WithMockUser
     void whenPostToClockOutEmployeeThenClockOutEmployee() throws Exception {
-        Long employeeID = 0L;
+        long employeeID = 0L;
         ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_OUT);
         when(timeTrackingUseCase.clockOut(employeeID)).thenReturn(clockResponse);
         mockMvc.perform(post("/time-entries/clock-out")
@@ -121,7 +121,7 @@ public class TimeTrackingSystemMvcTest {
     @Test
     @WithMockUser
     void whenUnsuccessfullyClockingOutDisplayWarning() throws Exception {
-        Long employeeID = 0L;
+        long employeeID = 0L;
         ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         when(timeTrackingUseCase.clockOut(employeeID)).thenReturn(clockResponse);
 
@@ -137,7 +137,7 @@ public class TimeTrackingSystemMvcTest {
     @Test
     @WithMockUser
     void whenPostToClockPauseEmployeeThenClockPauseForEmployee() throws Exception {
-        Long employeeID = 0L;
+        long employeeID = 0L;
         ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_PAUSE);
         when(timeTrackingUseCase.clockPause(employeeID)).thenReturn(clockResponse);
         mockMvc.perform(post("/time-entries/clock-pause")
@@ -152,7 +152,7 @@ public class TimeTrackingSystemMvcTest {
     @Test
     @WithMockUser
     void whenUnsuccessfullyClockingPauseDisplayWarning() throws Exception {
-        Long employeeID = 0L;
+        long employeeID = 0L;
         ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         when(timeTrackingUseCase.clockPause(employeeID)).thenReturn(clockResponse);
 

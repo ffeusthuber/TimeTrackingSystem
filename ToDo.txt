@@ -1,5 +1,10 @@
 In Work:
 
+[ ] Fill userdata in sidebar
+    [X] Username
+    [X] Role
+    [ ] Img
+
 [ ] Report
     [ ] Display worked hours of employee
         [ ] per week
@@ -22,17 +27,8 @@ In Work:
     [X] check if username is unique
     [X] check if form is filled out correctly
 
-[ ] Fill userdata in sidebar
-    [ ] Username
-    [ ] Role
-    [ ] Img
 
-[ ] check clock response and display fitting message on timeEntries.html
-    You have successfully clocked in at ... on ...
-    You have successfully clocked out at ... on ...
-    You have successfully clocked pause at ... on ...
-    Error: You are already clocked in
-    Error: You are not clocked in
+
 
 [ ] TimeEntriesController
         [ ] Create GET endpoint for finding all TimeEntries for Employee
