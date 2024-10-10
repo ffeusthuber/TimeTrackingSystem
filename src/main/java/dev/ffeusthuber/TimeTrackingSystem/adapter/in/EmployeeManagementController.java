@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class EmployeeController {
+public class EmployeeManagementController {
 
     private final EmployeeManagementUseCase employeeManagementService;
 
-    public EmployeeController(EmployeeManagementUseCase employeeManagementService) {
+    public EmployeeManagementController(EmployeeManagementUseCase employeeManagementService) {
         this.employeeManagementService = employeeManagementService;
     }
 

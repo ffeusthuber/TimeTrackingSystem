@@ -11,15 +11,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmployeeControllerTest {
+public class EmployeeManagementControllerTest {
 
         @Test
         void successfullyCreatedEmployeeIsAddedToEmployeeRepository() {
             EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withoutEmployees();
             EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService( new EmployeeService(employeeRepositoryStub));
-            EmployeeController employeeController = new EmployeeController(employeeManagementService);
+            EmployeeManagementController employeeManagementController = new EmployeeManagementController(employeeManagementService);
             RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
-            employeeController.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER", redirectAttributes);
+            employeeManagementController.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER", redirectAttributes);
 
             assertThat(employeeRepositoryStub.getEmployees().size()).isEqualTo(1);
         }
