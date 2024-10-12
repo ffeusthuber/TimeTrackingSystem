@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,8 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.util;
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.EmployeeRole;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

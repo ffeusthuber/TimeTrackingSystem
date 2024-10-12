@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
+package dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday;
 
 import java.time.ZoneId;
 

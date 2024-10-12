@@ -1,4 +1,6 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
+package dev.ffeusthuber.TimeTrackingSystem.application.dto;
+
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

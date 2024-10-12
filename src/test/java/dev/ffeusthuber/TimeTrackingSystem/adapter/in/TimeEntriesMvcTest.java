@@ -1,8 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockError;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockError;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;

@@ -1,6 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 
 import java.util.ArrayList;

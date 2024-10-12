@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponseStatus;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponseStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtils;
@@ -41,21 +41,21 @@ public class TimeEntriesController {
     }
 
     @PostMapping("/time-entries/clock-in")
-    public String clockIn(RedirectAttributes redirectAttributes) {
+    public String clockIn(RedirectAttributes redirectAttributes, ZoneId zoneId) {
         long employeeID = getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockIn(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
     }
 
     @PostMapping("/time-entries/clock-out")
-    public String clockOut(RedirectAttributes redirectAttributes) {
+    public String clockOut(RedirectAttributes redirectAttributes, ZoneId zoneId) {
         long employeeID = getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockOut(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
     }
 
     @PostMapping("/time-entries/clock-pause")
-    public String clockPause(RedirectAttributes redirectAttributes) {
+    public String clockPause(RedirectAttributes redirectAttributes, ZoneId zoneId) {
         long employeeID = getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockPause(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);

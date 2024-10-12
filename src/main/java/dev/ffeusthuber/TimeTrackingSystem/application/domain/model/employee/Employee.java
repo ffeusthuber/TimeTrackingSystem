@@ -1,4 +1,6 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
+package dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee;
+
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
 
 import java.util.Objects;
 

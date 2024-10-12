@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 
 import java.time.ZoneId;

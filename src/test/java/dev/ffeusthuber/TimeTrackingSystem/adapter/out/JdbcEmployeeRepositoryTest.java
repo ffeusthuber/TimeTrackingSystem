@@ -1,6 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;

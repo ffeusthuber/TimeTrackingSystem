@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Workday;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 
 import java.time.ZoneId;
 

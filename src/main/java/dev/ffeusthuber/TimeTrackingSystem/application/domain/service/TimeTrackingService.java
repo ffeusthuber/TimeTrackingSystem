@@ -1,9 +1,9 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockError;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockResponse;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockState;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryType;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockError;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import org.springframework.stereotype.Service;
 

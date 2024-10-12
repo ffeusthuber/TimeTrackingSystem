@@ -1,5 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
 
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZoneOffset;

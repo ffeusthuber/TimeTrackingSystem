@@ -1,12 +1,17 @@
 In Work:
 
-[ ] Fill userdata in sidebar
-    [X] Username
-    [X] Role
-    [ ] Img
 
 [ ] Report
     [ ] Display worked hours of employee
+        [ ] get worked hours for day
+            [ ] workday has timeEntries
+            [ ] when clocking --> timeEntry is added to workday
+            [ ] can calculate worked / paused hours
+            [ ] handle timeEntries from day before / after
+                [ ] if last timeEntry is clockIn --> get clock out from next day
+                [ ] if first timeEntry is clockOut --> day before
+
+
         [ ] per week
         [ ] overall for this month
     [ ] Display remaining flextime
@@ -22,6 +27,10 @@ In Work:
 
 
 ----------------------------------------------------------------------------------
+[ ] Fill userdata in sidebar
+    [X] Username
+    [X] Role
+    [ ] Img
 
 [X] validate input to employee creation
     [X] check if username is unique

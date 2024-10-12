@@ -3,9 +3,14 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.TimeEntryRepositoryStub;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.*;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockError;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -112,6 +117,15 @@ public class TimeTrackingServiceTest {
         assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
         timeTrackingUseCase.clockIn(employeeID);
         assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
+    }
+
+    @Disabled
+    @Test
+    void clockingInForFirstTimeOfDayCreatesWorkday() {
+//        long employeeID = 1L;
+//        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedOutEmployee(employeeID);
+//
+//        timeTrackingUseCase.clockIn(employeeID);
     }
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID) {

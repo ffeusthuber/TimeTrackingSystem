@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
+package dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry;
 
 import java.util.Objects;
 

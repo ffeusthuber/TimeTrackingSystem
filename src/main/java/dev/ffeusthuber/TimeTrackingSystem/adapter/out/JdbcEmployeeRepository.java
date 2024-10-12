@@ -1,8 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.ClockState;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.Employee;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.EmployeeRole;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;

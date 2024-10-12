@@ -1,6 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntryDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.port.out;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 
 import java.util.List;
 

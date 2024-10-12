@@ -1,4 +1,6 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
+package dev.ffeusthuber.TimeTrackingSystem.application.dto;
+
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 
 public class EmployeeDTO {
     private final String fullName;
