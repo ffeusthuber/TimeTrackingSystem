@@ -1,8 +1,7 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
+package dev.ffeusthuber.TimeTrackingSystem.application.dto;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
-import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

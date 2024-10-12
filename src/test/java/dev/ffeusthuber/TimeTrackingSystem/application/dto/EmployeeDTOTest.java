@@ -1,8 +1,7 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model;
+package dev.ffeusthuber.TimeTrackingSystem.application.dto;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
-import dev.ffeusthuber.TimeTrackingSystem.application.dto.EmployeeDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
