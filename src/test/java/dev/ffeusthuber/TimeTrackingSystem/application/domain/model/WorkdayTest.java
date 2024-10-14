@@ -71,6 +71,20 @@ public class WorkdayTest {
         assertThat(workedHours).isEqualTo(expectedWorkedHours);
     }
 
+    @Test
+    void workdaysSpanningIntoNextDayGetCalculatedCorrectly() {
+        double expectedWorkedHours = 2.0;
+        ZonedDateTime timeOfFirstClockIn = ZonedDateTime.of(2021, 1, 1, 23, 0, 0, 0, ZoneOffset.UTC);
+        TimeEntry timeEntry1 = new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, timeOfFirstClockIn);
+        TimeEntry timeEntry2 = new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_OUT, timeOfFirstClockIn.plusMinutes((long)(expectedWorkedHours * 60)));
+        Workday workday = new Workday(EMPLOYEE_ID, ZONE_ID);
+        addTimeEntries(workday, timeEntry1, timeEntry2);
+
+        double workedHours = workday.calculateWorkedHours();
+
+        assertThat(workedHours).isEqualTo(expectedWorkedHours);
+    }
+
     private void addTimeEntries(Workday workday, TimeEntry... timEntries){
         for (TimeEntry timeEntry : timEntries) {
             workday.addTimeEntry(timeEntry);
