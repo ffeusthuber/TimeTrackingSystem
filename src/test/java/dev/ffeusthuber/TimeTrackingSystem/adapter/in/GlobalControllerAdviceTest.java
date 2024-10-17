@@ -7,6 +7,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeMan
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
+import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
 import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtilsStub;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ExtendedModelMap;
@@ -15,12 +16,14 @@ import org.springframework.ui.Model;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GlobalControllerAdviceTest {
+
     @Test
     void fullNameAndRoleAreAddedToModelForDisplayInSidebar() {
         long employeeID = 1L;
-        Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER);
+        WorkScheduleConfig workScheduleConfig = new WorkScheduleConfig();
+        Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workScheduleConfig.defaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
-        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub));
+        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub,workScheduleConfig));
         GlobalControllerAdvice globalControllerAdvice = new GlobalControllerAdvice(employeeManagementService, new AuthenticationUtilsStub(employeeRepositoryStub, employeeID));
         Model model = new ExtendedModelMap();
 

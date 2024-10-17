@@ -4,6 +4,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Empl
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
+import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final WorkScheduleConfig workScheduleConfig;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, WorkScheduleConfig workScheduleConfig) {
         this.employeeRepository = employeeRepository;
+        this.workScheduleConfig = workScheduleConfig;
     }
 
     public ClockState getClockStateForEmployee(Long employeeID) {
@@ -47,12 +50,12 @@ public class EmployeeService {
         EmployeeRole employeeRole = EmployeeRole.valueOf(role);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
-        Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole);
+        Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole, workScheduleConfig.defaultWorkSchedule());
 
         employeeRepository.create(employee);
         Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
-        return new Employee(employeeId, firstname, lastname, email, encryptedPassword, employeeRole);
+        return new Employee(employeeId, firstname, lastname, email, encryptedPassword, employeeRole, workScheduleConfig.defaultWorkSchedule());
     }
 
     public Employee getEmployeeById(long employeeID) {

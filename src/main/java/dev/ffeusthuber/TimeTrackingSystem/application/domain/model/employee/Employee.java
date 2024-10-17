@@ -13,13 +13,14 @@ public class Employee {
     private String password;
     private EmployeeRole role;
     private ClockState clockState;
+    private WorkSchedule workSchedule;
 
     public Employee(Long employeeID, ClockState clockState) {
         this.employeeID = employeeID;
         this.clockState = clockState;
     }
 
-    public Employee(Long employeeID, String firstName, String lastName, String email, String password, EmployeeRole role) {
+    public Employee(Long employeeID, String firstName, String lastName, String email, String password, EmployeeRole role, WorkSchedule workSchedule) {
         this.employeeID = employeeID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,6 +28,7 @@ public class Employee {
         this.password = password;
         this.role = role;
         this.clockState = ClockState.CLOCKED_OUT;
+        this.workSchedule = workSchedule;
     }
 
     public Employee(Long employeeID, String firstName, String lastName, String email, String password, EmployeeRole role, ClockState clockState) {
@@ -79,11 +81,21 @@ public class Employee {
         return this.role;
     }
 
+    public WorkSchedule getWorkSchedule() {
+        return this.workSchedule;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Employee employee)) return false;
-        return Objects.equals(employeeID, employee.employeeID) && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(email, employee.email) && Objects.equals(password, employee.password) && role == employee.role && clockState == employee.clockState;
+        return Objects.equals(employeeID, employee.employeeID) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(email, employee.email) &&
+                Objects.equals(password, employee.password) &&
+                role == employee.role &&
+                clockState == employee.clockState;
     }
 
     @Override

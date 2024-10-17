@@ -7,6 +7,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.TimeEntrySe
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.TimeTrackingService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
+import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -36,9 +37,10 @@ public class JdbcTimeEntryRepositoryTest {
     @BeforeEach
     void setUp() {
         employeeID = 1;
-        Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER);
+        WorkScheduleConfig workScheduleConfig = new WorkScheduleConfig();
+        Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workScheduleConfig.defaultWorkSchedule());
         TimeEntryService timeEntryService = new TimeEntryService(timeEntryRepository);
-        EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withEmployee(employee));
+        EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withEmployee(employee), workScheduleConfig);
         timeTrackingService = new TimeTrackingService(timeEntryService, employeeService);
     }
 

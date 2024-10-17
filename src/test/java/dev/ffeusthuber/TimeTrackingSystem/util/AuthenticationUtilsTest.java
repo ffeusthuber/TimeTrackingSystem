@@ -4,6 +4,7 @@ import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
+import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,8 @@ public class AuthenticationUtilsTest {
     @Test
     void testGetAuthenticatedEmployeeID() {
         long employeeID = 1L;
-        Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER);
+        WorkScheduleConfig workScheduleConfig = new WorkScheduleConfig();
+        Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workScheduleConfig.defaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("j.doe@test-mail.com");
         AuthenticationUtils authenticationUtils = new AuthenticationUtils(employeeRepositoryStub);

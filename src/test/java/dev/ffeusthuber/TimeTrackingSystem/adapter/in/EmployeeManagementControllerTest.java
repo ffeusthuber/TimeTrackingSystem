@@ -5,6 +5,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeMan
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
+import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
@@ -16,7 +17,8 @@ public class EmployeeManagementControllerTest {
         @Test
         void successfullyCreatedEmployeeIsAddedToEmployeeRepository() {
             EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withoutEmployees();
-            EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService( new EmployeeService(employeeRepositoryStub));
+            WorkScheduleConfig workScheduleConfig = new WorkScheduleConfig();
+            EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService( new EmployeeService(employeeRepositoryStub, workScheduleConfig));
             EmployeeManagementController employeeManagementController = new EmployeeManagementController(employeeManagementService);
             RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
             employeeManagementController.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER", redirectAttributes);

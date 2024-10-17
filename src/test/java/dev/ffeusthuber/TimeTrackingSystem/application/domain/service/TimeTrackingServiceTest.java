@@ -10,12 +10,20 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.Clo
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
-import org.junit.jupiter.api.Disabled;
+import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TimeTrackingServiceTest {
+
+    private static WorkScheduleConfig workScheduleConfig;
+
+    @BeforeAll
+    static void setUp() {
+        workScheduleConfig = new WorkScheduleConfig();
+    }
 
     @Test
     void canClockInWithGivenEmployeeID() {
@@ -119,27 +127,18 @@ public class TimeTrackingServiceTest {
         assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
     }
 
-    @Disabled
-    @Test
-    void clockingInForFirstTimeOfDayCreatesWorkday() {
-//        long employeeID = 1L;
-//        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedOutEmployee(employeeID);
-//
-//        timeTrackingUseCase.clockIn(employeeID);
-    }
-
     private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID) {
         return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT))));
+                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT)), workScheduleConfig));
     }
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID, TimeEntryRepository timeEntryRepository) {
         return new TimeTrackingService(new TimeEntryService(timeEntryRepository),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT))));
+                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT)), workScheduleConfig));
     }
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedInEmployee(long employeeID) {
         return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_IN))));
+                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_IN)), workScheduleConfig));
     }
 }

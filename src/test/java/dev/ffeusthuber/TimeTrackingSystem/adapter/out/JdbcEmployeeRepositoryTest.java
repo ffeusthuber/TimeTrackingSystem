@@ -5,6 +5,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeMan
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
+import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -31,11 +32,14 @@ public class JdbcEmployeeRepositoryTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private WorkScheduleConfig workScheduleConfig;
+
     private EmployeeManagementUseCase employeeManagementService;
 
     @BeforeEach
     void setUp() {
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        EmployeeService employeeService = new EmployeeService(employeeRepository, workScheduleConfig);
         employeeManagementService = new EmployeeManagementService(employeeService);
     }
 

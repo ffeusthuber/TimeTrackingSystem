@@ -1,5 +1,12 @@
 In Work:
 
+[ ] WorkSchedule
+    [ ] add workSchedule to employee equals method
+    [ ] refactor employeeService to use workScheduleService
+    [ ] Clean up employee constructors
+    [ ] new Employee is created with default schedule
+    [ ] Employee can be created with own schedule
+
 
 [ ] Report
     [ ] Display worked hours of employee
