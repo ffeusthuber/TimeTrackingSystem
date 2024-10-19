@@ -23,7 +23,7 @@ public class GlobalControllerAdviceTest {
         WorkScheduleConfig workScheduleConfig = new WorkScheduleConfig();
         Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workScheduleConfig.defaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
-        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub,workScheduleConfig));
+        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub));
         GlobalControllerAdvice globalControllerAdvice = new GlobalControllerAdvice(employeeManagementService, new AuthenticationUtilsStub(employeeRepositoryStub, employeeID));
         Model model = new ExtendedModelMap();
 

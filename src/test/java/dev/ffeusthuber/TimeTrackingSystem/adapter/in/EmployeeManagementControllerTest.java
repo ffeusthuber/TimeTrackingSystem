@@ -18,7 +18,7 @@ public class EmployeeManagementControllerTest {
         void successfullyCreatedEmployeeIsAddedToEmployeeRepository() {
             EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withoutEmployees();
             WorkScheduleConfig workScheduleConfig = new WorkScheduleConfig();
-            EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService( new EmployeeService(employeeRepositoryStub, workScheduleConfig));
+            EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService( new EmployeeService(employeeRepositoryStub));
             EmployeeManagementController employeeManagementController = new EmployeeManagementController(employeeManagementService);
             RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
             employeeManagementController.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER", redirectAttributes);

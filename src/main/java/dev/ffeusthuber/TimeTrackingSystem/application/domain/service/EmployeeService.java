@@ -14,9 +14,9 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final WorkScheduleConfig workScheduleConfig;
 
-    public EmployeeService(EmployeeRepository employeeRepository, WorkScheduleConfig workScheduleConfig) {
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        this.workScheduleConfig = workScheduleConfig;
+        this.workScheduleConfig = new WorkScheduleConfig();
     }
 
     public ClockState getClockStateForEmployee(Long employeeID) {

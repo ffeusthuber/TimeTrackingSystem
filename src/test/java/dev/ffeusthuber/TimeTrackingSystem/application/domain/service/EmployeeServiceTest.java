@@ -102,6 +102,6 @@ public class EmployeeServiceTest {
     }
 
     private static EmployeeService createEmployeeService(EmployeeRepository employeeRepository) {
-        return new EmployeeService(employeeRepository, workScheduleConfig);
+        return new EmployeeService(employeeRepository);
     }
 }

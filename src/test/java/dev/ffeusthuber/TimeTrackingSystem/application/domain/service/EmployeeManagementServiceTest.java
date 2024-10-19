@@ -25,7 +25,7 @@ public class EmployeeManagementServiceTest {
     void canCreateEmployee() {
         //create Employee endpoint can only be reached with role ADMIN
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withoutEmployees();
-        EmployeeService employeeService = new EmployeeService(employeeRepository, workScheduleConfig);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
         EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService);
 
         employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
@@ -38,7 +38,7 @@ public class EmployeeManagementServiceTest {
     void canGetEmployeeById() {
         Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workScheduleConfig.defaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
-        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub, workScheduleConfig));
+        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub));
 
         EmployeeDTO employeeDTO = employeeManagementService.getEmployee(1L);
 

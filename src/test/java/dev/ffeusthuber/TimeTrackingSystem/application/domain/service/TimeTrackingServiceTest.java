@@ -129,16 +129,16 @@ public class TimeTrackingServiceTest {
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID) {
         return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT)), workScheduleConfig));
+                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT))));
     }
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID, TimeEntryRepository timeEntryRepository) {
         return new TimeTrackingService(new TimeEntryService(timeEntryRepository),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT)), workScheduleConfig));
+                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT))));
     }
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedInEmployee(long employeeID) {
         return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_IN)), workScheduleConfig));
+                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_IN))));
     }
 }

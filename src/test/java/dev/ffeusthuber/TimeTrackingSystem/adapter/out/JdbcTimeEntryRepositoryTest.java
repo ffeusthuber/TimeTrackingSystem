@@ -40,7 +40,7 @@ public class JdbcTimeEntryRepositoryTest {
         WorkScheduleConfig workScheduleConfig = new WorkScheduleConfig();
         Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workScheduleConfig.defaultWorkSchedule());
         TimeEntryService timeEntryService = new TimeEntryService(timeEntryRepository);
-        EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withEmployee(employee), workScheduleConfig);
+        EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withEmployee(employee));
         timeTrackingService = new TimeTrackingService(timeEntryService, employeeService);
     }
 
