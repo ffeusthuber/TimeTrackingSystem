@@ -3,23 +3,15 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.WorkSchedule;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.EmployeeDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
-import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmployeeManagementServiceTest {
-
-    private static WorkScheduleConfig workScheduleConfig;
-
-    @BeforeAll
-    static void setUp() {
-        workScheduleConfig = new WorkScheduleConfig();
-    }
 
     @Test
     void canCreateEmployee() {
@@ -36,7 +28,7 @@ public class EmployeeManagementServiceTest {
 
     @Test
     void canGetEmployeeById() {
-        Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workScheduleConfig.defaultWorkSchedule());
+        Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub));
 

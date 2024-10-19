@@ -12,7 +12,7 @@ public class WorkScheduleTest {
     @Test
     void givenAWeekdayTheScheduledWorkHoursForThatDayAreReturned(){
         float mondayScheduledWorkHours = 8.5f;
-        WorkSchedule workSchedule = new WorkSchedule(mondayScheduledWorkHours, 8f, 8f, 8f, 5.5f, 0f, 0f);
+        WorkSchedule workSchedule = WorkSchedule.createSpecificWorkSchedule(mondayScheduledWorkHours, 8f, 8f, 8f, 5.5f, 0f, 0f);
 
         float scheduledHours = workSchedule.getScheduledWorkHoursForDay(DayOfWeek.MONDAY);
 
@@ -21,8 +21,8 @@ public class WorkScheduleTest {
 
     @Test
     void workSchedulesAreEqualIfAllScheduledWorkHoursAreEqual(){
-        WorkSchedule workSchedule1 = new WorkSchedule(8.5f,8f,8f,8f,5.5f,0f,0f);
-        WorkSchedule workSchedule2 = new WorkSchedule(8.5f,8f,8f,8f,5.5f,0f,0f);
+        WorkSchedule workSchedule1 = WorkSchedule.createSpecificWorkSchedule(8.5f,8f,8f,8f,5.5f,0f,0f);
+        WorkSchedule workSchedule2 = WorkSchedule.createSpecificWorkSchedule(8.5f,8f,8f,8f,5.5f,0f,0f);
 
         assertThat(workSchedule1).isEqualTo(workSchedule2);
     }

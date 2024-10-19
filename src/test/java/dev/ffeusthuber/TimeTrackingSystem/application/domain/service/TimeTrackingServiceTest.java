@@ -10,20 +10,11 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.Clo
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
-import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TimeTrackingServiceTest {
-
-    private static WorkScheduleConfig workScheduleConfig;
-
-    @BeforeAll
-    static void setUp() {
-        workScheduleConfig = new WorkScheduleConfig();
-    }
 
     @Test
     void canClockInWithGivenEmployeeID() {

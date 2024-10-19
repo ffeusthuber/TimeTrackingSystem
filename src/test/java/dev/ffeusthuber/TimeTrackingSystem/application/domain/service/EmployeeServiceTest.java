@@ -3,10 +3,9 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.WorkSchedule;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
-import dev.ffeusthuber.TimeTrackingSystem.config.WorkScheduleConfig;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -15,14 +14,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmployeeServiceTest {
-
-    private static WorkScheduleConfig workScheduleConfig;
-
-
-    @BeforeAll
-    static void setUp() {
-        workScheduleConfig = new WorkScheduleConfig();
-    }
 
     @Test
     void createdEmployeeGetsAssignedId() {
@@ -38,11 +29,10 @@ public class EmployeeServiceTest {
     void createdEmployeeGetsAssignedTheDefaultWorkSchedule() {
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withoutEmployees();
         EmployeeService employeeService = createEmployeeService(employeeRepository);
-        WorkScheduleConfig workScheduleConfig = new WorkScheduleConfig();
 
         Employee createdEmployee = employeeService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
 
-        assertThat(createdEmployee.getWorkSchedule()).isEqualTo(workScheduleConfig.defaultWorkSchedule());
+        assertThat(createdEmployee.getWorkSchedule()).isEqualTo(WorkSchedule.createDefaultWorkSchedule());
     }
 
     @Test
@@ -92,7 +82,7 @@ public class EmployeeServiceTest {
 
     @Test
     void canGetEmployeeById() {
-        Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workScheduleConfig.defaultWorkSchedule());
+        Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeService employeeService = createEmployeeService(employeeRepositoryStub);
 
