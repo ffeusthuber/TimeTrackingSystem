@@ -8,6 +8,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepositor
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+
 @Service
 public class EmployeeService {
 
@@ -58,5 +60,10 @@ public class EmployeeService {
 
     public Employee getEmployeeById(long employeeID) {
         return employeeRepository.getEmployeeByID(employeeID);
+    }
+
+    public float getScheduledHoursForEmployeeOnWeekDay(long employeeId, DayOfWeek dayOfWeek) {
+        Employee employee = employeeRepository.getEmployeeByID(employeeId);
+        return employee.getWorkSchedule().getScheduledWorkHoursForDay(dayOfWeek);
     }
 }

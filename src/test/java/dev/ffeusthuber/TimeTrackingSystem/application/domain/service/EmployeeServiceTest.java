@@ -9,6 +9,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepositor
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +34,20 @@ public class EmployeeServiceTest {
         Employee createdEmployee = employeeService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
 
         assertThat(createdEmployee.getWorkSchedule()).isEqualTo(WorkSchedule.createDefaultWorkSchedule());
+    }
+
+    @Test
+    void givenADayOfWeekCanGetScheduledHorsForEmployee() {
+        long employeeId = 1L;
+        float hoursMonday = 8;
+        WorkSchedule workSchedule = WorkSchedule.createSpecificWorkSchedule(hoursMonday, 8.5f, 8.5f, 8.5f, 8.5f, 8.5f, 8.5f);
+        Employee employee = new Employee(employeeId, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, workSchedule);
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
+        EmployeeService employeeService = createEmployeeService(employeeRepository);
+
+        float actualScheduledHours = employeeService.getScheduledHoursForEmployeeOnWeekDay(employeeId, DayOfWeek.MONDAY);
+
+        assertThat(actualScheduledHours).isEqualTo(hoursMonday);
     }
 
     @Test
