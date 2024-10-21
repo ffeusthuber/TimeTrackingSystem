@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Employee {
 
-    private final Long employeeID;
+    private Long employeeID;
     private String firstName;
     private String lastName;
     private String email;
@@ -31,7 +31,7 @@ public class Employee {
         this.workSchedule = workSchedule;
     }
 
-    public Employee(Long employeeID, String firstName, String lastName, String email, String password, EmployeeRole role, ClockState clockState) {
+    public Employee(Long employeeID, String firstName, String lastName, String email, String password, EmployeeRole role, ClockState clockState, WorkSchedule workSchedule) {
         this.employeeID = employeeID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,6 +39,7 @@ public class Employee {
         this.password = password;
         this.role = role;
         this.clockState = clockState;
+        this.workSchedule = workSchedule;
     }
 
     public Long getEmployeeID() {
@@ -85,6 +86,10 @@ public class Employee {
         return this.workSchedule;
     }
 
+    public void setEmployeeID(Long employeeId) {
+        this.employeeID = employeeId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -95,11 +100,12 @@ public class Employee {
                 Objects.equals(email, employee.email) &&
                 Objects.equals(password, employee.password) &&
                 role == employee.role &&
-                clockState == employee.clockState;
+                clockState == employee.clockState &&
+                Objects.equals(workSchedule, employee.workSchedule);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(employeeID, firstName, lastName, email, password, role, clockState);
+        return Objects.hash(employeeID, firstName, lastName, email, password, role, clockState, workSchedule);
     }
 }

@@ -14,3 +14,16 @@ CREATE TABLE IF NOT EXISTS Time_entry (
     entry_type VARCHAR(255) NOT NULL,
     entry_date_time DATETIME  NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS Work_schedule (
+    work_schedule_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    employee_id BIGINT NOT NULL UNIQUE,
+    hours_monday FLOAT NOT NULL,
+    hours_tuesday FLOAT  NOT NULL,
+    hours_wednesday FLOAT  NOT NULL,
+    hours_thursday FLOAT  NOT NULL,
+    hours_friday FLOAT  NOT NULL,
+    hours_saturday FLOAT  NOT NULL,
+    hours_sunday FLOAT  NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
+);

@@ -66,7 +66,8 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
                         employee.getEmail(),
                         employee.getPassword(),
                         employee.getRole(),
-                        employee.getClockState()))
+                        employee.getClockState(),
+                        employee.getWorkSchedule()))
                 .orElse(null);
     }
 }

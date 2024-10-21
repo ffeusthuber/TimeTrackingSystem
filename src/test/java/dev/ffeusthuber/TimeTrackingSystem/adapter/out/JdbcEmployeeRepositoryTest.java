@@ -41,6 +41,7 @@ public class JdbcEmployeeRepositoryTest {
 
     @AfterEach
     void clearDatabase() {
+        jdbcTemplate.execute("DELETE FROM Work_schedule");
         jdbcTemplate.execute("DELETE FROM Employee");
     }
 
@@ -88,12 +89,13 @@ public class JdbcEmployeeRepositoryTest {
     }
 
     @Test
-    void canGetEmployeeByID(){
+    void canGetEmployeeByID() {
         String email = "j.doe@test-mail.com";
         Employee expectedEmployee = employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
         Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
         Employee actualEmployee = employeeRepository.getEmployeeByID(employeeId);
+        System.out.println("WorkSchedule :" + actualEmployee.getWorkSchedule()); // why null?
 
         assertThat(actualEmployee).isEqualTo(expectedEmployee);
     }

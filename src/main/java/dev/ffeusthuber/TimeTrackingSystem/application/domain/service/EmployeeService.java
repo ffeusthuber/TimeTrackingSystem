@@ -14,9 +14,11 @@ import java.time.DayOfWeek;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
+        bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
     public ClockState getClockStateForEmployee(Long employeeID) {
@@ -48,14 +50,12 @@ public class EmployeeService {
 
     public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
         EmployeeRole employeeRole = EmployeeRole.valueOf(role);
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
         Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole, WorkSchedule.createDefaultWorkSchedule());
 
         employeeRepository.create(employee);
-        Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
-
-        return new Employee(employeeId, firstname, lastname, email, encryptedPassword, employeeRole, WorkSchedule.createDefaultWorkSchedule());
+        employee.setEmployeeID(employeeRepository.getEmployeeIDByEmail(email));
+        return employee;
     }
 
     public Employee getEmployeeById(long employeeID) {
