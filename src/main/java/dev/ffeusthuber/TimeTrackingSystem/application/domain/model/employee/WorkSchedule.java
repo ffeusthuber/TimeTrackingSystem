@@ -1,34 +1,39 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Properties;
 
-@PropertySource("classpath:work-schedule.properties")
 public class WorkSchedule {
-    @Value("${default.work.hours.monday}")
-    private static float workHoursMonday;
+    private static float defaultWorkHoursMonday;
+    private static float defaultWorkHoursTuesday;
+    private static float defaultWorkHoursWednesday;
+    private static float defaultWorkHoursThursday;
+    private static float defaultWorkHoursFriday;
+    private static float defaultWorkHoursSaturday;
+    private static float defaultWorkHoursSunday;
 
-    @Value("${default.work.hours.tuesday}")
-    private static float workHoursTuesday;
-
-    @Value("${default.work.hours.wednesday}")
-    private static float workHoursWednesday;
-
-    @Value("${default.work.hours.thursday}")
-    private static float workHoursThursday;
-
-    @Value("${default.work.hours.friday}")
-    private static float workHoursFriday;
-
-    @Value("${default.work.hours.saturday}")
-    private static float workHoursSaturday;
-
-    @Value("${default.work.hours.sunday}")
-    private static float workHoursSunday;
+    static {
+        Properties properties = new Properties();
+        try (InputStream input = WorkSchedule.class.getClassLoader().getResourceAsStream("work-schedule.properties")) {
+            if (input == null) {
+                throw new IOException("Unable to find work-schedule.properties");
+            }
+            properties.load(input);
+            defaultWorkHoursMonday = Float.parseFloat(properties.getProperty("default.work.hours.monday", "0"));
+            defaultWorkHoursTuesday = Float.parseFloat(properties.getProperty("default.work.hours.tuesday", "0"));
+            defaultWorkHoursWednesday = Float.parseFloat(properties.getProperty("default.work.hours.wednesday", "0"));
+            defaultWorkHoursThursday = Float.parseFloat(properties.getProperty("default.work.hours.thursday", "0"));
+            defaultWorkHoursFriday = Float.parseFloat(properties.getProperty("default.work.hours.friday", "0"));
+            defaultWorkHoursSaturday = Float.parseFloat(properties.getProperty("default.work.hours.saturday", "0"));
+            defaultWorkHoursSunday = Float.parseFloat(properties.getProperty("default.work.hours.sunday", "0"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     private final float[] scheduledWorkHours;
 
@@ -48,7 +53,7 @@ public class WorkSchedule {
     }
 
     public static WorkSchedule createDefaultWorkSchedule() {
-        return new WorkSchedule(workHoursMonday, workHoursTuesday, workHoursWednesday, workHoursThursday, workHoursFriday, workHoursSaturday, workHoursSunday);
+        return new WorkSchedule(defaultWorkHoursMonday, defaultWorkHoursTuesday, defaultWorkHoursWednesday, defaultWorkHoursThursday, defaultWorkHoursFriday, defaultWorkHoursSaturday, defaultWorkHoursSunday);
     }
 
     public static WorkSchedule createSpecificWorkSchedule(float hoursMonday,
