@@ -37,7 +37,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void givenADayOfWeekCanGetScheduledHorsForEmployee() {
+    void givenADayOfWeekCanGetScheduledHoursForEmployee() {
         long employeeId = 1L;
         float hoursMonday = 8;
         WorkSchedule workSchedule = WorkSchedule.createSpecificWorkSchedule(hoursMonday, 8.5f, 8.5f, 8.5f, 8.5f, 8.5f, 8.5f);

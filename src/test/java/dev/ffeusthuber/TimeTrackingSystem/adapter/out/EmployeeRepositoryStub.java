@@ -33,7 +33,7 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     @Override
-    public void create(Employee employee) {
+    public void save(Employee employee) {
         employees.add(employee);
     }
 

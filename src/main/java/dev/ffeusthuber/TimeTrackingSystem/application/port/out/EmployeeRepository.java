@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EmployeeRepository {
 
-    void create(Employee employee);
+    void save(Employee employee);
 
     void updateClockState(Long employeeID, String clockState);
 

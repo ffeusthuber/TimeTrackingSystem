@@ -27,7 +27,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public void create(Employee employee) {
+    public void save(Employee employee) {
         String sql = "INSERT INTO Employee (first_name, last_name, email, password, role, clock_state) VALUES (?, ?, ?, ?, ?,?)";
         jdbcTemplate.update(sql,
                             employee.getFirstName(),

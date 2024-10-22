@@ -53,7 +53,7 @@ public class EmployeeService {
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
         Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole, WorkSchedule.createDefaultWorkSchedule());
 
-        employeeRepository.create(employee);
+        employeeRepository.save(employee);
         employee.setEmployeeID(employeeRepository.getEmployeeIDByEmail(email));
         return employee;
     }
