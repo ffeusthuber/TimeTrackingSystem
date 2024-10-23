@@ -12,11 +12,15 @@ import java.util.Queue;
 public class Workday {
     private final long employeeId;
     private final ZoneId timeZoneId;
+    private final ZonedDateTime workDate;
     private final Queue<TimeEntry> timeEntries = new LinkedList<>();
+    private final float scheduledHours;
 
-    public Workday(long employeeId, ZoneId timeZoneId) {
+    public Workday(long employeeId, ZonedDateTime workDate, float scheduledHours) {
         this.employeeId = employeeId;
-        this.timeZoneId = timeZoneId;
+        this.workDate = workDate;
+        timeZoneId = workDate.getZone();
+        this.scheduledHours = scheduledHours;
     }
 
     public ZoneId getTimeZoneId() {
@@ -51,5 +55,9 @@ public class Workday {
         }
 
         return totalWorkedHours;
+    }
+
+    public double getScheduledHours() {
+        return this.scheduledHours;
     }
 }
