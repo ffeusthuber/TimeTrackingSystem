@@ -49,7 +49,7 @@ public class JdbcTimeEntryRepositoryTest {
     }
 
     @Test
-    void timeEntryCanBeSaved() {
+    void timeEntryIsSavedWhenCreatedWithTimeTrackingService() {
         timeTrackingService.clockIn(employeeID);
 
         assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);

@@ -46,7 +46,7 @@ public class JdbcEmployeeRepositoryTest {
     }
 
     @Test
-    void employeeCanBeSaved() {
+    void employeeIsSavedWhenCreatedViaEmployeeManagementService() {
         employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
 
         assertThat(employeeRepository.getEmployees()).hasSize(1);
