@@ -31,6 +31,10 @@ public class Workday {
         return this.employeeId;
     }
 
+    public ZonedDateTime getWorkDate() {
+        return this.workDate;
+    }
+
     public void addTimeEntry(TimeEntry timeEntry) {
         this.timeEntries.add(timeEntry);
     }
