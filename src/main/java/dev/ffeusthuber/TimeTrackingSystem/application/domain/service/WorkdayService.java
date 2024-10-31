@@ -2,6 +2,7 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
@@ -22,6 +23,10 @@ public class WorkdayService {
         this.workdayRepository = workdayRepository;
     }
 
+    public Optional<Workday> getLatestWorkdayForEmployee(long employeeID) {
+        return workdayRepository.getLatestWorkdayForEmployee(employeeID);
+    }
+
     public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, ZonedDateTime workDate) {
         return workdayRepository.getWorkdayForEmployeeOnDate(employeeID, workDate);
     }
@@ -36,7 +41,14 @@ public class WorkdayService {
     }
 
     public void addTimeEntryToWorkday(TimeEntry timeEntry) {
-        Workday workday = getOrCreateWorkdayForEmployeeOnDate(timeEntry.getEmployeeID(), timeEntry.getEntryDateTime());
+        Workday workday;
+        if(timeEntry.getType() == TimeEntryType.CLOCK_IN) {
+            workday = getOrCreateWorkdayForEmployeeOnDate(timeEntry.getEmployeeID(), timeEntry.getEntryDateTime());
+        }
+        else {
+            workday = getLatestWorkdayForEmployee(timeEntry.getEmployeeID())
+                    .orElseThrow(() -> new IllegalStateException("No workday found for employee"));
+        }
         workday.addTimeEntry(timeEntry);
         workdayRepository.saveWorkday(workday);
     }

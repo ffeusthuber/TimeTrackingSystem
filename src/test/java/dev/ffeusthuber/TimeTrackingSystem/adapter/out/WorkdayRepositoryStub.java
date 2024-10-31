@@ -4,10 +4,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workd
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class WorkdayRepositoryStub implements WorkdayRepository {
     private final List<Workday> workdayList = new ArrayList<>();
@@ -34,5 +31,12 @@ public class WorkdayRepositoryStub implements WorkdayRepository {
     @Override
     public void saveWorkday(Workday workday) {
         workdayList.add(workday);
+    }
+
+    @Override
+    public Optional<Workday> getLatestWorkdayForEmployee(long employeeID) {
+        return workdayList.stream()
+                          .filter(workday -> workday.getEmployeeId() == employeeID)
+                          .max(Comparator.comparing(Workday::getWorkDate));
     }
 }

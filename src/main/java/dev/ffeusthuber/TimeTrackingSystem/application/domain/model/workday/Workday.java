@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Workday {
@@ -37,6 +38,10 @@ public class Workday {
 
     public void addTimeEntry(TimeEntry timeEntry) {
         this.timeEntries.add(timeEntry);
+    }
+
+    public List<TimeEntry> getTimeEntries() {
+        return new LinkedList<>(timeEntries);
     }
 
     public double calculateWorkedHours() {

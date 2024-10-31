@@ -6,7 +6,10 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 
 public interface WorkdayRepository {
+    void saveWorkday(Workday workday);
+    Optional<Workday> getLatestWorkdayForEmployee(long employeeID);
     Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, ZonedDateTime now);
 
-    void saveWorkday(Workday workday);
+
+
 }

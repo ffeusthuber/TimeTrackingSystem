@@ -20,4 +20,9 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
     public void saveWorkday(Workday workday) {
 
     }
+
+    @Override
+    public Optional<Workday> getLatestWorkdayForEmployee(long employeeID) {
+        return Optional.empty();
+    }
 }
