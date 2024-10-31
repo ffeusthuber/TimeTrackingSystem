@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface WorkdayRepository {
     Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, ZonedDateTime now);
+
+    void saveWorkday(Workday workday);
 }

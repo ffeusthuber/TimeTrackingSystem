@@ -30,4 +30,9 @@ public class WorkdayRepositoryStub implements WorkdayRepository {
                           .filter(workday -> workday.getEmployeeId() == employeeID && workday.getWorkDate().toLocalDate().equals(date.toLocalDate()))
                           .findFirst();
     }
+
+    @Override
+    public void saveWorkday(Workday workday) {
+        workdayList.add(workday);
+    }
 }

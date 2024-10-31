@@ -15,4 +15,9 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
     public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, ZonedDateTime now) {
         return Optional.empty();
     }
+
+    @Override
+    public void saveWorkday(Workday workday) {
+
+    }
 }
