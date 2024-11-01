@@ -13,6 +13,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -31,35 +33,36 @@ public class WorkdayServiceTest {
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
         WorkdayService workdayService = new WorkdayService(employeeRepository, workdayRepository);
 
-        assertThat(workdayRepository.getWorkdayForEmployeeOnDate(employeeID, timeOfFirstClockIn)).isEmpty();
+        assertThat(workdayRepository.getWorkdayForEmployeeOnDate(employeeID, timeOfFirstClockIn.toLocalDate(), timeOfFirstClockIn.getZone())).isEmpty();
 
         workdayService.addTimeEntryToWorkday(timeEntry);
 
-        assertThat(workdayRepository.getWorkdayForEmployeeOnDate(employeeID, timeOfFirstClockIn)).isNotEmpty();
+        assertThat(workdayRepository.getWorkdayForEmployeeOnDate(employeeID,  timeOfFirstClockIn.toLocalDate(), timeOfFirstClockIn.getZone())).isNotEmpty();
     }
 
     @Test
     void canGetLatestWorkdayForEmployee() {
         long employeeID = 1L;
         float scheduledHours = 5.5f;
-        Workday workday = new Workday(employeeID, ZonedDateTime.now().minusDays(1), scheduledHours);
-        Workday latestWorkday = new Workday(employeeID, ZonedDateTime.now(), scheduledHours);
-        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
+        Workday workday = new Workday(employeeID, LocalDate.of(2020,1,1), ZoneId.of("UTC"), scheduledHours);
+        Workday latestWorkday = new Workday(employeeID, LocalDate.of(2020,1,2), ZoneId.of("UTC"), scheduledHours);
+        WorkdayRepository workdayRepository = workdayRepositoryStubWithWorkdays(workday, latestWorkday);
 
         WorkdayService workdayService = new WorkdayService(null,workdayRepository);
 
-        workdayRepository.saveWorkday(workday);
-        workdayRepository.saveWorkday(latestWorkday);
-
         assertThat(workdayService.getLatestWorkdayForEmployee(employeeID)).isEqualTo(Optional.of(latestWorkday));
+    }
+
+    private WorkdayRepository workdayRepositoryStubWithWorkdays(Workday... workdays) {
+        return WorkdayRepositoryStub.withWorkdays(workdays);
     }
 
     @Test
     void nonClockInTimeEntriesGetAddedToLatestWorkday() {
         long employeeID = 1L;
         float scheduledHours = 5.5f;
-        Workday latestWorkday = new Workday(employeeID, ZonedDateTime.now().minusDays(1), scheduledHours);
-        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkday(latestWorkday);
+        Workday workday = new Workday(employeeID, LocalDate.of(2020,1,1), ZoneId.of("UTC"), scheduledHours);
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);
         WorkdayService workdayService = new WorkdayService(null,workdayRepository);
         ZonedDateTime timeOfClockOut = ZonedDateTime.now();
         TimeEntry timeEntry = new TimeEntry(employeeID, TimeEntryType.CLOCK_OUT, timeOfClockOut);
@@ -86,11 +89,13 @@ public class WorkdayServiceTest {
     void canGetExistingWorkdayForEmployeeOnDate() {
         long employeeID = 1L;
         float scheduledHours = 5.5f;
-        Workday workday = new Workday(employeeID, ZonedDateTime.now(), scheduledHours);
-        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkday(workday);
+        LocalDate workDate = LocalDate.of(2020,1,1);
+        ZoneId zoneId = ZoneId.of("UTC");
+        Workday workday = new Workday(employeeID, workDate, zoneId , scheduledHours);
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);
 
         WorkdayService workdayService = new WorkdayService(null,workdayRepository);
 
-        assertThat(workdayService.getWorkdayForEmployeeOnDate(employeeID, ZonedDateTime.now())).isEqualTo(Optional.of(workday));
+        assertThat(workdayService.getWorkdayForEmployeeOnDate(employeeID, workDate, zoneId)).isEqualTo(Optional.of(workday));
     }
 }

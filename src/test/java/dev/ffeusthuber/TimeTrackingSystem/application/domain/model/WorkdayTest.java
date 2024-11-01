@@ -5,6 +5,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.Tim
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
@@ -13,12 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WorkdayTest {
 
     private final long EMPLOYEE_ID = 1L;
-    private final ZonedDateTime WORK_DATE = ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+    private final LocalDate WORK_DATE = LocalDate.of(2021, 1, 1);
+    private final ZoneId ZONE_ID = ZoneId.of("UTC");
     private final float SCHEDULED_HOURS = 8.25f;
 
     @Test
     void whenNoTimeEntryIsAddedToWorkdayThenCalculateWorkedHoursReturnsZero() {
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
         
         assertThat(workday.calculateWorkedHours()).isEqualTo(0);
     }
@@ -27,10 +30,10 @@ public class WorkdayTest {
     @Test
     void canCalculateWorkedHoursFromClockInAndClockOut() {
         double expectedWorkedHours = 5.5;
-        ZonedDateTime clockInTime = WORK_DATE;
+        ZonedDateTime clockInTime = WORK_DATE.atStartOfDay(ZONE_ID);
         ZonedDateTime clockOutTime = clockInTime.plusMinutes((long) (expectedWorkedHours * 60));
 
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
         addTimeEntries(workday,
                        new TimeEntry(EMPLOYEE_ID,TimeEntryType.CLOCK_IN,clockInTime),
                        new TimeEntry(EMPLOYEE_ID,TimeEntryType.CLOCK_OUT,clockOutTime));
@@ -42,8 +45,8 @@ public class WorkdayTest {
     void canCalculateWorkedHoursFromMultipleClockInAndClockOut() {
         double expectedWorkedHours = 5.5;
         int pauseMinutes = 30;
-        ZonedDateTime timeOfFirstEntry = WORK_DATE;
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
+        ZonedDateTime timeOfFirstEntry = WORK_DATE.atStartOfDay(ZONE_ID);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
         addTimeEntries(workday,
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, timeOfFirstEntry),
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_PAUSE, timeOfFirstEntry.plusMinutes((long) ((expectedWorkedHours / 2) * 60))),
@@ -57,8 +60,8 @@ public class WorkdayTest {
     @Test
     void ifFirstTimeEntryOfWorkdayIsNotClockInThenCalculateWorkedHoursFromFirstClockIn() {
         double expectedWorkedHours = 5.5;
-        ZonedDateTime timeOfFirstClockIn = WORK_DATE;
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
+        ZonedDateTime timeOfFirstClockIn = WORK_DATE.atStartOfDay(ZONE_ID);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
         addTimeEntries(workday,
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_OUT, timeOfFirstClockIn.minusMinutes(60)),
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, timeOfFirstClockIn),
@@ -72,7 +75,7 @@ public class WorkdayTest {
     void workdaysSpanningIntoNextDayGetCalculatedCorrectly() {
         double expectedWorkedHours = 2.0;
         ZonedDateTime timeOfFirstClockIn = ZonedDateTime.of(2021, 1, 1, 23, 0, 0, 0, ZoneOffset.UTC);
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
         addTimeEntries(workday,
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, timeOfFirstClockIn),
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_OUT, timeOfFirstClockIn.plusMinutes((long)(expectedWorkedHours * 60)))

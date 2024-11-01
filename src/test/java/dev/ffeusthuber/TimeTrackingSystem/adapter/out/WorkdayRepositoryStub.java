@@ -3,7 +3,8 @@ package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class WorkdayRepositoryStub implements WorkdayRepository {
@@ -13,8 +14,8 @@ public class WorkdayRepositoryStub implements WorkdayRepository {
         workdayList.addAll(Arrays.asList(workdays));
     }
 
-    public static WorkdayRepositoryStub withWorkday(Workday workday) {
-        return new WorkdayRepositoryStub(workday);
+    public static WorkdayRepositoryStub withWorkdays(Workday... workdays) {
+        return new WorkdayRepositoryStub(workdays);
     }
 
     public static WorkdayRepository withoutWorkdays() {
@@ -22,9 +23,9 @@ public class WorkdayRepositoryStub implements WorkdayRepository {
     }
 
     @Override
-    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, ZonedDateTime date) {
+    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date, ZoneId zoneId) {
         return workdayList.stream()
-                          .filter(workday -> workday.getEmployeeId() == employeeID && workday.getWorkDate().toLocalDate().equals(date.toLocalDate()))
+                          .filter(workday -> workday.getEmployeeId() == employeeID && workday.getWorkDate().equals(date))
                           .findFirst();
     }
 

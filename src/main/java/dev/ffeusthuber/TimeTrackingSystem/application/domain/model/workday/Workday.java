@@ -3,6 +3,7 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -12,27 +13,27 @@ import java.util.Queue;
 
 public class Workday {
     private final long employeeId;
-    private final ZoneId timeZoneId;
-    private final ZonedDateTime workDate;
+    private final LocalDate workDate;
+    private final ZoneId zoneId;
     private final Queue<TimeEntry> timeEntries = new LinkedList<>();
     private final float scheduledHours;
 
-    public Workday(long employeeId, ZonedDateTime workDate, float scheduledHours) {
+    public Workday(long employeeId, LocalDate workDate, ZoneId zoneId, float scheduledHours) {
         this.employeeId = employeeId;
         this.workDate = workDate;
-        timeZoneId = workDate.getZone();
+        this.zoneId = zoneId;
         this.scheduledHours = scheduledHours;
     }
 
-    public ZoneId getTimeZoneId() {
-        return this.timeZoneId;
+    public ZoneId getZoneId() {
+        return this.zoneId;
     }
 
     public long getEmployeeId() {
         return this.employeeId;
     }
 
-    public ZonedDateTime getWorkDate() {
+    public LocalDate getWorkDate() {
         return this.workDate;
     }
 
@@ -45,15 +46,11 @@ public class Workday {
     }
 
     public double calculateWorkedHours() {
-        if (timeEntries.isEmpty()) {
-            return 0.0;
-        }
+        if (timeEntries.isEmpty()) return 0.0;
 
         Queue<TimeEntry> entriesCopy = new LinkedList<>(timeEntries);
 
-        while (entriesCopy.peek().getType() != TimeEntryType.CLOCK_IN) {
-            entriesCopy.poll();
-        }
+        skipUntilFirstClockInTimeEntry(entriesCopy);
 
         double totalWorkedHours = 0.0;
         while (entriesCopy.size() >= 2) {
@@ -64,6 +61,12 @@ public class Workday {
         }
 
         return totalWorkedHours;
+    }
+
+    private static void skipUntilFirstClockInTimeEntry(Queue<TimeEntry> entriesCopy) {
+        while (entriesCopy.peek().getType() != TimeEntryType.CLOCK_IN) {
+            entriesCopy.poll();
+        }
     }
 
     public double getScheduledHours() {
