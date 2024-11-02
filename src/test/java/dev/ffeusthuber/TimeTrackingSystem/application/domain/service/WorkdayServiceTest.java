@@ -8,7 +8,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Work
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,79 +22,77 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WorkdayServiceTest {
 
+    private static final long EMPLOYEE_ID = 1L;
+    private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
+
     @Test
-    void firstAddedClockInTimeEntryCreatesWorkdayForEmployee() {
-        long employeeID = 1L;
-        ZonedDateTime timeOfFirstClockIn = ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-        TimeEntry timeEntry = new TimeEntry(employeeID, TimeEntryType.CLOCK_IN, timeOfFirstClockIn);
-        Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
-        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
-        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
-        WorkdayService workdayService = new WorkdayService(employeeRepository, workdayRepository);
+    void firstAddedClockInTimeEntryOnDateCreatesWorkdayForEmployee() {
+        ZonedDateTime day1ClockInTime = ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        ZonedDateTime day2ClockInTime = ZonedDateTime.of(2021, 1, 2, 0, 0, 0, 0, ZoneOffset.UTC);
+        Employee employee = createEmployee();
+        WorkdayService workdayService = new WorkdayService(
+                EmployeeRepositoryStub.withEmployee(employee),
+                WorkdayRepositoryStub.withoutWorkdays());
 
-        assertThat(workdayRepository.getWorkdayForEmployeeOnDate(employeeID, timeOfFirstClockIn.toLocalDate(), timeOfFirstClockIn.getZone())).isEmpty();
+        workdayService.addTimeEntryToWorkday(new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, day1ClockInTime));
+        workdayService.addTimeEntryToWorkday(new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, day2ClockInTime));
 
-        workdayService.addTimeEntryToWorkday(timeEntry);
-
-        assertThat(workdayRepository.getWorkdayForEmployeeOnDate(employeeID,  timeOfFirstClockIn.toLocalDate(), timeOfFirstClockIn.getZone())).isNotEmpty();
+        assertThat(workdayService.getWorkdayForEmployeeOnDate(EMPLOYEE_ID,  day1ClockInTime.toLocalDate(), day1ClockInTime.getZone())).isNotEmpty();
+        assertThat(workdayService.getWorkdayForEmployeeOnDate(EMPLOYEE_ID,  day2ClockInTime.toLocalDate(), day2ClockInTime.getZone())).isNotEmpty();
     }
 
     @Test
     void canGetLatestWorkdayForEmployee() {
-        long employeeID = 1L;
-        float scheduledHours = 5.5f;
-        Workday workday = new Workday(employeeID, LocalDate.of(2020,1,1), ZoneId.of("UTC"), scheduledHours);
-        Workday latestWorkday = new Workday(employeeID, LocalDate.of(2020,1,2), ZoneId.of("UTC"), scheduledHours);
+        Workday workday = new Workday(EMPLOYEE_ID, LocalDate.of(2020,1,1), UTC_ZONE, 5.5f);
+        Workday latestWorkday = new Workday(EMPLOYEE_ID, LocalDate.of(2020,1,2), UTC_ZONE, 5.5f);
         WorkdayRepository workdayRepository = workdayRepositoryStubWithWorkdays(workday, latestWorkday);
 
         WorkdayService workdayService = new WorkdayService(null,workdayRepository);
 
-        assertThat(workdayService.getLatestWorkdayForEmployee(employeeID)).isEqualTo(Optional.of(latestWorkday));
-    }
-
-    private WorkdayRepository workdayRepositoryStubWithWorkdays(Workday... workdays) {
-        return WorkdayRepositoryStub.withWorkdays(workdays);
+        assertThat(workdayService.getLatestWorkdayForEmployee(EMPLOYEE_ID))
+                .isPresent()
+                .contains(latestWorkday);
     }
 
     @Test
-    void nonClockInTimeEntriesGetAddedToLatestWorkday() {
-        long employeeID = 1L;
-        float scheduledHours = 5.5f;
-        Workday workday = new Workday(employeeID, LocalDate.of(2020,1,1), ZoneId.of("UTC"), scheduledHours);
-        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);
+    void nonClockInTimeEntriesDoNotCreateAWorkdayButGetAddedToLatestWorkday() {
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), UTC_ZONE, 5.5f));
         WorkdayService workdayService = new WorkdayService(null,workdayRepository);
-        ZonedDateTime timeOfClockOut = ZonedDateTime.now();
-        TimeEntry timeEntry = new TimeEntry(employeeID, TimeEntryType.CLOCK_OUT, timeOfClockOut);
+        TimeEntry clockOutTimeEntry = new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_OUT, ZonedDateTime.now());
 
-        workdayService.addTimeEntryToWorkday(timeEntry);
+        workdayService.addTimeEntryToWorkday(clockOutTimeEntry);
 
-        if (workdayRepository.getLatestWorkdayForEmployee(employeeID).isPresent()) {
-            assertThat(workdayRepository.getLatestWorkdayForEmployee(employeeID).get().getTimeEntries()).contains(timeEntry);
-        }
+        Optional<Workday> latestWorkday = workdayRepository.getLatestWorkdayForEmployee(EMPLOYEE_ID);
+
+        assertThat(latestWorkday).isPresent();
+        assertThat(latestWorkday.get().getTimeEntries()).contains(clockOutTimeEntry);
     }
 
     @Test
-    void nonClockInTimeEntryThrowsExceptionIfNoWorkdayExists() {
-        long employeeID = 1L;
-        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
-        WorkdayService workdayService = new WorkdayService(null, workdayRepository);
-        ZonedDateTime timeOfClockOut = ZonedDateTime.now();
-        TimeEntry timeEntry = new TimeEntry(employeeID, TimeEntryType.CLOCK_OUT, timeOfClockOut);
+    void throwsExceptionWhenAddingNonClockInTimeEntryWithoutExistingWorkday() {
+        WorkdayService workdayService = new WorkdayService(null, WorkdayRepositoryStub.withoutWorkdays());
+        TimeEntry clockOutTimeEntry = new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_OUT, ZonedDateTime.now());
 
-        Assertions.assertThrows(IllegalStateException.class, () -> workdayService.addTimeEntryToWorkday(timeEntry));
+        Assertions.assertThrows(IllegalStateException.class, () -> workdayService.addTimeEntryToWorkday(clockOutTimeEntry));
     }
 
     @Test
     void canGetExistingWorkdayForEmployeeOnDate() {
-        long employeeID = 1L;
-        float scheduledHours = 5.5f;
         LocalDate workDate = LocalDate.of(2020,1,1);
-        ZoneId zoneId = ZoneId.of("UTC");
-        Workday workday = new Workday(employeeID, workDate, zoneId , scheduledHours);
+        Workday workday = new Workday(EMPLOYEE_ID, workDate, UTC_ZONE , 5.5f);
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);
-
         WorkdayService workdayService = new WorkdayService(null,workdayRepository);
 
-        assertThat(workdayService.getWorkdayForEmployeeOnDate(employeeID, workDate, zoneId)).isEqualTo(Optional.of(workday));
+        assertThat(workdayService.getWorkdayForEmployeeOnDate(EMPLOYEE_ID, workDate, UTC_ZONE))
+                .isPresent()
+                .contains(workday);
+    }
+
+    private Employee createEmployee() {
+        return new Employee(EMPLOYEE_ID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
+    }
+
+    private WorkdayRepository workdayRepositoryStubWithWorkdays(Workday... workdays) {
+        return WorkdayRepositoryStub.withWorkdays(workdays);
     }
 }
