@@ -1,25 +1,13 @@
 In Work:
 
-[ ] WorkSchedule
-    [X] add workSchedule to employee equals method
-    [X] new Employee is created with default schedule
-    [ ] Employee can be created with own schedule
+
 
 [ ] Clean up employee constructors
 
 [ ] Workday
-when to create?
-    - when clocking in
-    - when getting report
-    - check if workday exists for today for employee
-    - if not create new workday
-    - if yes return existing workday
-
     [ ] when clocking --> timeEntry is added to workday
     [ ] can calculate worked / paused hours
-    [ ] handle timeEntries from day before / after
-        [ ] if last timeEntry is clockIn --> get clock out from next day
-        [ ] if first timeEntry is clockOut --> day before
+
 
 [ ] Report
     [ ] Display worked hours of employee
@@ -43,6 +31,11 @@ when to create?
     [X] Username
     [X] Role
     [ ] Img
+
+[X] WorkSchedule
+    [X] add workSchedule to employee equals method
+    [X] new Employee is created with default schedule
+    [X] Employee can be created with own schedule
 
 [X] validate input to employee creation
     [X] check if username is unique

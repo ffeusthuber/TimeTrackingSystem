@@ -5,6 +5,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
 import java.time.ZoneId;
 import java.util.List;
 
-public interface GetTimeEntriesUseCase {
-    List<TimeEntryDTO> getTimeEntriesForEmployee(long employeeID, ZoneId zoneId);
+public interface ReportUseCase {
+    List<TimeEntryDTO> displayTimeEntriesOfEmployee(long employeeID, ZoneId zoneId);
 }

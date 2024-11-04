@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
 import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtils;
@@ -27,7 +27,7 @@ public class TimeReportMvcTest {
     TimeTrackingUseCase timeTrackingUseCase;
 
     @MockBean
-    GetTimeEntriesUseCase getTimeEntriesService;
+    ReportUseCase reportUseCase;
 
     @MockBean
     EmployeeManagementService employeeManagementService;

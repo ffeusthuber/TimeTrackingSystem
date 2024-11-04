@@ -2,7 +2,7 @@ package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponseStatus;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.GetTimeEntriesUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +18,15 @@ import java.time.ZoneId;
 public class TimeEntriesController {
 
 
-    private final GetTimeEntriesUseCase getTimeEntriesService;
+    private final ReportUseCase reportService;
     private final TimeTrackingUseCase timeTrackingService;
     private final AuthenticationUtils authenticationUtils;
     private ZoneId zoneId;
 
 
     @Autowired
-    public TimeEntriesController(GetTimeEntriesUseCase getTimeEntriesService, TimeTrackingUseCase timeTrackingService, AuthenticationUtils authenticationUtils) {
-        this.getTimeEntriesService = getTimeEntriesService;
+    public TimeEntriesController(ReportUseCase reportService, TimeTrackingUseCase timeTrackingService, AuthenticationUtils authenticationUtils) {
+        this.reportService = reportService;
         this.timeTrackingService = timeTrackingService;
         this.authenticationUtils = authenticationUtils;
     }
@@ -66,7 +66,7 @@ public class TimeEntriesController {
     }
 
     private void addModelAttributes(Model model, long employeeID) {
-        model.addAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID, zoneId));
+        model.addAttribute("timeEntries", reportService.displayTimeEntriesOfEmployee(employeeID, zoneId));
     }
 
     private String processClockAction(RedirectAttributes redirectAttributes, ClockResponse clockResponse, Long employeeID) {
@@ -82,7 +82,7 @@ public class TimeEntriesController {
     }
 
     private void addTimeEntriesToFlashAttributes(RedirectAttributes redirectAttributes, Long employeeID) {
-        redirectAttributes.addFlashAttribute("timeEntries", getTimeEntriesService.getTimeEntriesForEmployee(employeeID, zoneId));
+        redirectAttributes.addFlashAttribute("timeEntries", reportService.displayTimeEntriesOfEmployee(employeeID, zoneId));
     }
 
     private void setSuccessFlashAttributes(RedirectAttributes redirectAttributes, ClockResponse clockResponse) {
