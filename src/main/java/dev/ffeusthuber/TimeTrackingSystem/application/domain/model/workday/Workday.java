@@ -45,14 +45,14 @@ public class Workday {
         return new LinkedList<>(timeEntries);
     }
 
-    public double calculateWorkedHours() {
-        if (timeEntries.isEmpty()) return 0.0;
+    public float calculateWorkedHours() {
+        if (timeEntries.isEmpty()) return 0.0f;
 
         Queue<TimeEntry> entriesCopy = new LinkedList<>(timeEntries);
 
         skipUntilFirstClockInTimeEntry(entriesCopy);
 
-        double totalWorkedHours = 0.0;
+        float totalWorkedHours = 0.0f;
         while (entriesCopy.size() >= 2) {
             ZonedDateTime start = entriesCopy.poll().getEntryDateTime();
             ZonedDateTime end = entriesCopy.poll().getEntryDateTime();
@@ -69,7 +69,7 @@ public class Workday {
         }
     }
 
-    public double getScheduledHours() {
+    public float getScheduledHours() {
         return this.scheduledHours;
     }
 }
