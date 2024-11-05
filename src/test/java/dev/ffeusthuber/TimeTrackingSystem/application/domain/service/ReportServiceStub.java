@@ -2,10 +2,12 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkdayDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 public class ReportServiceStub implements ReportUseCase {
     private final List<TimeEntry> timeEntriesToReturn;
@@ -20,7 +22,8 @@ public class ReportServiceStub implements ReportUseCase {
                 .toList();
     }
 
-    public static ReportServiceStub withTimeEntriesToReturn(List<TimeEntry> timeEntriesToReturn) {
-        return new ReportServiceStub(timeEntriesToReturn);
+    @Override
+    public Optional<WorkdayDTO> displayLatestWorkdayOfEmployee(long employeeID) {
+        return Optional.empty();
     }
 }
