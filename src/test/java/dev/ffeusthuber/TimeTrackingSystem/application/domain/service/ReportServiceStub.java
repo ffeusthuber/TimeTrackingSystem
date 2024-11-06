@@ -16,14 +16,14 @@ public class ReportServiceStub implements ReportUseCase {
         this.timeEntriesToReturn = timeEntriesToReturn;
     }
 
-    public List<TimeEntryDTO> displayTimeEntriesOfEmployee(long employeeID, ZoneId zoneId) {
+    public List<TimeEntryDTO> getTimeEntriesOfEmployee(long employeeID, ZoneId zoneId) {
         return timeEntriesToReturn.stream()
                 .map(timeEntry -> new TimeEntryDTO(timeEntry,zoneId))
                 .toList();
     }
 
     @Override
-    public Optional<WorkdayDTO> displayLatestWorkdayOfEmployee(long employeeID) {
+    public Optional<WorkdayDTO> getLatestWorkdayOfEmployee(long employeeID) {
         return Optional.empty();
     }
 }

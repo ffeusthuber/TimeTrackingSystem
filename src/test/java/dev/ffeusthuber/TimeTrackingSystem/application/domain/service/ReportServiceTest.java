@@ -33,7 +33,7 @@ public class ReportServiceTest {
         List<TimeEntry> timeEntries = List.of(timeEntry1,timeEntry2,timeEntry3);
         ReportService reportService = new ReportService(TimeEntryRepositoryStub.withEntries(timeEntries), null);
 
-        List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.displayTimeEntriesOfEmployee(EMPLOYEE_ID_1, DEFAULT_ZONE);
+        List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.getTimeEntriesOfEmployee(EMPLOYEE_ID_1, DEFAULT_ZONE);
 
         assertThat(timeEntriesForEmployee1).isEqualTo(List.of(new TimeEntryDTO(timeEntry1, DEFAULT_ZONE),
                                                               new TimeEntryDTO(timeEntry2, DEFAULT_ZONE)));
@@ -54,7 +54,7 @@ public class ReportServiceTest {
         ReportService reportService = new ReportService(null,
                                                         workdayService);
 
-        Optional<WorkdayDTO> workdayDTO = reportService.displayLatestWorkdayOfEmployee(EMPLOYEE_ID_1);
+        Optional<WorkdayDTO> workdayDTO = reportService.getLatestWorkdayOfEmployee(EMPLOYEE_ID_1);
 
         assertThat(workdayDTO).isPresent();
         assertThat(workdayDTO.get().getWorkedHours()).isEqualTo(hoursWorked);

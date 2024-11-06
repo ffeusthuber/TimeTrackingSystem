@@ -21,14 +21,14 @@ public class ReportService implements ReportUseCase {
     }
 
     @Override
-    public List<TimeEntryDTO> displayTimeEntriesOfEmployee(long employeeID, ZoneId zoneId) {
+    public List<TimeEntryDTO> getTimeEntriesOfEmployee(long employeeID, ZoneId zoneId) {
         return this.timeEntryRepository.getTimeEntriesByEmployeeId(employeeID).stream()
                 .map(timeEntry -> new TimeEntryDTO(timeEntry,zoneId))
                 .toList();
     }
 
     @Override
-    public Optional<WorkdayDTO> displayLatestWorkdayOfEmployee(long employeeID) {
+    public Optional<WorkdayDTO> getLatestWorkdayOfEmployee(long employeeID) {
        return this.workdayService.getLatestWorkdayForEmployee(employeeID)
                .map(WorkdayDTO::new);
     }

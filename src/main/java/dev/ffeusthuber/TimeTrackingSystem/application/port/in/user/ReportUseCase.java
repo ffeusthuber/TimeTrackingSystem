@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReportUseCase {
-    List<TimeEntryDTO> displayTimeEntriesOfEmployee(long employeeID, ZoneId zoneId);
-    Optional<WorkdayDTO> displayLatestWorkdayOfEmployee(long employeeID);
+    List<TimeEntryDTO> getTimeEntriesOfEmployee(long employeeID, ZoneId zoneId);
+    Optional<WorkdayDTO> getLatestWorkdayOfEmployee(long employeeID);
 }

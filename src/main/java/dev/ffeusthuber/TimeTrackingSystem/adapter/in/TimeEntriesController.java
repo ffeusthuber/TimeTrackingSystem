@@ -66,7 +66,7 @@ public class TimeEntriesController {
     }
 
     private void addModelAttributes(Model model, long employeeID) {
-        model.addAttribute("timeEntries", reportService.displayTimeEntriesOfEmployee(employeeID, zoneId));
+        model.addAttribute("timeEntries", reportService.getTimeEntriesOfEmployee(employeeID, zoneId));
     }
 
     private String processClockAction(RedirectAttributes redirectAttributes, ClockResponse clockResponse, Long employeeID) {
@@ -82,7 +82,7 @@ public class TimeEntriesController {
     }
 
     private void addTimeEntriesToFlashAttributes(RedirectAttributes redirectAttributes, Long employeeID) {
-        redirectAttributes.addFlashAttribute("timeEntries", reportService.displayTimeEntriesOfEmployee(employeeID, zoneId));
+        redirectAttributes.addFlashAttribute("timeEntries", reportService.getTimeEntriesOfEmployee(employeeID, zoneId));
     }
 
     private void setSuccessFlashAttributes(RedirectAttributes redirectAttributes, ClockResponse clockResponse) {
