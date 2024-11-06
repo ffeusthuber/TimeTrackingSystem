@@ -25,48 +25,40 @@ public class TimeEntriesController {
 
 
     @Autowired
-    public TimeEntriesController(ReportUseCase reportService, TimeTrackingUseCase timeTrackingService, AuthenticationUtils authenticationUtils) {
-        this.reportService = reportService;
-        this.timeTrackingService = timeTrackingService;
+    public TimeEntriesController(ReportUseCase reportUseCase, TimeTrackingUseCase timeTrackingUseCase, AuthenticationUtils authenticationUtils) {
+        this.reportService = reportUseCase;
+        this.timeTrackingService = timeTrackingUseCase;
         this.authenticationUtils = authenticationUtils;
     }
 
 
     @GetMapping({"/time-entries","/"})
     public String displayTimeEntriesForEmployee(Model model, ZoneId zoneId) {
-        long employeeID = getAuthenticatedEmployeeID();
+        long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         this.zoneId = zoneId;
-        addModelAttributes(model, employeeID);
+        model.addAttribute("timeEntries", reportService.getTimeEntriesOfEmployee(employeeID, this.zoneId));
         return "timeEntries";
     }
 
     @PostMapping("/time-entries/clock-in")
     public String clockIn(RedirectAttributes redirectAttributes, ZoneId zoneId) {
-        long employeeID = getAuthenticatedEmployeeID();
+        long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockIn(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
     }
 
     @PostMapping("/time-entries/clock-out")
     public String clockOut(RedirectAttributes redirectAttributes, ZoneId zoneId) {
-        long employeeID = getAuthenticatedEmployeeID();
+        long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockOut(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
     }
 
     @PostMapping("/time-entries/clock-pause")
     public String clockPause(RedirectAttributes redirectAttributes, ZoneId zoneId) {
-        long employeeID = getAuthenticatedEmployeeID();
+        long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockPause(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
-    }
-
-    private long getAuthenticatedEmployeeID() {
-       return authenticationUtils.getAuthenticatedEmployeeID();
-    }
-
-    private void addModelAttributes(Model model, long employeeID) {
-        model.addAttribute("timeEntries", reportService.getTimeEntriesOfEmployee(employeeID, zoneId));
     }
 
     private String processClockAction(RedirectAttributes redirectAttributes, ClockResponse clockResponse, Long employeeID) {

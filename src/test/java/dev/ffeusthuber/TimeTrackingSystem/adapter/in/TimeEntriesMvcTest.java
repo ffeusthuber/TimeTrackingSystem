@@ -62,8 +62,6 @@ public class TimeEntriesMvcTest {
     @WithMockUser
     void whenGetTimeEntriesReturnViewWithTimeEntriesInModel() throws Exception {
         mockMvc.perform(get("/time-entries"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("timeEntries"))
                .andExpect(model().attributeExists("timeEntries"));
     }
 

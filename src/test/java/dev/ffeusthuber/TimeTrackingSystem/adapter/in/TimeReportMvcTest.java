@@ -15,8 +15,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TimeReportController.class)
 @Import(SecurityConfiguration.class)
@@ -45,5 +44,12 @@ public class TimeReportMvcTest {
         mockMvc.perform(get("/time-report"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("timeReport"));
+    }
+
+    @Test
+    @WithMockUser
+    void whenGetTimeEntriesReturnViewWithTimeEntriesInModel() throws Exception {
+        mockMvc.perform(get("/time-report"))
+               .andExpect(model().attributeExists("workday"));
     }
 }
