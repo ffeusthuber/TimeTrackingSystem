@@ -21,10 +21,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         if (employeeService.isEmployeeClockedIn(employeeID)) {
             return ClockResponse.error(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
         }
-        TimeEntry timeEntry = timeEntryService.createTimeEntry(employeeID, TimeEntryType.CLOCK_IN);
-        workdayService.addTimeEntryToWorkday(timeEntry);
-        employeeService.setClockStateForEmployee(employeeID, ClockState.CLOCKED_IN);
-        return ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN);
+        return handleClockAction(employeeID, TimeEntryType.CLOCK_IN, ClockState.CLOCKED_IN);
     }
 
     @Override
@@ -32,10 +29,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         if (!employeeService.isEmployeeClockedIn(employeeID)) {
             return ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         }
-        TimeEntry timeEntry = timeEntryService.createTimeEntry(employeeID, TimeEntryType.CLOCK_OUT);
-        workdayService.addTimeEntryToWorkday(timeEntry);
-        employeeService.setClockStateForEmployee(employeeID, ClockState.CLOCKED_OUT);
-        return ClockResponse.success(employeeID, TimeEntryType.CLOCK_OUT);
+        return handleClockAction(employeeID, TimeEntryType.CLOCK_OUT, ClockState.CLOCKED_OUT);
     }
 
     @Override
@@ -43,10 +37,15 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         if(!employeeService.isEmployeeClockedIn(employeeID)) {
             return ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         }
-        TimeEntry timeEntry = timeEntryService.createTimeEntry(employeeID, TimeEntryType.CLOCK_PAUSE);
+        return handleClockAction(employeeID, TimeEntryType.CLOCK_PAUSE, ClockState.ON_PAUSE);
+    }
+
+    private ClockResponse handleClockAction(long employeeID, TimeEntryType entryType, ClockState clockState) {
+        TimeEntry timeEntry = timeEntryService.createTimeEntry(employeeID, entryType);
         workdayService.addTimeEntryToWorkday(timeEntry);
-        employeeService.setClockStateForEmployee(employeeID, ClockState.CLOCKED_OUT);
-        return ClockResponse.success(employeeID, TimeEntryType.CLOCK_PAUSE);
+        employeeService.setClockStateForEmployee(employeeID, clockState);
+
+        return ClockResponse.success(employeeID, entryType);
     }
 
 }

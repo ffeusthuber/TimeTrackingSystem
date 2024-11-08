@@ -1,17 +1,15 @@
 In Work:
 
-[ ] refactor TimeTrackingService
 [ ] refactor to Workday as aggregate root
+    [ ] display timeEntries of latest workday instead of all timeEntries
 
-[ ] display workday instead of all timeEntries
-[ ] if no workday for day display latest
-
+[ ] throw a clockError if employee clockstatus update fails
 [ ] Clean up employee constructors
 
 [ ] Workday
-    [ ] when clocking --> timeEntry is added to workday
-    [ ] can calculate worked / paused hours
-
+    [X] when clocking --> timeEntry is added to workday
+    [X] can calculate worked / paused hours
+    [ ] can get workdays between two dates
 
 [ ] Report
     [ ] Display worked hours of employee
@@ -45,9 +43,6 @@ In Work:
     [X] check if username is unique
     [X] check if form is filled out correctly
 
-
-
-
 [ ] TimeEntriesController
         [ ] Create GET endpoint for finding all TimeEntries for Employee
             [ ] Create GET endpoint for finding all TimeEntries for Employee between two dates
@@ -68,7 +63,6 @@ In Work:
         [X] implement message on success
         [X] implement message on failure page
         [ ] Save multiple employees at once (from CSV)
-
 
     [ ] Setup role based access control
         [ ] Only admin can access employee management
