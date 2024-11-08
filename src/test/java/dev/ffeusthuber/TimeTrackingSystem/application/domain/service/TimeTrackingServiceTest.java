@@ -3,14 +3,21 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.TimeEntryRepositoryStub;
+import dev.ffeusthuber.TimeTrackingSystem.adapter.out.WorkdayRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.WorkSchedule;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockError;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -119,17 +126,21 @@ public class TimeTrackingServiceTest {
     }
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID) {
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT, WorkSchedule.createDefaultWorkSchedule()));
         return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT))));
+                                       new EmployeeService(employeeRepository), new WorkdayService(employeeRepository, WorkdayRepositoryStub.withoutWorkdays()));
     }
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID, TimeEntryRepository timeEntryRepository) {
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT, WorkSchedule.createDefaultWorkSchedule()));
         return new TimeTrackingService(new TimeEntryService(timeEntryRepository),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT))));
+                                       new EmployeeService(employeeRepository), new WorkdayService(employeeRepository, WorkdayRepositoryStub.withoutWorkdays()));
     }
 
     private static TimeTrackingService getTimeTrackingServiceWithClockedInEmployee(long employeeID) {
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_IN, WorkSchedule.createDefaultWorkSchedule()));
         return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
-                                       new EmployeeService(EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_IN))));
+                                       new EmployeeService(employeeRepository), new WorkdayService(employeeRepository, WorkdayRepositoryStub.withWorkdays(
+                                               new Workday(employeeID, LocalDate.of(2021, 1, 1), ZoneId.of("UTC"),8.5f))));
     }
 }

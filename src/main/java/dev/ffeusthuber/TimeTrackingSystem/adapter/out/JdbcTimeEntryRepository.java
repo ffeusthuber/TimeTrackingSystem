@@ -28,7 +28,7 @@ public class JdbcTimeEntryRepository implements TimeEntryRepository {
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToTimeEntry(rs), employeeID);
     }
 
-private TimeEntry mapRowToTimeEntry(ResultSet rs) throws SQLException {
+    private TimeEntry mapRowToTimeEntry(ResultSet rs) throws SQLException {
         return new TimeEntry(
                 rs.getLong("employee_id"),
                 TimeEntryType.valueOf(rs.getString("entry_type")),

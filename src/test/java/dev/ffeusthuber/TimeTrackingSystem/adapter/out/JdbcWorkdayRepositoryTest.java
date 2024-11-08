@@ -7,9 +7,9 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeSer
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.TimeEntryService;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.TimeTrackingService;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.WorkdayService;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -24,16 +24,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @Tag("io")
-public class JdbcTimeEntryRepositoryTest {
+public class JdbcWorkdayRepositoryTest {
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
+    private WorkdayRepository workdayRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
     private TimeEntryRepository timeEntryRepository;
 
-
-    private TimeTrackingUseCase timeTrackingService;
-
+    private WorkdayService workdayService;
+    private TimeTrackingService timeTrackingService;
     private long employeeID;
 
     @BeforeEach
@@ -43,20 +49,21 @@ public class JdbcTimeEntryRepositoryTest {
         TimeEntryService timeEntryService = new TimeEntryService(timeEntryRepository);
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
-        WorkdayService workdayService = new WorkdayService(employeeRepository, WorkdayRepositoryStub.withoutWorkdays());
+        workdayService = new WorkdayService(employeeRepository, workdayRepository);
         timeTrackingService = new TimeTrackingService(timeEntryService, employeeService, workdayService);
+
     }
 
     @AfterEach
     void clearDatabase() {
+        jdbcTemplate.execute("DELETE FROM Workday");
         jdbcTemplate.execute("DELETE FROM Employee");
     }
 
     @Test
-    void timeEntryIsSavedWhenCreatedWithTimeTrackingService() {
+    void workdayIsSavedWhenEmployeeClocksIn() {
         timeTrackingService.clockIn(employeeID);
 
-        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
+        assertThat(workdayRepository.getLatestWorkdayForEmployee(employeeID)).isNotEmpty();
     }
-
 }

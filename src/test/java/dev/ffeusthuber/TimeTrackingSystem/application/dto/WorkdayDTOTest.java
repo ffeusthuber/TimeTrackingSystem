@@ -28,6 +28,7 @@ public class WorkdayDTOTest {
 
         assertThat(workdayDTO.getScheduledHours()).isEqualTo(scheduledHours);
         assertThat(workdayDTO.getWorkedHours()).isEqualTo(workedHours);
+        assertThat(workdayDTO.getFormatedDate()).isEqualTo("01.JANUARY.2021");
     }
 
 }

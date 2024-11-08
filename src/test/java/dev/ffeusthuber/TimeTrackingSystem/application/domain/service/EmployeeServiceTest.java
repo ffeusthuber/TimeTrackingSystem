@@ -55,9 +55,9 @@ public class EmployeeServiceTest {
         long clockedInEmployeeId = 1L;
         long clockedOutEmployeeId = 2L;
         long pausedEmployeeId = 3L;
-        Employee clockedInEmployee = new Employee(clockedInEmployeeId, ClockState.CLOCKED_IN);
-        Employee clockedOutEmployee = new Employee(clockedOutEmployeeId, ClockState.CLOCKED_OUT);
-        Employee pausedEmployee = new Employee(pausedEmployeeId, ClockState.ON_PAUSE);
+        Employee clockedInEmployee = new Employee(clockedInEmployeeId, ClockState.CLOCKED_IN, WorkSchedule.createDefaultWorkSchedule());
+        Employee clockedOutEmployee = new Employee(clockedOutEmployeeId, ClockState.CLOCKED_OUT, WorkSchedule.createDefaultWorkSchedule());
+        Employee pausedEmployee = new Employee(pausedEmployeeId, ClockState.ON_PAUSE, WorkSchedule.createDefaultWorkSchedule());
         List<Employee> employees = List.of(clockedInEmployee, clockedOutEmployee, pausedEmployee);
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployees(employees);
         EmployeeService employeeService = createEmployeeService(employeeRepository);
@@ -70,7 +70,7 @@ public class EmployeeServiceTest {
     @Test
     void canSetClockStateForEmployee() {
         long employeeId = 1L;
-        Employee employee = new Employee(employeeId, ClockState.CLOCKED_OUT);
+        Employee employee = new Employee(employeeId, ClockState.CLOCKED_OUT, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeService employeeService = createEmployeeService(employeeRepository);
 

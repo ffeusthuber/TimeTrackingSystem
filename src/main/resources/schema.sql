@@ -27,3 +27,13 @@ CREATE TABLE IF NOT EXISTS Work_schedule (
     hours_sunday FLOAT  NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
 );
+
+CREATE TABLE IF NOT EXISTS Workday (
+    workday_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    employee_id BIGINT NOT NULL,
+    date DATE  NOT NULL,
+    zone_id VARCHAR(255) NOT NULL,
+    hours_scheduled FLOAT  NOT NULL
+);
+
+

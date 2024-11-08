@@ -1,6 +1,10 @@
 In Work:
 
+[ ] refactor TimeTrackingService
+[ ] refactor to Workday as aggregate root
 
+[ ] display workday instead of all timeEntries
+[ ] if no workday for day display latest
 
 [ ] Clean up employee constructors
 

@@ -15,9 +15,10 @@ public class Employee {
     private ClockState clockState;
     private WorkSchedule workSchedule;
 
-    public Employee(Long employeeID, ClockState clockState) {
+    public Employee(Long employeeID, ClockState clockState, WorkSchedule workSchedule) {
         this.employeeID = employeeID;
         this.clockState = clockState;
+        this.workSchedule = workSchedule;
     }
 
     public Employee(Long employeeID, String firstName, String lastName, String email, String password, EmployeeRole role, WorkSchedule workSchedule) {
