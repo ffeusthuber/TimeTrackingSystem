@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 
 public class Workday {
@@ -64,5 +65,17 @@ public class Workday {
 
     public float getScheduledHours() {
         return this.scheduledHours;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Workday workday)) return false;
+        return employeeId == workday.employeeId && Float.compare(scheduledHours, workday.scheduledHours) == 0 && Objects.equals(workDate, workday.workDate) && Objects.equals(timeEntries, workday.timeEntries);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employeeId, workDate, timeEntries, scheduledHours);
     }
 }

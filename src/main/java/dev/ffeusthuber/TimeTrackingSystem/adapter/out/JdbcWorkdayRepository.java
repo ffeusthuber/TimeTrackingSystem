@@ -24,7 +24,13 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
 
     @Override
     public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date) {
-        return Optional.empty();
+        try {
+            String sql = "SELECT * FROM Workday WHERE employee_id = ? AND date = ?";
+            Workday workday = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToWorkday(rs), employeeID, date);
+            return Optional.ofNullable(workday);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

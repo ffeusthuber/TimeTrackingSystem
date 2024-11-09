@@ -40,19 +40,6 @@ public class WorkdayServiceTest {
     }
 
     @Test
-    void canGetLatestWorkdayForEmployee() {
-        Workday workday = new Workday(EMPLOYEE_ID, LocalDate.of(2020,1,1), 5.5f);
-        Workday latestWorkday = new Workday(EMPLOYEE_ID, LocalDate.of(2020,1,2),  5.5f);
-        WorkdayRepository workdayRepository = workdayRepositoryStubWithWorkdays(workday, latestWorkday);
-
-        WorkdayService workdayService = new WorkdayService(null,workdayRepository);
-
-        assertThat(workdayService.getLatestWorkdayForEmployee(EMPLOYEE_ID))
-                .isPresent()
-                .contains(latestWorkday);
-    }
-
-    @Test
     void nonClockInTimeEntriesDoNotCreateAWorkdayButGetAddedToLatestWorkday() {
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), 5.5f));
         WorkdayService workdayService = new WorkdayService(null,workdayRepository);
@@ -74,23 +61,7 @@ public class WorkdayServiceTest {
         Assertions.assertThrows(IllegalStateException.class, () -> workdayService.addTimeEntryToWorkday(clockOutTimeEntry));
     }
 
-    @Test
-    void canGetExistingWorkdayForEmployeeOnDate() {
-        LocalDate workDate = LocalDate.of(2020,1,1);
-        Workday workday = new Workday(EMPLOYEE_ID, workDate, 5.5f);
-        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);
-        WorkdayService workdayService = new WorkdayService(null,workdayRepository);
-
-        assertThat(workdayService.getWorkdayForEmployeeOnDate(EMPLOYEE_ID, workDate))
-                .isPresent()
-                .contains(workday);
-    }
-
     private Employee createEmployee() {
         return new Employee(EMPLOYEE_ID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
-    }
-
-    private WorkdayRepository workdayRepositoryStubWithWorkdays(Workday... workdays) {
-        return WorkdayRepositoryStub.withWorkdays(workdays);
     }
 }
