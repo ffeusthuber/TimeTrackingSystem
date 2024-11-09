@@ -9,7 +9,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Optional;
 
 
@@ -28,16 +27,16 @@ public class WorkdayService {
         return workdayRepository.getLatestWorkdayForEmployee(employeeID);
     }
 
-    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate, ZoneId zoneId) {
-        return workdayRepository.getWorkdayForEmployeeOnDate(employeeID, workDate, zoneId);
+    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate) {
+        return workdayRepository.getWorkdayForEmployeeOnDate(employeeID, workDate);
     }
 
-    private Workday getOrCreateWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate, ZoneId zoneId) {
-        return getWorkdayForEmployeeOnDate(employeeID, workDate, zoneId)
+    private Workday getOrCreateWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate) {
+        return getWorkdayForEmployeeOnDate(employeeID, workDate)
                 .orElseGet(() -> {
                     Employee employee = employeeRepository.getEmployeeByID(employeeID);
                     float scheduledHours = employee.getWorkSchedule().getScheduledWorkHoursForDay(workDate.getDayOfWeek());
-                    return new Workday(employeeID, workDate, zoneId, scheduledHours);
+                    return new Workday(employeeID, workDate, scheduledHours);
                 });
     }
 
@@ -45,8 +44,7 @@ public class WorkdayService {
         Workday workday;
         if(timeEntry.getType() == TimeEntryType.CLOCK_IN) {
             workday = getOrCreateWorkdayForEmployeeOnDate(timeEntry.getEmployeeID(),
-                                                          timeEntry.getEntryDateTime().toLocalDate(),
-                                                          timeEntry.getEntryDateTime().getZone());
+                                                          timeEntry.getEntryDateTime().toLocalDate());
         }
         else {
             workday = getLatestWorkdayForEmployee(timeEntry.getEmployeeID())

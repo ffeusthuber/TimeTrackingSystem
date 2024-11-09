@@ -17,7 +17,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryReposito
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -141,6 +140,6 @@ public class TimeTrackingServiceTest {
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_IN, WorkSchedule.createDefaultWorkSchedule()));
         return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
                                        new EmployeeService(employeeRepository), new WorkdayService(employeeRepository, WorkdayRepositoryStub.withWorkdays(
-                                               new Workday(employeeID, LocalDate.of(2021, 1, 1), ZoneId.of("UTC"),8.5f))));
+                                               new Workday(employeeID, LocalDate.of(2021, 1, 1), 8.5f))));
     }
 }

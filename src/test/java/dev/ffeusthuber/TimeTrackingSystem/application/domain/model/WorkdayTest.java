@@ -21,7 +21,7 @@ public class WorkdayTest {
 
     @Test
     void whenNoTimeEntryIsAddedToWorkdayThenCalculateWorkedHoursReturnsZero() {
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
         
         assertThat(workday.calculateWorkedHours()).isEqualTo(0);
     }
@@ -33,7 +33,7 @@ public class WorkdayTest {
         ZonedDateTime clockInTime = WORK_DATE.atStartOfDay(ZONE_ID);
         ZonedDateTime clockOutTime = clockInTime.plusMinutes((long) (expectedWorkedHours * 60));
 
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
         addTimeEntries(workday,
                        new TimeEntry(EMPLOYEE_ID,TimeEntryType.CLOCK_IN,clockInTime),
                        new TimeEntry(EMPLOYEE_ID,TimeEntryType.CLOCK_OUT,clockOutTime));
@@ -46,7 +46,7 @@ public class WorkdayTest {
         float expectedWorkedHours = 5.5f;
         int pauseMinutes = 30;
         ZonedDateTime timeOfFirstEntry = WORK_DATE.atStartOfDay(ZONE_ID);
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
         addTimeEntries(workday,
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, timeOfFirstEntry),
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_PAUSE, timeOfFirstEntry.plusMinutes((long) ((expectedWorkedHours / 2) * 60))),
@@ -61,7 +61,7 @@ public class WorkdayTest {
     void ifFirstTimeEntryOfWorkdayIsNotClockInThenCalculateWorkedHoursFromFirstClockIn() {
         float expectedWorkedHours = 5.5f;
         ZonedDateTime timeOfFirstClockIn = WORK_DATE.atStartOfDay(ZONE_ID);
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
         addTimeEntries(workday,
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_OUT, timeOfFirstClockIn.minusMinutes(60)),
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, timeOfFirstClockIn),
@@ -75,7 +75,7 @@ public class WorkdayTest {
     void workdaysSpanningIntoNextDayGetCalculatedCorrectly() {
         float expectedWorkedHours = 2.0f;
         ZonedDateTime timeOfFirstClockIn = ZonedDateTime.of(2021, 1, 1, 23, 0, 0, 0, ZoneOffset.UTC);
-        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, ZONE_ID, SCHEDULED_HOURS);
+        Workday workday = new Workday(EMPLOYEE_ID, WORK_DATE, SCHEDULED_HOURS);
         addTimeEntries(workday,
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, timeOfFirstClockIn),
                        new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_OUT, timeOfFirstClockIn.plusMinutes((long)(expectedWorkedHours * 60)))

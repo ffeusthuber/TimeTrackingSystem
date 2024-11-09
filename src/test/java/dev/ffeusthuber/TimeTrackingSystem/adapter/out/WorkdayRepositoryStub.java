@@ -4,7 +4,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workd
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 public class WorkdayRepositoryStub implements WorkdayRepository {
@@ -23,7 +22,7 @@ public class WorkdayRepositoryStub implements WorkdayRepository {
     }
 
     @Override
-    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date, ZoneId zoneId) {
+    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date) {
         return workdayList.stream()
                           .filter(workday -> workday.getEmployeeId() == employeeID && workday.getWorkDate().equals(date))
                           .findFirst();

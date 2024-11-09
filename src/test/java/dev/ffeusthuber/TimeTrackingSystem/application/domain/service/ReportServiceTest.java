@@ -46,7 +46,7 @@ public class ReportServiceTest {
         float hoursWorked = 8;
         TimeEntry clockIn = new TimeEntry(EMPLOYEE_ID_1, TimeEntryType.CLOCK_IN, BASE_TIME);
         TimeEntry clockOut = new TimeEntry(EMPLOYEE_ID_1, TimeEntryType.CLOCK_OUT, BASE_TIME.plusHours((long) hoursWorked));
-        Workday workday = new Workday(EMPLOYEE_ID_1, BASE_TIME.toLocalDate(), DEFAULT_ZONE, scheduledHours);
+        Workday workday = new Workday(EMPLOYEE_ID_1, BASE_TIME.toLocalDate(), scheduledHours);
         workday.addTimeEntry(clockIn);
         workday.addTimeEntry(clockOut);
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);

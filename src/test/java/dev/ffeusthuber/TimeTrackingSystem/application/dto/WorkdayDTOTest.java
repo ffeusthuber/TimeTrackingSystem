@@ -20,7 +20,7 @@ public class WorkdayDTOTest {
         ZonedDateTime clockInTime = ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
         ZonedDateTime clockOutTime = clockInTime.plusHours((long) workedHours);
 
-        Workday workday = new Workday(employeeID, clockInTime.toLocalDate(), clockInTime.getZone(), scheduledHours);
+        Workday workday = new Workday(employeeID, clockInTime.toLocalDate(), scheduledHours);
         workday.addTimeEntry(new TimeEntry(employeeID, TimeEntryType.CLOCK_IN, clockInTime));
         workday.addTimeEntry(new TimeEntry(employeeID, TimeEntryType.CLOCK_OUT, clockOutTime));
 

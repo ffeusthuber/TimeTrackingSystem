@@ -4,7 +4,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.Tim
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
@@ -14,19 +13,13 @@ import java.util.Queue;
 public class Workday {
     private final long employeeId;
     private final LocalDate workDate;
-    private final ZoneId zoneId;
     private final Queue<TimeEntry> timeEntries = new LinkedList<>();
     private final float scheduledHours;
 
-    public Workday(long employeeId, LocalDate workDate, ZoneId zoneId, float scheduledHours) {
+    public Workday(long employeeId, LocalDate workDate, float scheduledHours) {
         this.employeeId = employeeId;
         this.workDate = workDate;
-        this.zoneId = zoneId;
         this.scheduledHours = scheduledHours;
-    }
-
-    public ZoneId getZoneId() {
-        return this.zoneId;
     }
 
     public long getEmployeeId() {

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Optional;
 
 @Repository
@@ -24,14 +23,14 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
     }
 
     @Override
-    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date, ZoneId zoneId) {
+    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date) {
         return Optional.empty();
     }
 
     @Override
     public void saveWorkday(Workday workday) {
-        String sql = "INSERT INTO Workday (employee_id, date, zone_id, hours_scheduled) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, workday.getEmployeeId(), workday.getWorkDate(), workday.getZoneId().toString(), workday.getScheduledHours());
+        String sql = "INSERT INTO Workday (employee_id, date, hours_scheduled) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, workday.getEmployeeId(), workday.getWorkDate(), workday.getScheduledHours());
     }
 
     @Override
@@ -49,7 +48,6 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
         return new Workday(
                 rs.getLong("employee_id"),
                 rs.getDate("date").toLocalDate(),
-                ZoneId.of(rs.getString("zone_id")),
                 rs.getFloat("hours_scheduled")
         );
     }

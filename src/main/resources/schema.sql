@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS Workday (
     workday_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     employee_id BIGINT NOT NULL,
     date DATE  NOT NULL,
-    zone_id VARCHAR(255) NOT NULL,
     hours_scheduled FLOAT  NOT NULL
 );
 
