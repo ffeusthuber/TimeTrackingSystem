@@ -2,7 +2,6 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
-import dev.ffeusthuber.TimeTrackingSystem.adapter.out.TimeEntryRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.WorkdayRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.WorkSchedule;
@@ -13,7 +12,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.Tim
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.Test;
 
@@ -124,23 +122,21 @@ public class TimeTrackingServiceTest {
     }
 
     private TimeTrackingUseCase getTimeTrackingServiceWithEmployeeInClockState(long employeeID, ClockState clockState) {
-        TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
         Employee employee = new Employee(employeeID, clockState, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         WorkdayService workdayService = new WorkdayService(employeeRepository, workdayRepository);
-        TimeEntryService timeEntryService = new TimeEntryService(timeEntryRepository);
+        TimeEntryService timeEntryService = new TimeEntryService();
         return new TimeTrackingService(timeEntryService, employeeService, workdayService);
     }
 
     private TimeTrackingUseCase getTimeTrackingServiceWithEmployeeInClockState(long employeeID, ClockState clockState, WorkdayRepository workdayRepository) {
-        TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
         Employee employee = new Employee(employeeID, clockState, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         WorkdayService workdayService = new WorkdayService(employeeRepository, workdayRepository);
-        TimeEntryService timeEntryService = new TimeEntryService(timeEntryRepository);
+        TimeEntryService timeEntryService = new TimeEntryService();
         return new TimeTrackingService(timeEntryService, employeeService, workdayService);
     }
 }

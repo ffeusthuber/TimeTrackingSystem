@@ -22,8 +22,9 @@ public class WorkdayService {
         this.workdayRepository = workdayRepository;
     }
 
-    public Optional<Workday> getLatestWorkdayForEmployee(long employeeID) {
-        return workdayRepository.getLatestWorkdayForEmployee(employeeID);
+    public Workday getLatestWorkdayForEmployee(long employeeID) {
+        return workdayRepository.getLatestWorkdayForEmployee(employeeID)
+                         .orElseGet(() -> createNewWorkdayForEmployee(employeeID, LocalDate.now()));
     }
 
     public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate) {
@@ -37,9 +38,8 @@ public class WorkdayService {
 
     private Workday createNewWorkdayForEmployee(long employeeID, LocalDate workDate) {
         float scheduledHours = getScheduledHoursForEmployeeOnDay(employeeID, workDate);
-        Workday workdayWithID = workdayRepository.saveWorkday(new Workday(employeeID, workDate, scheduledHours));
 
-        return workdayWithID;
+        return workdayRepository.saveWorkday(new Workday(employeeID, workDate, scheduledHours));
     }
 
     private float getScheduledHoursForEmployeeOnDay(long employeeID, LocalDate workDate) {

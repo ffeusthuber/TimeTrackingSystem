@@ -33,29 +33,29 @@ public class TimeEntriesController {
 
 
     @GetMapping({"/time-entries","/"})
-    public String displayTimeEntriesForEmployee(Model model, ZoneId zoneId) {
+    public String displayTimeEntriesOfLatestWorkdayOfEmployee(Model model, ZoneId zoneId) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         this.zoneId = zoneId;
-        model.addAttribute("timeEntries", reportService.getTimeEntriesOfEmployee(employeeID, this.zoneId));
+        model.addAttribute("timeEntries", reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeID, this.zoneId));
         return "timeEntries";
     }
 
     @PostMapping("/time-entries/clock-in")
-    public String clockIn(RedirectAttributes redirectAttributes, ZoneId zoneId) {
+    public String clockIn(RedirectAttributes redirectAttributes) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockIn(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
     }
 
     @PostMapping("/time-entries/clock-out")
-    public String clockOut(RedirectAttributes redirectAttributes, ZoneId zoneId) {
+    public String clockOut(RedirectAttributes redirectAttributes) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockOut(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
     }
 
     @PostMapping("/time-entries/clock-pause")
-    public String clockPause(RedirectAttributes redirectAttributes, ZoneId zoneId) {
+    public String clockPause(RedirectAttributes redirectAttributes) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockPause(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
@@ -74,7 +74,7 @@ public class TimeEntriesController {
     }
 
     private void addTimeEntriesToFlashAttributes(RedirectAttributes redirectAttributes, Long employeeID) {
-        redirectAttributes.addFlashAttribute("timeEntries", reportService.getTimeEntriesOfEmployee(employeeID, zoneId));
+        redirectAttributes.addFlashAttribute("timeEntries", reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeID, zoneId));
     }
 
     private void setSuccessFlashAttributes(RedirectAttributes redirectAttributes, ClockResponse clockResponse) {

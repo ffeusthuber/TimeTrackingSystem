@@ -18,11 +18,12 @@ public class Workday {
     private final Queue<TimeEntry> timeEntries = new LinkedList<>();
     private final float scheduledHours;
 
-    public Workday(long workdayId, long employeeId, LocalDate workDate, float scheduledHours) {
+    public Workday(long workdayId, long employeeId, LocalDate workDate, float scheduledHours, List<TimeEntry> timeEntries) {
         this.workdayId = workdayId;
         this.employeeId = employeeId;
         this.workDate = workDate;
         this.scheduledHours = scheduledHours;
+        this.timeEntries.addAll(timeEntries);
     }
 
     public Workday(long employeeId, LocalDate workDate, float scheduledHours) {
@@ -33,10 +34,6 @@ public class Workday {
 
     public long getWorkdayId() {
         return this.workdayId;
-    }
-
-    public void setWorkdayId(long workdayId) {
-        this.workdayId = workdayId;
     }
 
     public long getEmployeeId() {

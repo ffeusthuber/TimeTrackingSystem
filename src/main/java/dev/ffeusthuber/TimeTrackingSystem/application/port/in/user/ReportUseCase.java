@@ -5,9 +5,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkdayDTO;
 
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 
 public interface ReportUseCase {
-    List<TimeEntryDTO> getTimeEntriesOfEmployee(long employeeID, ZoneId zoneId);
-    Optional<WorkdayDTO> getLatestWorkdayOfEmployee(long employeeID);
+    List<TimeEntryDTO> getTimeEntriesOfLatestWorkdayOfEmployee(long employeeID, ZoneId zoneId);
+    WorkdayDTO getLatestWorkdayOfEmployee(long employeeID);
 }
