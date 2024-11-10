@@ -1,8 +1,11 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.*;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class TimeTrackingService implements TimeTrackingUseCase {
@@ -41,8 +44,10 @@ public class TimeTrackingService implements TimeTrackingUseCase {
     }
 
     private ClockResponse handleClockAction(long employeeID, TimeEntryType entryType, ClockState clockState) {
-        TimeEntry timeEntry = timeEntryService.createTimeEntry(employeeID, entryType);
-        workdayService.addTimeEntryToWorkday(timeEntry);
+        Workday workday = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeID, LocalDate.now());
+        long workdayID = workday.getWorkdayId();
+        TimeEntry timeEntry = timeEntryService.createTimeEntry(workdayID, entryType);
+        workdayService.addTimeEntryToWorkday(timeEntry, workday);
         employeeService.setClockStateForEmployee(employeeID, clockState);
 
         return ClockResponse.success(employeeID, entryType);

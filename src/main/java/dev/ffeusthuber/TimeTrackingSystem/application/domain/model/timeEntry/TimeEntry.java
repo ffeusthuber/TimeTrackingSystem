@@ -4,18 +4,18 @@ import java.time.ZonedDateTime;
 
 public class TimeEntry implements Comparable<TimeEntry>{
 
-    private final long employeeID;
+    private final long workdayID;
     private final TimeEntryType entryType;
     private final ZonedDateTime entryDateTime;
 
-    public TimeEntry(long employeeID, TimeEntryType entryType, ZonedDateTime entryDateTime) {
-        this.employeeID = employeeID;
+    public TimeEntry(long workdayID, TimeEntryType entryType, ZonedDateTime entryDateTime) {
+        this.workdayID = workdayID;
         this.entryType = entryType;
         this.entryDateTime = entryDateTime;
     }
 
     public long getEmployeeID() {
-        return this.employeeID;
+        return this.workdayID;
     }
 
     public TimeEntryType getType() {

@@ -34,9 +34,12 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
     }
 
     @Override
-    public void saveWorkday(Workday workday) {
+    public Workday saveWorkday(Workday workday) {
         String sql = "INSERT INTO Workday (employee_id, date, hours_scheduled) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, workday.getEmployeeId(), workday.getWorkDate(), workday.getScheduledHours());
+        Workday workdayWithId = getWorkdayForEmployeeOnDate(workday.getEmployeeId(), workday.getWorkDate())
+                .orElseThrow(() -> new IllegalStateException("Failed to retrieve saved workday"));
+        return workdayWithId;
     }
 
     @Override
@@ -52,6 +55,7 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
 
     private Workday mapRowToWorkday(ResultSet rs) throws SQLException {
         return new Workday(
+                rs.getLong("workday_id"),
                 rs.getLong("employee_id"),
                 rs.getDate("date").toLocalDate(),
                 rs.getFloat("hours_scheduled")

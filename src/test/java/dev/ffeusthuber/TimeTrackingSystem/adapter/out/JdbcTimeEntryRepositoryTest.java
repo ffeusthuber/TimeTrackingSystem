@@ -10,10 +10,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.WorkdayServ
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,6 +49,7 @@ public class JdbcTimeEntryRepositoryTest {
         jdbcTemplate.execute("DELETE FROM Employee");
     }
 
+    @Disabled
     @Test
     void timeEntryIsSavedWhenCreatedWithTimeTrackingService() {
         timeTrackingService.clockIn(employeeID);

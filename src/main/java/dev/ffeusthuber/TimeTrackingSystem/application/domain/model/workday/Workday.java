@@ -12,15 +12,31 @@ import java.util.Objects;
 import java.util.Queue;
 
 public class Workday {
+    private long workdayId;
     private final long employeeId;
     private final LocalDate workDate;
     private final Queue<TimeEntry> timeEntries = new LinkedList<>();
     private final float scheduledHours;
 
+    public Workday(long workdayId, long employeeId, LocalDate workDate, float scheduledHours) {
+        this.workdayId = workdayId;
+        this.employeeId = employeeId;
+        this.workDate = workDate;
+        this.scheduledHours = scheduledHours;
+    }
+
     public Workday(long employeeId, LocalDate workDate, float scheduledHours) {
         this.employeeId = employeeId;
         this.workDate = workDate;
         this.scheduledHours = scheduledHours;
+    }
+
+    public long getWorkdayId() {
+        return this.workdayId;
+    }
+
+    public void setWorkdayId(long workdayId) {
+        this.workdayId = workdayId;
     }
 
     public long getEmployeeId() {

@@ -14,9 +14,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workd
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.TimeEntryRepository;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,7 +24,7 @@ public class TimeTrackingServiceTest {
     @Test
     void canClockInWithGivenEmployeeID() {
         long clockedOutEmployeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedOutEmployee(clockedOutEmployeeID);
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(clockedOutEmployeeID, ClockState.CLOCKED_OUT);
 
         ClockResponse clockResponse = timeTrackingUseCase.clockIn(clockedOutEmployeeID);
 
@@ -35,7 +34,7 @@ public class TimeTrackingServiceTest {
     @Test
     void canClockOutWithGivenEmployeeID() {
         long clockedInEmployeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedInEmployee(clockedInEmployeeID);
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(clockedInEmployeeID, ClockState.CLOCKED_IN);
 
         ClockResponse clockResponse = timeTrackingUseCase.clockOut(clockedInEmployeeID);
 
@@ -45,7 +44,7 @@ public class TimeTrackingServiceTest {
     @Test
     void canClockPauseWithGivenEmployeeID() {
         long clockedInEmployeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedInEmployee(clockedInEmployeeID);
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(clockedInEmployeeID, ClockState.CLOCKED_IN);
 
         ClockResponse clockResponse = timeTrackingUseCase.clockPause(clockedInEmployeeID);
 
@@ -55,7 +54,7 @@ public class TimeTrackingServiceTest {
     @Test
     void clockingInWhenAlreadyClockedInReturnsError() {
         long clockedInEmployeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedInEmployee(clockedInEmployeeID);
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(clockedInEmployeeID, ClockState.CLOCKED_IN);
 
         ClockResponse clockResponse = timeTrackingUseCase.clockIn(clockedInEmployeeID);
 
@@ -65,7 +64,7 @@ public class TimeTrackingServiceTest {
     @Test
     void clockingOutWhenNotClockedInReturnsError() {
         long clockedOutEmployeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedOutEmployee(clockedOutEmployeeID);
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(clockedOutEmployeeID, ClockState.CLOCKED_OUT);
 
         ClockResponse clockResponse = timeTrackingUseCase.clockOut(clockedOutEmployeeID);
 
@@ -75,7 +74,7 @@ public class TimeTrackingServiceTest {
     @Test
     void clockingPauseWhenNotClockedInReturnsError() {
         long clockedOutEmployeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedOutEmployee(clockedOutEmployeeID);
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(clockedOutEmployeeID, ClockState.CLOCKED_OUT);
 
         ClockResponse clockResponse = timeTrackingUseCase.clockPause(clockedOutEmployeeID);
 
@@ -85,7 +84,7 @@ public class TimeTrackingServiceTest {
     @Test
     void canClockInAfterClockingOut() throws InterruptedException {
         long employeeID = 1L;
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedOutEmployee(employeeID);
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(employeeID, ClockState.CLOCKED_OUT);
 
         timeTrackingUseCase.clockIn(employeeID);
         // wait to ensure that the clock in time is different from the clock out time for comparison
@@ -99,47 +98,49 @@ public class TimeTrackingServiceTest {
 
 
     @Test
-    void successfulClockingSavesTimeEntry() {
+    void successfulClockingAddsTimeEntryToWorkday() {
         long employeeID = 1L;
-        TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedOutEmployee(employeeID, timeEntryRepository);
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(employeeID, ClockState.CLOCKED_OUT, workdayRepository);
 
-        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).isEmpty();
         timeTrackingUseCase.clockIn(employeeID);
-        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
+        Workday workday = workdayRepository.getLatestWorkdayForEmployee(employeeID).orElseThrow();
+        assertThat(workday.getTimeEntries()).hasSize(1);
         timeTrackingUseCase.clockOut(employeeID);
-        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(2);
+        assertThat(workday.getTimeEntries()).hasSize(2);
     }
 
     @Test
-    void unsuccessfulClockingShouldNotSaveTimeEntry() {
+    void unsuccessfulClockingShouldNotAddTimeEntryToWorkday() {
         long employeeID = 1L;
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
+        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithEmployeeInClockState(employeeID, ClockState.CLOCKED_OUT, workdayRepository);
+
+        timeTrackingUseCase.clockIn(employeeID);
+        Workday workday = workdayRepository.getLatestWorkdayForEmployee(employeeID).orElseThrow();
+        assertThat(workday.getTimeEntries()).hasSize(1);
+        timeTrackingUseCase.clockIn(employeeID);
+        assertThat(workday.getTimeEntries()).hasSize(1);
+    }
+
+    private TimeTrackingUseCase getTimeTrackingServiceWithEmployeeInClockState(long employeeID, ClockState clockState) {
         TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
-        TimeTrackingUseCase timeTrackingUseCase = getTimeTrackingServiceWithClockedOutEmployee(employeeID, timeEntryRepository);
-
-        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).isEmpty();
-        timeTrackingUseCase.clockIn(employeeID);
-        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
-        timeTrackingUseCase.clockIn(employeeID);
-        assertThat(timeEntryRepository.getTimeEntriesByEmployeeId(employeeID)).hasSize(1);
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
+        Employee employee = new Employee(employeeID, clockState, WorkSchedule.createDefaultWorkSchedule());
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        WorkdayService workdayService = new WorkdayService(employeeRepository, workdayRepository);
+        TimeEntryService timeEntryService = new TimeEntryService(timeEntryRepository);
+        return new TimeTrackingService(timeEntryService, employeeService, workdayService);
     }
 
-    private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID) {
-        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT, WorkSchedule.createDefaultWorkSchedule()));
-        return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
-                                       new EmployeeService(employeeRepository), new WorkdayService(employeeRepository, WorkdayRepositoryStub.withoutWorkdays()));
-    }
-
-    private static TimeTrackingService getTimeTrackingServiceWithClockedOutEmployee(long employeeID, TimeEntryRepository timeEntryRepository) {
-        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_OUT, WorkSchedule.createDefaultWorkSchedule()));
-        return new TimeTrackingService(new TimeEntryService(timeEntryRepository),
-                                       new EmployeeService(employeeRepository), new WorkdayService(employeeRepository, WorkdayRepositoryStub.withoutWorkdays()));
-    }
-
-    private static TimeTrackingService getTimeTrackingServiceWithClockedInEmployee(long employeeID) {
-        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(new Employee(employeeID, ClockState.CLOCKED_IN, WorkSchedule.createDefaultWorkSchedule()));
-        return new TimeTrackingService(new TimeEntryService(TimeEntryRepositoryStub.withoutEntries()),
-                                       new EmployeeService(employeeRepository), new WorkdayService(employeeRepository, WorkdayRepositoryStub.withWorkdays(
-                                               new Workday(employeeID, LocalDate.of(2021, 1, 1), 8.5f))));
+    private TimeTrackingUseCase getTimeTrackingServiceWithEmployeeInClockState(long employeeID, ClockState clockState, WorkdayRepository workdayRepository) {
+        TimeEntryRepository timeEntryRepository = TimeEntryRepositoryStub.withoutEntries();
+        Employee employee = new Employee(employeeID, clockState, WorkSchedule.createDefaultWorkSchedule());
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        WorkdayService workdayService = new WorkdayService(employeeRepository, workdayRepository);
+        TimeEntryService timeEntryService = new TimeEntryService(timeEntryRepository);
+        return new TimeTrackingService(timeEntryService, employeeService, workdayService);
     }
 }

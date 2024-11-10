@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Employee (
 
 CREATE TABLE IF NOT EXISTS Time_entry (
     time_entry_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    employee_id BIGINT NOT NULL,
+    workday_id BIGINT NOT NULL,
     entry_type VARCHAR(255) NOT NULL,
     entry_date_time DATETIME  NOT NULL
 );

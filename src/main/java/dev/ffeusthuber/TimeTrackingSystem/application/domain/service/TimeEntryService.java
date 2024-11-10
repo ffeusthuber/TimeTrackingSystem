@@ -16,8 +16,8 @@ public class TimeEntryService {
         this.timeEntryRepository = timeEntryRepository;
     }
 
-    public TimeEntry createTimeEntry(long employeeID, TimeEntryType timeEntryType) {
-        TimeEntry timeEntry = new TimeEntry(employeeID, timeEntryType, ZonedDateTime.now(ZoneOffset.UTC));
+    public TimeEntry createTimeEntry(long workdayID, TimeEntryType timeEntryType) {
+        TimeEntry timeEntry = new TimeEntry(workdayID, timeEntryType, ZonedDateTime.now(ZoneOffset.UTC));
         timeEntryRepository.save(timeEntry);
         return timeEntry;
     }

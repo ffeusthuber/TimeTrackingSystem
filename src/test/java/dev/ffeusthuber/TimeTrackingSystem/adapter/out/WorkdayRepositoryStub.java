@@ -29,8 +29,9 @@ public class WorkdayRepositoryStub implements WorkdayRepository {
     }
 
     @Override
-    public void saveWorkday(Workday workday) {
+    public Workday saveWorkday(Workday workday) {
         workdayList.add(workday);
+        return workday;
     }
 
     @Override

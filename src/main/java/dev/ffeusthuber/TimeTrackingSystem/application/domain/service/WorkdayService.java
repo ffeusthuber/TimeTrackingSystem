@@ -2,7 +2,6 @@ package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
@@ -31,25 +30,24 @@ public class WorkdayService {
         return workdayRepository.getWorkdayForEmployeeOnDate(employeeID, workDate);
     }
 
-    private Workday getOrCreateWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate) {
+    public Workday getOrCreateWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate) {
         return getWorkdayForEmployeeOnDate(employeeID, workDate)
-                .orElseGet(() -> {
-                    Employee employee = employeeRepository.getEmployeeByID(employeeID);
-                    float scheduledHours = employee.getWorkSchedule().getScheduledWorkHoursForDay(workDate.getDayOfWeek());
-                    return new Workday(employeeID, workDate, scheduledHours);
-                });
+                .orElseGet(() -> createNewWorkdayForEmployee(employeeID, workDate));
     }
 
-    public void addTimeEntryToWorkday(TimeEntry timeEntry) {
-        Workday workday;
-        if(timeEntry.getType() == TimeEntryType.CLOCK_IN) {
-            workday = getOrCreateWorkdayForEmployeeOnDate(timeEntry.getEmployeeID(),
-                                                          timeEntry.getEntryDateTime().toLocalDate());
-        }
-        else {
-            workday = getLatestWorkdayForEmployee(timeEntry.getEmployeeID())
-                    .orElseThrow(() -> new IllegalStateException("No workday found for employee"));
-        }
+    private Workday createNewWorkdayForEmployee(long employeeID, LocalDate workDate) {
+        float scheduledHours = getScheduledHoursForEmployeeOnDay(employeeID, workDate);
+        Workday workdayWithID = workdayRepository.saveWorkday(new Workday(employeeID, workDate, scheduledHours));
+
+        return workdayWithID;
+    }
+
+    private float getScheduledHoursForEmployeeOnDay(long employeeID, LocalDate workDate) {
+        Employee employee = employeeRepository.getEmployeeByID(employeeID);
+        return employee.getWorkSchedule().getScheduledWorkHoursForDay(workDate.getDayOfWeek());
+    }
+
+    public void addTimeEntryToWorkday(TimeEntry timeEntry, Workday workday) {
         workday.addTimeEntry(timeEntry);
         workdayRepository.saveWorkday(workday);
     }

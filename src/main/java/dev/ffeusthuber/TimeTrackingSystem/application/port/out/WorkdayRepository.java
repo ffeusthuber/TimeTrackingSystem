@@ -6,10 +6,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface WorkdayRepository {
-    void saveWorkday(Workday workday);
+    Workday saveWorkday(Workday workday);
     Optional<Workday> getLatestWorkdayForEmployee(long employeeID);
     Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date);
-
-
-
 }
