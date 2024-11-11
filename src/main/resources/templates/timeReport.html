@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Time Tracking System</title>
     <link th:href="@{/style.css}" rel="stylesheet" />
 </head>
 <body>
@@ -19,8 +19,8 @@
           <table>
               <div th:if="${workday != null}">
                   <p>Workday Date: <span th:text="${workday.getFormatedDate}"></span></p>
-                  <p>Worked Hours: <span th:text="${workday.getWorkedHours}"></span></p>
-                  <p>Scheduled Hours: <span th:text="${workday.getScheduledHours}"></span></p>
+                  <p>Actual Work Time: <span th:text="${workday.getFormatedActualWorkTime}"></span></p>
+                  <p>Scheduled Work Time: <span th:text="${workday.getFormatedScheduledWorkTime}"></span></p>
               </div>
               <div th:if="${workday == null}">
                   <p>No workday to display. Clock in to create your first workday.</p>

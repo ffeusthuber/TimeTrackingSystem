@@ -1,5 +1,10 @@
 In Work:
 
+[ ] user can change password
+     [ ] ask for current password
+     [ ] ask for new password
+     [ ] ask for new password again
+
 [ ] throw a clockError if employee clockstatus update fails
 [ ] Clean up employee constructors
 

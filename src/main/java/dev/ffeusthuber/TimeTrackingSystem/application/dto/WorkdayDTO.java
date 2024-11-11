@@ -17,12 +17,19 @@ public class WorkdayDTO {
         this.date = workday.getWorkDate();
     }
 
-    public float getScheduledHours() {
-        return scheduledHours;
+    public String getFormatedScheduledWorkTime() {
+        int hours = (int) scheduledHours;
+        int minutes = (int) ((scheduledHours - hours) * 60);
+
+        return String.format("%d hours %d minutes", hours, minutes);
     }
 
-    public float getWorkedHours() {
-        return workedHours;
+    public String getFormatedActualWorkTime() {
+        int hours = (int) workedHours;
+        int minutes = (int) ((workedHours - hours) * 60);
+        int seconds = (int) (((workedHours - hours) * 60 - minutes) * 60);
+
+        return String.format("%d hours %d minutes %d seconds", hours, minutes, seconds);
     }
 
     public String getFormatedDate() {
