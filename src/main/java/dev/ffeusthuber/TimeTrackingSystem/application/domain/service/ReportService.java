@@ -6,6 +6,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkdayDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
@@ -28,8 +29,18 @@ public class ReportService implements ReportUseCase {
     }
 
     @Override
-    public WorkdayDTO getLatestWorkdayOfEmployee(long employeeID) {
+    public WorkdayDTO getWorkdayDataForLatestWorkdayOfEmployee(long employeeID) {
         Optional< Workday> optionalWorkday = this.workdayService.getLatestWorkdayForEmployee(employeeID);
         return optionalWorkday.map(WorkdayDTO::new).orElse(null);
+    }
+
+    @Override
+    public List<WorkdayDTO> getWorkdayDataForCurrentWeekForEmployee(long employeeId1) {
+        LocalDate now = LocalDate.now();
+        LocalDate startOfWeek = now.with(java.time.DayOfWeek.MONDAY);
+        LocalDate endOfWeek = now.with(java.time.DayOfWeek.SUNDAY);
+        return workdayService.getWorkdaysForEmployeeBetweenDates(employeeId1, startOfWeek, endOfWeek).stream()
+                             .map(WorkdayDTO::new)
+                             .toList();
     }
 }

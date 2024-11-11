@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,6 +64,21 @@ public class WorkdayServiceTest {
         Optional<Workday> workday = workdayService.getWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
 
         assertThat(workday).isNotPresent();
+    }
+
+    @Test
+    void canGetWorkdaysBetweenTwoDates() {
+        Employee employee = createEmployee();
+        WorkdayService workdayService = new WorkdayService(
+                EmployeeRepositoryStub.withEmployee(employee),
+                WorkdayRepositoryStub.withoutWorkdays());
+
+        Workday workday1 = workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
+        Workday workday2 = workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 2));
+        Workday workday3 = workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 3));
+
+        assertThat(workdayService.getWorkdaysForEmployeeBetweenDates(EMPLOYEE_ID, LocalDate.of(2021, 1, 1), LocalDate.of(2021, 1, 3)))
+                .isEqualTo(List.of(workday1, workday2, workday3));
     }
 
     @Test

@@ -8,6 +8,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -49,5 +50,9 @@ public class WorkdayService {
     public void addTimeEntryToWorkday(TimeEntry timeEntry, Workday workday) {
         workday.addTimeEntry(timeEntry);
         workdayRepository.saveWorkday(workday);
+    }
+
+    public List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeId, LocalDate fromIncluding, LocalDate toIncluding) {
+        return workdayRepository.getWorkdaysForEmployeeBetweenDates(employeeId, fromIncluding, toIncluding);
     }
 }

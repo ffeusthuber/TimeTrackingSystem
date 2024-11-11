@@ -29,6 +29,14 @@ public class WorkdayRepositoryStub implements WorkdayRepository {
     }
 
     @Override
+    public List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeId, LocalDate fromIncluding, LocalDate toIncluding) {
+        return workdayList.stream().filter(workday -> workday.getEmployeeId() == employeeId &&
+                                                     !workday.getWorkDate().isBefore(fromIncluding) &&
+                                                     !workday.getWorkDate().isAfter(toIncluding))
+                          .toList();
+    }
+
+    @Override
     public Workday saveWorkday(Workday workday) {
         workdayList.add(workday);
         return workday;

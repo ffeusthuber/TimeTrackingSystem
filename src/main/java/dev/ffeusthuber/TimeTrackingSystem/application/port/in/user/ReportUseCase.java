@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface ReportUseCase {
     List<TimeEntryDTO> getTimeEntriesOfLatestWorkdayOfEmployee(long employeeID, ZoneId zoneId);
-    WorkdayDTO getLatestWorkdayOfEmployee(long employeeID);
+    WorkdayDTO getWorkdayDataForLatestWorkdayOfEmployee(long employeeID);
+    List<WorkdayDTO> getWorkdayDataForCurrentWeekForEmployee(long employeeId1);
 }

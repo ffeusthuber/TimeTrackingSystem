@@ -55,9 +55,9 @@ public class TimeReportMvcTest {
     @Test
     @WithMockUser
     void whenGetTimeEntriesReturnViewWithTimeEntriesInModel() throws Exception {
-        when(reportUseCase.getLatestWorkdayOfEmployee(anyLong())).thenReturn(new WorkdayDTO(new Workday(1L, LocalDate.now(),8.5f)));
+        when(reportUseCase.getWorkdayDataForLatestWorkdayOfEmployee(anyLong())).thenReturn(new WorkdayDTO(new Workday(1L, LocalDate.now(), 8.5f)));
 
         mockMvc.perform(get("/time-report"))
-               .andExpect(model().attributeExists("workday"));
+               .andExpect(model().attributeExists("workdays"));
     }
 }

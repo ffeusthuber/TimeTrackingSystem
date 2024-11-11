@@ -14,18 +14,27 @@
     <div class="top">
       <h1>Time Report</h1>
     </div>
-
       <div class="table-wrapper">
           <table>
-              <div th:if="${workday != null}">
-                  <p>Workday Date: <span th:text="${workday.getFormatedDate}"></span></p>
-                  <p>Actual Work Time: <span th:text="${workday.getFormatedActualWorkTime}"></span></p>
-                  <p>Paused Time: <span th:text="${workday.getFormatedPauseTime}"></span></p>
-                  <p>Scheduled Work Time: <span th:text="${workday.getFormatedScheduledWorkTime}"></span></p>
-              </div>
-              <div th:if="${workday == null}">
-                  <p>No workday to display. Clock in to create your first workday.</p>
-              </div>
+              <thead>
+              <tr>
+                  <th>Workday Date</th>
+                  <th>Actual Work Time</th>
+                  <th>Paused Time</th>
+                  <th>Scheduled Work Time</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:if="${#lists.isEmpty(workdays)}">
+                  <td colspan="4">No workdays to display. Clock in to create your first workday.</td>
+              </tr>
+              <tr th:each="workday : ${workdays}">
+                  <td th:text="${workday.getFormatedDate}">Date</td>
+                  <td th:text="${workday.getFormatedActualWorkTime}">Actual Work Time</td>
+                  <td th:text="${workday.getFormatedPauseTime}">Paused Time</td>
+                  <td th:text="${workday.getFormatedScheduledWorkTime}">ScheduledWorkTime</td>
+              </tr>
+              </tbody>
           </table>
       </div>
   </div>

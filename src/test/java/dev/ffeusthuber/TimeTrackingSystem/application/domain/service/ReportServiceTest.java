@@ -6,9 +6,11 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.Tim
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkdayDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -30,7 +32,7 @@ public class ReportServiceTest {
         List<TimeEntry> timeEntries = List.of(timeEntry1,timeEntry2);
         Workday workday = new Workday(1L, baseTime.toLocalDate(), scheduledHours);
         timeEntries.forEach(workday::addTimeEntry);
-        ReportService reportService = new ReportService( new WorkdayService(null, WorkdayRepositoryStub.withWorkdays(workday)));
+        ReportUseCase reportService = new ReportService( new WorkdayService(null, WorkdayRepositoryStub.withWorkdays(workday)));
 
         List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeId1, defaultZone);
 
@@ -39,10 +41,10 @@ public class ReportServiceTest {
     }
 
     @Test
-    void ifNoWorkdayExistsReturnsEmptyList() {
+    void ifNoWorkdayExistsTimeEntriesOfLatestWorkdayReturnsEmptyList() {
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
         WorkdayService workdayService = new WorkdayService(null, workdayRepository);
-        ReportService reportService = new ReportService(workdayService);
+        ReportUseCase reportService = new ReportService(workdayService);
 
         List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeId1, defaultZone);
 
@@ -59,22 +61,33 @@ public class ReportServiceTest {
         timeEntries.forEach(workday::addTimeEntry);
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);
         WorkdayService workdayService = new WorkdayService(null, workdayRepository);
-        ReportService reportService = new ReportService(workdayService);
+        ReportUseCase reportService = new ReportService(workdayService);
 
-        WorkdayDTO workdayDTO = reportService.getLatestWorkdayOfEmployee(employeeId1);
+        WorkdayDTO workdayDTO = reportService.getWorkdayDataForLatestWorkdayOfEmployee(employeeId1);
 
         assertThat(workdayDTO).isNotNull();
     }
 
     @Test
-    void ifNoWorkdayExistsReturnNull() {
+    void ifNoWorkdayExistsReturnNullForLatestWorkday() {
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
         WorkdayService workdayService = new WorkdayService(null, workdayRepository);
-        ReportService reportService = new ReportService(workdayService);
+        ReportUseCase reportService = new ReportService(workdayService);
 
-        WorkdayDTO workdayDTO = reportService.getLatestWorkdayOfEmployee(employeeId1);
+        WorkdayDTO workdayDTO = reportService.getWorkdayDataForLatestWorkdayOfEmployee(employeeId1);
 
         assertThat(workdayDTO).isNull();
     }
 
+    @Test
+    void canDisplayWorkdaysForCurrentWeek() {
+        Workday workday = new Workday(employeeId1, LocalDate.now(), scheduledHours);
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);
+        WorkdayService workdayService = new WorkdayService(null, workdayRepository);
+        ReportUseCase reportService = new ReportService(workdayService);
+
+        List<WorkdayDTO> workdaysForCurrentWeek = reportService.getWorkdayDataForCurrentWeekForEmployee(employeeId1);
+
+        assertThat(workdaysForCurrentWeek).isNotEmpty();
+    }
 }

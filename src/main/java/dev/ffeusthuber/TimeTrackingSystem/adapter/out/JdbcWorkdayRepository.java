@@ -38,6 +38,12 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
     }
 
     @Override
+    public List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeID, LocalDate fromIncluding, LocalDate toIncluding) {
+        String sql = "SELECT * FROM Workday WHERE employee_id = ? AND date between ? and ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToWorkday(rs), employeeID, fromIncluding, toIncluding);
+    }
+
+    @Override
     public Workday saveWorkday(Workday workday) {
         String sql = "INSERT INTO Workday (employee_id, date, hours_scheduled) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM Workday WHERE employee_id = ? AND date = ?)";
         jdbcTemplate.update(sql, workday.getEmployeeId(), workday.getWorkDate(), workday.getScheduledHours(), workday.getEmployeeId(), workday.getWorkDate());

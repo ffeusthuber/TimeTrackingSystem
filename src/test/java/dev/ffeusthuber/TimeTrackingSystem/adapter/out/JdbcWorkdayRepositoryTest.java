@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,6 +34,25 @@ public class JdbcWorkdayRepositoryTest {
     }
 
     @Test
+    void saveWorkdayInsertsNewWorkdayAndSetsWorkdayId() {
+        Workday workday = new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), 5.5f);
+        Workday savedWorkday = workdayRepository.saveWorkday(workday);
+
+        assertThat(savedWorkday).isNotNull();
+        assertThat(savedWorkday.getWorkdayId()).isNotNull();
+    }
+
+    @Test
+    void saveWorkdayDoesNotInsertDuplicate() {
+        Workday workday = new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), 5.5f);
+        workdayRepository.saveWorkday(workday);
+        Workday duplicateWorkday = new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), 6.0f);
+        Workday savedWorkday = workdayRepository.saveWorkday(duplicateWorkday);
+
+        assertThat(savedWorkday.getScheduledHours()).isEqualTo(5.5f);
+    }
+
+    @Test
     void canGetLatestWorkdayForEmployee() {
         Workday workday = new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), 5.5f);
         Workday latestWorkday = new Workday(EMPLOYEE_ID, LocalDate.of(2020,1,2),  5.5f);
@@ -52,6 +72,36 @@ public class JdbcWorkdayRepositoryTest {
         assertThat(workdayRepository.getWorkdayForEmployeeOnDate(EMPLOYEE_ID, workDate))
                 .isPresent()
                 .contains(workday);
+    }
+
+    @Test
+    void getWorkdayForEmployeeOnDateReturnsEmptyIfNotFound() {
+        assertThat(workdayRepository.getWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2020, 1, 1)))
+                .isNotPresent();
+    }
+
+    @Test
+    void getLatestWorkdayForEmployeeReturnsEmptyIfNotFound() {
+        assertThat(workdayRepository.getLatestWorkdayForEmployee(EMPLOYEE_ID))
+                .isNotPresent();
+    }
+
+    @Test
+    void canGetWorkdaysBetweenTwoDates() {
+        Workday workday1 = new Workday(EMPLOYEE_ID, LocalDate.of(2021, 1, 1), 5.5f);
+        Workday workday2 = new Workday(EMPLOYEE_ID, LocalDate.of(2021, 1, 2), 5.5f);
+        Workday workday3 = new Workday(EMPLOYEE_ID, LocalDate.of(2021, 1, 3), 5.5f);
+
+        saveWorkdaysToRepository(workday1, workday2, workday3);
+
+        assertThat(workdayRepository.getWorkdaysForEmployeeBetweenDates(EMPLOYEE_ID, LocalDate.of(2021, 1, 1), LocalDate.of(2021, 1, 3)))
+                .isEqualTo(List.of(workday1, workday2, workday3));
+    }
+
+    @Test
+    void noFoundWorkdayBetweenDatesReturnsEmptyList() {
+        assertThat(workdayRepository.getWorkdaysForEmployeeBetweenDates(EMPLOYEE_ID, LocalDate.of(2021, 1, 4), LocalDate.of(2021, 1, 5)))
+                .isEmpty();
     }
 
     private void saveWorkdaysToRepository(Workday... workdays) {

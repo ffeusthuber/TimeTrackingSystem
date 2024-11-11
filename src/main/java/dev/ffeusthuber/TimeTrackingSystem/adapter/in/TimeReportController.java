@@ -18,9 +18,9 @@ public class TimeReportController {
     }
 
     @GetMapping("/time-report")
-    public String displayLatestWorkday(Model model) {
+    public String displayWorkdayDataOfCurrentWeek(Model model) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
-        model.addAttribute("workday", reportUseCase.getLatestWorkdayOfEmployee(employeeID));
+        model.addAttribute("workdays", reportUseCase.getWorkdayDataForCurrentWeekForEmployee(employeeID));
         return "timeReport";
     }
 }
