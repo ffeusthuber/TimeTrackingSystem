@@ -21,12 +21,12 @@ public class WorkdayTest {
     private final float scheduledHours = 8.25f;
 
     @Test
-    void whenNoTimeEntryIsAddedToWorkdayThenCalculateWorkedHoursReturnsZero() {
+    void whenNoTimeEntryIsAddedToWorkdayThenWorkedAndPausedHoursReturnsZero() {
         Workday workday = new Workday(employeeId, workDate, scheduledHours);
         
         assertThat(workday.calculateWorkedHours()).isEqualTo(0);
+        assertThat(workday.calculatePausedHours()).isEqualTo(0);
     }
-
 
     @Test
     void canCalculateWorkedHoursFromClockInAndClockOut() {
@@ -94,6 +94,20 @@ public class WorkdayTest {
                       );
 
         assertThat(workday.calculateWorkedHours()).isEqualTo(expectedWorkedHours);
+    }
+
+    @Test
+    void canCalculatePausedHours() {
+        float expectedPausedHours = 0.5f;
+        ZonedDateTime timeOfPauseStart = workDate.atStartOfDay(zoneId);
+        Workday workday = new Workday(employeeId, workDate, scheduledHours);
+        addTimeEntries(workday,
+                       new TimeEntry(employeeId, TimeEntryType.CLOCK_IN, timeOfPauseStart.minusHours(5)),
+                       new TimeEntry(employeeId, TimeEntryType.CLOCK_PAUSE, timeOfPauseStart),
+                       new TimeEntry(employeeId, TimeEntryType.CLOCK_IN, timeOfPauseStart.plusMinutes((long) (expectedPausedHours * 60)))
+                      );
+
+        assertThat(workday.calculatePausedHours()).isEqualTo(expectedPausedHours);
     }
 
     private void addTimeEntries(Workday workday, TimeEntry... timEntries){

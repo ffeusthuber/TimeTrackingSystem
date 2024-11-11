@@ -1,4 +1,11 @@
 In Work:
+[ ] Time Report
+    [ ] Display workdays for calendar week
+
+[ ] Workday
+    [X] can calculate worked / paused hours
+    [ ] can get workdays between two dates
+
 
 [ ] user can change password
      [ ] ask for current password
@@ -8,10 +15,7 @@ In Work:
 [ ] throw a clockError if employee clockstatus update fails
 [ ] Clean up employee constructors
 
-[ ] Workday
-    [X] when clocking --> timeEntry is added to workday
-    [X] can calculate worked / paused hours
-    [ ] can get workdays between two dates
+
 
 [ ] Report
     [ ] Display worked hours of employee

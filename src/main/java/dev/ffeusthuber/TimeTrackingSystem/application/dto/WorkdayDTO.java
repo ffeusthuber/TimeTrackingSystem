@@ -5,34 +5,51 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workd
 import java.time.LocalDate;
 
 public class WorkdayDTO {
-
-
     private final float workedHours;
+    private final float pausedHours;
     private final float scheduledHours;
     private final LocalDate date;
 
     public WorkdayDTO(Workday workday) {
-        this.scheduledHours = workday.getScheduledHours();
         this.workedHours = workday.calculateWorkedHours();
+        this.pausedHours = workday.calculatePausedHours();
+        this.scheduledHours = workday.getScheduledHours();
         this.date = workday.getWorkDate();
     }
 
-    public String getFormatedScheduledWorkTime() {
-        int hours = (int) scheduledHours;
-        int minutes = (int) ((scheduledHours - hours) * 60);
-
-        return String.format("%d hours %d minutes", hours, minutes);
+    public String getFormatedActualWorkTime() {
+        return formatToHoursMinutesAndSeconds(workedHours);
     }
 
-    public String getFormatedActualWorkTime() {
-        int hours = (int) workedHours;
-        int minutes = (int) ((workedHours - hours) * 60);
-        int seconds = (int) (((workedHours - hours) * 60 - minutes) * 60);
+    public String getFormatedPauseTime() {
+        return formatToMinutes(pausedHours);
+    }
 
-        return String.format("%d hours %d minutes %d seconds", hours, minutes, seconds);
+    public String getFormatedScheduledWorkTime() {
+        return formatedToHoursAndMinutes(scheduledHours);
     }
 
     public String getFormatedDate() {
         return String.format("%02d.%s.%d", date.getDayOfMonth(), date.getMonth().name(), date.getYear());
+    }
+
+    private String formatToMinutes(float hours) {
+        int minutes = (int) (hours * 60);
+        return String.format("%d minutes", minutes);
+    }
+
+    private String formatedToHoursAndMinutes(float hours) {
+        int fullHours = (int) hours;
+        int minutes = (int) ((hours - fullHours) * 60);
+
+        return String.format("%d hours %d minutes", fullHours, minutes);
+    }
+
+    private String formatToHoursMinutesAndSeconds(float hours) {
+        int fullHours = (int) hours;
+        int minutes = (int) ((hours - fullHours) * 60);
+        int seconds = (int) (((hours - fullHours) * 60 - minutes) * 60);
+
+        return String.format("%d hours %d minutes %d seconds", fullHours, minutes, seconds);
     }
 }

@@ -53,25 +53,34 @@ public class Workday {
     }
 
     public float calculateWorkedHours() {
+        return calculateTotalHoursForTimeEntryType(TimeEntryType.CLOCK_IN);
+    }
+
+    public float calculatePausedHours() {
+        return calculateTotalHoursForTimeEntryType(TimeEntryType.CLOCK_PAUSE);
+    }
+
+    private float calculateTotalHoursForTimeEntryType(TimeEntryType timeEntryType) {
         if (timeEntries.isEmpty()) return 0.0f;
 
         Queue<TimeEntry> entriesCopy = new LinkedList<>(timeEntries);
-        skipUntilFirstClockInTimeEntry(entriesCopy);
 
-        float totalWorkedHours = 0.0f;
+        float totalHours = 0.0f;
         while (entriesCopy.size() >= 2) {
+            skipUntilNextTimeEntryOfType(entriesCopy, timeEntryType);
+            if(entriesCopy.size() < 2) break;
             ZonedDateTime start = entriesCopy.poll().getEntryDateTime();
             ZonedDateTime end = entriesCopy.poll().getEntryDateTime();
-            totalWorkedHours += calculateHoursBetween(start, end);
+            totalHours += calculateHoursBetween(start, end);
         }
 
-        if(entriesCopy.size() == 1) {
-            ZonedDateTime lastClockIn = entriesCopy.poll().getEntryDateTime();
+        if(entriesCopy.size() == 1 && entriesCopy.peek().getType() == timeEntryType) {
+            ZonedDateTime timeOfLastEntry = entriesCopy.poll().getEntryDateTime();
             ZonedDateTime now = ZonedDateTime.now();
-            totalWorkedHours += calculateHoursBetween(lastClockIn, now);
+            totalHours += calculateHoursBetween(timeOfLastEntry, now);
         }
 
-        return totalWorkedHours;
+        return totalHours;
     }
 
     private float calculateHoursBetween(ZonedDateTime start, ZonedDateTime end) {
@@ -79,8 +88,8 @@ public class Workday {
         return secondsWorked / 3600.0f;
     }
 
-    private static void skipUntilFirstClockInTimeEntry(Queue<TimeEntry> entriesCopy) {
-        while (entriesCopy.peek().getType() != TimeEntryType.CLOCK_IN) {
+    private void skipUntilNextTimeEntryOfType(Queue<TimeEntry> entriesCopy, TimeEntryType timeEntryType) {
+        while (!entriesCopy.isEmpty() && entriesCopy.peek().getType() != timeEntryType) {
             entriesCopy.poll();
         }
     }
@@ -100,4 +109,5 @@ public class Workday {
     public int hashCode() {
         return Objects.hash(employeeId, workDate, timeEntries, scheduledHours);
     }
+
 }
