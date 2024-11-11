@@ -52,6 +52,14 @@ public class WorkSchedule {
         return scheduledWorkHours[index];
     }
 
+    public float getScheduledWorkHoursForWeek() {
+        float total = 0;
+        for (float hours : scheduledWorkHours) {
+            total += hours;
+        }
+        return total;
+    }
+
     public static WorkSchedule createDefaultWorkSchedule() {
         return new WorkSchedule(defaultWorkHoursMonday, defaultWorkHoursTuesday, defaultWorkHoursWednesday, defaultWorkHoursThursday, defaultWorkHoursFriday, defaultWorkHoursSaturday, defaultWorkHoursSunday);
     }
@@ -65,7 +73,6 @@ public class WorkSchedule {
                                                     float hoursSunday) {
         return new WorkSchedule(hoursMonday, hoursTuesday, hoursWednesday, hoursThursday, hoursFriday, hoursSaturday, hoursSunday);
     }
-
 
     @Override
     public boolean equals(Object o) {
