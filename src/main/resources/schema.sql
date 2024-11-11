@@ -8,11 +8,19 @@ CREATE TABLE IF NOT EXISTS Employee (
     clock_state VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS Workday (
+    workday_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    employee_id BIGINT NOT NULL,
+    date DATE  NOT NULL,
+    hours_scheduled FLOAT  NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS Time_entry (
     time_entry_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     workday_id BIGINT NOT NULL,
     entry_type VARCHAR(255) NOT NULL,
-    entry_date_time DATETIME  NOT NULL
+    entry_date_time DATETIME  NOT NULL,
+    FOREIGN KEY (workday_id) REFERENCES Workday(workday_id)
 );
 
 CREATE TABLE IF NOT EXISTS Work_schedule (
@@ -26,13 +34,6 @@ CREATE TABLE IF NOT EXISTS Work_schedule (
     hours_saturday FLOAT  NOT NULL,
     hours_sunday FLOAT  NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
-);
-
-CREATE TABLE IF NOT EXISTS Workday (
-    workday_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    employee_id BIGINT NOT NULL,
-    date DATE  NOT NULL,
-    hours_scheduled FLOAT  NOT NULL
 );
 
 
