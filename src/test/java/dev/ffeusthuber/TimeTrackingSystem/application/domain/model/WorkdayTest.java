@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,6 +40,17 @@ public class WorkdayTest {
                        new TimeEntry(employeeId, TimeEntryType.CLOCK_OUT, clockOutTime));
 
         assertThat(workday.calculateWorkedHours()).isEqualTo(expectedWorkedHours);
+    }
+
+    @Test
+    void canCalculateWorkedHoursFromClockInToNowIfNoClockOutIsPresent() {
+        ZonedDateTime clockInTime = workDate.atStartOfDay(zoneId);
+
+        Workday workday = new Workday(employeeId, workDate, scheduledHours);
+        addTimeEntries(workday,
+                       new TimeEntry(employeeId, TimeEntryType.CLOCK_IN, clockInTime));
+
+        assertThat(workday.calculateWorkedHours()).isEqualTo(workDate.atStartOfDay(zoneId).until(ZonedDateTime.now(zoneId), ChronoUnit.SECONDS) / 3600.0f);
     }
 
     @Test

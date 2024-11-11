@@ -56,18 +56,27 @@ public class Workday {
         if (timeEntries.isEmpty()) return 0.0f;
 
         Queue<TimeEntry> entriesCopy = new LinkedList<>(timeEntries);
-
         skipUntilFirstClockInTimeEntry(entriesCopy);
 
         float totalWorkedHours = 0.0f;
         while (entriesCopy.size() >= 2) {
             ZonedDateTime start = entriesCopy.poll().getEntryDateTime();
             ZonedDateTime end = entriesCopy.poll().getEntryDateTime();
-            long minutesWorked = ChronoUnit.MINUTES.between(start, end);
-            totalWorkedHours += minutesWorked / 60.0;
+            totalWorkedHours += calculateHoursBetween(start, end);
+        }
+
+        if(entriesCopy.size() == 1) {
+            ZonedDateTime lastClockIn = entriesCopy.poll().getEntryDateTime();
+            ZonedDateTime now = ZonedDateTime.now();
+            totalWorkedHours += calculateHoursBetween(lastClockIn, now);
         }
 
         return totalWorkedHours;
+    }
+
+    private float calculateHoursBetween(ZonedDateTime start, ZonedDateTime end) {
+        long secondsWorked = ChronoUnit.SECONDS.between(start, end);
+        return secondsWorked / 3600.0f;
     }
 
     private static void skipUntilFirstClockInTimeEntry(Queue<TimeEntry> entriesCopy) {

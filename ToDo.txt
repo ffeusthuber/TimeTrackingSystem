@@ -1,8 +1,5 @@
 In Work:
 
-[ ] refactor to Workday as aggregate root
-    [ ] display timeEntries of latest workday instead of all timeEntries
-
 [ ] throw a clockError if employee clockstatus update fails
 [ ] Clean up employee constructors
 
@@ -13,20 +10,17 @@ In Work:
 
 [ ] Report
     [ ] Display worked hours of employee
-        [ ] get worked hours for day
+        [X] get worked hours for day
         [ ] per week
         [ ] overall for this month
     [ ] Display remaining flextime
 
-   [ ] Display regular working time
+   [X] Display regular working time
    [ ] Display overtime
 
     Date	    Pause (min)	    Worktime    Overtime
     01.10.2024	60	            8h	        0h
     02.10.2024	45	            9h 35min	1h 35min
-
-
-
 
 ----------------------------------------------------------------------------------
 [ ] Fill userdata in sidebar
@@ -43,10 +37,8 @@ In Work:
     [X] check if username is unique
     [X] check if form is filled out correctly
 
-[ ] TimeEntriesController
-        [ ] Create GET endpoint for finding all TimeEntries for Employee
-            [ ] Create GET endpoint for finding all TimeEntries for Employee between two dates
-
+[X] TimeEntriesController
+        [X] Create GET endpoint for all timeEntries of latest workday of employee
         [X] Create POST endpoint for clocking in
         [X] Create POST endpoint for clocking out
         [X] Create POST endpoint for pausing
