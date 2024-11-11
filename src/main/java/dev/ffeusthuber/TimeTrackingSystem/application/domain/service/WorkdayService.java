@@ -22,9 +22,8 @@ public class WorkdayService {
         this.workdayRepository = workdayRepository;
     }
 
-    public Workday getLatestWorkdayForEmployee(long employeeID) {
-        return workdayRepository.getLatestWorkdayForEmployee(employeeID)
-                         .orElseGet(() -> createNewWorkdayForEmployee(employeeID, LocalDate.now()));
+    public Optional<Workday> getLatestWorkdayForEmployee(long employeeID) {
+        return workdayRepository.getLatestWorkdayForEmployee(employeeID);
     }
 
     public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate) {

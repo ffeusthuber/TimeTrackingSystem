@@ -31,22 +31,12 @@ public class WorkdayServiceTest {
         workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
         workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 2));
 
-        Workday latestWorkday = workdayService.getLatestWorkdayForEmployee(EMPLOYEE_ID);
+        Optional<Workday> latestWorkday = workdayService.getLatestWorkdayForEmployee(EMPLOYEE_ID);
 
-        assertThat(latestWorkday.getWorkDate()).isEqualTo(LocalDate.of(2021, 1, 2));
+        assertThat(latestWorkday).isPresent();
+        assertThat(latestWorkday.get().getWorkDate()).isEqualTo(LocalDate.of(2021, 1, 2));
     }
 
-    @Test
-    void whenTryingToGetLatestWorkdayWithoutExistingWorkdayNewWorkdayIsCreated() {
-        Employee employee = createEmployee();
-        WorkdayService workdayService = new WorkdayService(
-                EmployeeRepositoryStub.withEmployee(employee),
-                WorkdayRepositoryStub.withoutWorkdays());
-
-        Workday latestWorkday = workdayService.getLatestWorkdayForEmployee(EMPLOYEE_ID);
-
-        assertThat(latestWorkday).isNotNull();
-    }
 
     @Test
     void canGetWorkdayForEmployeeOnSpecificDate() {

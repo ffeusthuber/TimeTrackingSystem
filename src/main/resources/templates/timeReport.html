@@ -14,6 +14,19 @@
     <div class="top">
       <h1>Time Report</h1>
     </div>
+
+      <div class="table-wrapper">
+          <table>
+              <div th:if="${workday != null}">
+                  <p>Workday Date: <span th:text="${workday.getFormatedDate}"></span></p>
+                  <p>Worked Hours: <span th:text="${workday.getWorkedHours}"></span></p>
+                  <p>Scheduled Hours: <span th:text="${workday.getScheduledHours}"></span></p>
+              </div>
+              <div th:if="${workday == null}">
+                  <p>No workday to display. Clock in to create your first workday.</p>
+              </div>
+          </table>
+      </div>
   </div>
 </div>
 </body>

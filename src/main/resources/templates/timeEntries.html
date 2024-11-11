@@ -31,6 +31,9 @@
                 </tr>
                 </thead>
                 <tbody>
+                <tr th:if="${#lists.isEmpty(timeEntries)}">
+                    <td colspan="4">No time entries to display. Clock in to create your first time entry.</td>
+                </tr>
                 <tr th:each="timeEntry : ${timeEntries}">
                     <td th:text="${timeEntry.getWeekday}">Weekday</td>
                     <td th:text="${timeEntry.getDate}">Date</td>

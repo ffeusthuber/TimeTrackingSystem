@@ -18,42 +18,64 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReportServiceTest {
 
-    private static final ZoneId DEFAULT_ZONE = ZoneId.of("Europe/Vienna");
-    private static final ZonedDateTime BASE_TIME = ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-    private static final long EMPLOYEE_ID_1 = 1L;
+    private final ZoneId defaultZone = ZoneId.of("Europe/Vienna");
+    private final ZonedDateTime baseTime = ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+    private final long employeeId1 = 1L;
+    private final float scheduledHours = 8.5f;
 
     @Test
     void canDisplayAllTimeEntriesOfLatestWorkdayOfEmployee() {
-        TimeEntry timeEntry1 = new TimeEntry(EMPLOYEE_ID_1, TimeEntryType.CLOCK_IN, BASE_TIME);
-        TimeEntry timeEntry2 = new TimeEntry(EMPLOYEE_ID_1, TimeEntryType.CLOCK_OUT, BASE_TIME.plusHours(8));
+        TimeEntry timeEntry1 = new TimeEntry(employeeId1, TimeEntryType.CLOCK_IN, baseTime);
+        TimeEntry timeEntry2 = new TimeEntry(employeeId1, TimeEntryType.CLOCK_OUT, baseTime.plusHours(8));
         List<TimeEntry> timeEntries = List.of(timeEntry1,timeEntry2);
-        Workday workday = new Workday(1L, BASE_TIME.toLocalDate(), 8.5f);
+        Workday workday = new Workday(1L, baseTime.toLocalDate(), scheduledHours);
         timeEntries.forEach(workday::addTimeEntry);
         ReportService reportService = new ReportService( new WorkdayService(null, WorkdayRepositoryStub.withWorkdays(workday)));
 
-        List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(EMPLOYEE_ID_1, DEFAULT_ZONE);
+        List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeId1, defaultZone);
 
-        assertThat(timeEntriesForEmployee1).isEqualTo(List.of(new TimeEntryDTO(timeEntry1, DEFAULT_ZONE),
-                                                              new TimeEntryDTO(timeEntry2, DEFAULT_ZONE)));
+        assertThat(timeEntriesForEmployee1).isEqualTo(List.of(new TimeEntryDTO(timeEntry1, defaultZone),
+                                                              new TimeEntryDTO(timeEntry2, defaultZone)));
+    }
+
+    @Test
+    void ifNoWorkdayExistsReturnsEmptyList() {
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
+        WorkdayService workdayService = new WorkdayService(null, workdayRepository);
+        ReportService reportService = new ReportService(workdayService);
+
+        List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeId1, defaultZone);
+
+        assertThat(timeEntriesForEmployee1).isEmpty();
     }
 
 
     @Test
     void canDisplayDataOfLatestWorkdayOfEmployee() {
-        float scheduledHours = 8.5f;
         float hoursWorked = 8;
-        TimeEntry clockIn = new TimeEntry(EMPLOYEE_ID_1, TimeEntryType.CLOCK_IN, BASE_TIME);
-        TimeEntry clockOut = new TimeEntry(EMPLOYEE_ID_1, TimeEntryType.CLOCK_OUT, BASE_TIME.plusHours((long) hoursWorked));
-        Workday workday = new Workday(EMPLOYEE_ID_1, BASE_TIME.toLocalDate(), scheduledHours);
-        workday.addTimeEntry(clockIn);
-        workday.addTimeEntry(clockOut);
+        TimeEntry clockIn = new TimeEntry(employeeId1, TimeEntryType.CLOCK_IN, baseTime);
+        TimeEntry clockOut = new TimeEntry(employeeId1, TimeEntryType.CLOCK_OUT, baseTime.plusHours((long) hoursWorked));
+        List<TimeEntry> timeEntries = List.of(clockIn,clockOut);
+        Workday workday = new Workday(employeeId1, baseTime.toLocalDate(), scheduledHours);
+        timeEntries.forEach(workday::addTimeEntry);
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withWorkdays(workday);
         WorkdayService workdayService = new WorkdayService(null, workdayRepository);
         ReportService reportService = new ReportService(workdayService);
 
-        WorkdayDTO workdayDTO = reportService.getLatestWorkdayOfEmployee(EMPLOYEE_ID_1);
+        WorkdayDTO workdayDTO = reportService.getLatestWorkdayOfEmployee(employeeId1);
 
         assertThat(workdayDTO.getWorkedHours()).isEqualTo(hoursWorked);
+    }
+
+    @Test
+    void ifNoWorkdayExistsReturnNull() {
+        WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
+        WorkdayService workdayService = new WorkdayService(null, workdayRepository);
+        ReportService reportService = new ReportService(workdayService);
+
+        WorkdayDTO workdayDTO = reportService.getLatestWorkdayOfEmployee(employeeId1);
+
+        assertThat(workdayDTO).isNull();
     }
 
 }
