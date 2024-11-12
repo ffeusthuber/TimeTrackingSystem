@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.ZoneId;
 
 @Controller
-public class TimeEntriesController {
+public class TimeTrackingController {
 
 
     private final ReportUseCase reportService;
@@ -25,36 +25,36 @@ public class TimeEntriesController {
 
 
     @Autowired
-    public TimeEntriesController(ReportUseCase reportUseCase, TimeTrackingUseCase timeTrackingUseCase, AuthenticationUtils authenticationUtils) {
+    public TimeTrackingController(ReportUseCase reportUseCase, TimeTrackingUseCase timeTrackingUseCase, AuthenticationUtils authenticationUtils) {
         this.reportService = reportUseCase;
         this.timeTrackingService = timeTrackingUseCase;
         this.authenticationUtils = authenticationUtils;
     }
 
 
-    @GetMapping({"/time-entries","/"})
+    @GetMapping({"/time-tracking","/"})
     public String displayTimeEntriesOfLatestWorkdayOfEmployee(Model model, ZoneId zoneId) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         this.zoneId = zoneId;
         model.addAttribute("timeEntries", reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeID, this.zoneId));
-        return "timeEntries";
+        return "timeTracking";
     }
 
-    @PostMapping("/time-entries/clock-in")
+    @PostMapping("/time-tracking/clock-in")
     public String clockIn(RedirectAttributes redirectAttributes) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockIn(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
     }
 
-    @PostMapping("/time-entries/clock-out")
+    @PostMapping("/time-tracking/clock-out")
     public String clockOut(RedirectAttributes redirectAttributes) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockOut(employeeID);
         return processClockAction(redirectAttributes, clockResponse, employeeID);
     }
 
-    @PostMapping("/time-entries/clock-pause")
+    @PostMapping("/time-tracking/clock-pause")
     public String clockPause(RedirectAttributes redirectAttributes) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockPause(employeeID);
@@ -66,11 +66,11 @@ public class TimeEntriesController {
 
         if(clockResponse.getStatus() == ClockResponseStatus.SUCCESS){
             setSuccessFlashAttributes(redirectAttributes, clockResponse);
-            return "redirect:/time-entries?success";
+            return "redirect:/time-tracking?success";
         } else {
             setErrorFlashAttributes(redirectAttributes, clockResponse);
         }
-        return "redirect:/time-entries?error";
+        return "redirect:/time-tracking?error";
     }
 
     private void addTimeEntriesToFlashAttributes(RedirectAttributes redirectAttributes, Long employeeID) {

@@ -7,12 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class TimeReportController {
+public class ReportController {
 
     private final ReportUseCase reportUseCase;
     private final AuthenticationUtils authenticationUtils;
 
-    public TimeReportController(ReportUseCase reportUseCase, AuthenticationUtils authenticationUtils) {
+    public ReportController(ReportUseCase reportUseCase, AuthenticationUtils authenticationUtils) {
         this.reportUseCase = reportUseCase;
         this.authenticationUtils = authenticationUtils;
     }

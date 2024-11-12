@@ -46,19 +46,19 @@
 
 
         <div class="buttons">
-            <form th:action ="@{/time-entries/clock-in}" method="post">
+            <form th:action ="@{/time-tracking/clock-in}" method="post">
                 <button type="submit" name="clockInButton">
                     <i class='bx bx-log-in-circle'></i>
                     <span>Clock in</span>
                 </button>
             </form>
-            <form th:action ="@{/time-entries/clock-pause}" method="post">
+            <form th:action ="@{/time-tracking/clock-pause}" method="post">
                 <button type="submit" name="clockPauseButton">
                     <i class='bx bxs-coffee'></i>
                     <span>Clock pause</span>
                 </button>
             </form>
-            <form th:action ="@{/time-entries/clock-out}" method="post">
+            <form th:action ="@{/time-tracking/clock-out}" method="post">
                 <button type="submit" name="clockOutButton">
                     <i class='bx bx-log-out-circle'></i>
                     <span>Clock Out</span>
