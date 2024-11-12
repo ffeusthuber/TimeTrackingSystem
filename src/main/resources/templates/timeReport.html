@@ -37,9 +37,9 @@
                     <td th:text="${workday.getFormatedScheduledWorkTime}">ScheduledWorkTime</td>
                 </tr>
                 <tr th:if="${!#lists.isEmpty(weekReport.getWorkdays())}">
-                    <td colspan="4">In week <span th:text="${weekReport.getWeekNumber()}"></span>
-                        you worked <span th:text="${weekReport.getWorkedHoursForWeek()}"></span>
-                        of the <span th:text="${weekReport.getScheduledWorkHoursForWeek()}"></span> scheduled hours.</td>
+                    <td colspan="4">In week <span th:text="${weekReport.getWeekNumber()} " class="bold"></span>
+                        you worked for <span th:text="${weekReport.getWorkedHoursForWeek()} " class="bold"></span>
+                        of the <span th:text="${weekReport.getScheduledWorkHoursForWeek()}" class="bold"></span> scheduled hours.</td>
                 </tr>
                 </tbody>
             </table>
