@@ -1,12 +1,12 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -33,18 +33,19 @@ public class WorkdayService {
 
     public Workday getOrCreateWorkdayForEmployeeOnDate(long employeeID, LocalDate workDate) {
         return getWorkdayForEmployeeOnDate(employeeID, workDate)
-                .orElseGet(() -> createNewWorkdayForEmployee(employeeID, workDate));
+                .orElseGet(() -> createAndSaveWorkday(employeeID, workDate));
     }
 
-    private Workday createNewWorkdayForEmployee(long employeeID, LocalDate workDate) {
-        float scheduledHours = getScheduledHoursForEmployeeOnDay(employeeID, workDate);
-
-        return workdayRepository.saveWorkday(new Workday(employeeID, workDate, scheduledHours));
+    private Workday createAndSaveWorkday(long employeeID, LocalDate workDate) {
+        float scheduledHours = getScheduledHoursForEmployeeOnDayOfWeek(employeeID, workDate.getDayOfWeek());
+        Workday workday = new Workday(employeeID, workDate, scheduledHours);
+        return workdayRepository.saveWorkday(workday);
     }
 
-    private float getScheduledHoursForEmployeeOnDay(long employeeID, LocalDate workDate) {
-        Employee employee = employeeRepository.getEmployeeByID(employeeID);
-        return employee.getWorkSchedule().getScheduledWorkHoursForDay(workDate.getDayOfWeek());
+    private float getScheduledHoursForEmployeeOnDayOfWeek(long employeeID, DayOfWeek dayOfWeek) {
+        return employeeRepository.getEmployeeByID(employeeID)
+                .getWorkSchedule()
+                .getScheduledWorkHoursForDay(dayOfWeek);
     }
 
     public void addTimeEntryToWorkday(TimeEntry timeEntry, Workday workday) {
@@ -54,5 +55,12 @@ public class WorkdayService {
 
     public List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeId, LocalDate fromIncluding, LocalDate toIncluding) {
         return workdayRepository.getWorkdaysForEmployeeBetweenDates(employeeId, fromIncluding, toIncluding);
+    }
+
+    public float getWorkedHoursForEmployeeBetweenDates(long employeeId, LocalDate fromIncluding, LocalDate toIncluding) {
+        return (float) getWorkdaysForEmployeeBetweenDates(employeeId, fromIncluding, toIncluding)
+                .stream()
+                .mapToDouble(Workday::calculateWorkedHours)
+                .sum();
     }
 }

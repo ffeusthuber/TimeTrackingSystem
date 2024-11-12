@@ -1,8 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
-import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkdayDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.WeekReport;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
@@ -15,8 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -45,19 +42,14 @@ public class TimeReportMvcTest {
 
 
     @Test
-    @WithMockUser(roles = "USER")
-    void whenGetToTimeReportReturnTimeReportView() throws Exception {
-        mockMvc.perform(get("/time-report"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("timeReport"));
-    }
-
-    @Test
     @WithMockUser
     void whenGetTimeEntriesReturnViewWithTimeEntriesInModel() throws Exception {
-        when(reportUseCase.getWorkdayDataForLatestWorkdayOfEmployee(anyLong())).thenReturn(new WorkdayDTO(new Workday(1L, LocalDate.now(), 8.5f)));
+        WeekReport weekReport = new WeekReport(1, null, 0, 0);
+        when(reportUseCase.getCurrentWeekReportForEmployee(anyLong())).thenReturn(weekReport);
 
         mockMvc.perform(get("/time-report"))
-               .andExpect(model().attributeExists("workdays"));
+               .andExpect(status().isOk())
+               .andExpect(view().name("timeReport"))
+               .andExpect(model().attributeExists("weekReport"));
     }
 }

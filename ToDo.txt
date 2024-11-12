@@ -1,37 +1,29 @@
 In Work:
-[ ] Time Report
-    [ ] Display workdays for calendar week
 
-[ ] Workday
-    [X] can calculate worked / paused hours
-    [ ] can get workdays between two dates
-
-
-[ ] user can change password
-     [ ] ask for current password
-     [ ] ask for new password
-     [ ] ask for new password again
-
-[ ] throw a clockError if employee clockstatus update fails
-[ ] Clean up employee constructors
-
-
-
-[ ] Report
-    [ ] Display worked hours of employee
-        [X] get worked hours for day
-        [ ] per week
-        [ ] overall for this month
+[ ] TimeReport
+    [ ] Display report for
+        [X] current week
+        [ ] month
     [ ] Display remaining flextime
 
-   [X] Display regular working time
-   [ ] Display overtime
-
-    Date	    Pause (min)	    Worktime    Overtime
-    01.10.2024	60	            8h	        0h
-    02.10.2024	45	            9h 35min	1h 35min
 
 ----------------------------------------------------------------------------------
+
+[ ] User/Admin can change own password
+    [ ] default password when creating employee
+    [ ] User can change password
+         [ ] ask for current password
+         [ ] ask for new password
+         [ ] ask for new password again
+         [ ] NEXT STEP: User has to change password from default
+
+[ ] Admin can save new employee
+        [X] Implement EmployeeRepositoryAdapter
+        [X] Add POST endpoint to save new employee from form
+        [X] implement message on success
+        [X] implement message on failure page
+        [ ] Save multiple employees at once (from CSV)
+
 [ ] Fill userdata in sidebar
     [X] Username
     [X] Role
@@ -52,40 +44,13 @@ In Work:
         [X] Create POST endpoint for clocking out
         [X] Create POST endpoint for pausing
 
-    [ ] TimeEntryRepositoryAdapter
-        [X] Save timeEntry
-        [X] Find all timEntries for employee
-        [ ] Find all timeEntries for employee between two dates
-
-
-[ ] Admin can save new employee
-        [X] Implement EmployeeRepositoryAdapter
-        [X] Add POST endpoint to save new employee from form
-        [X] implement message on success
-        [X] implement message on failure page
-        [ ] Save multiple employees at once (from CSV)
-
-    [ ] Setup role based access control
-        [ ] Only admin can access employee management
-        [ ] Display message cant access endpoint
-
-    [ ] User/Admin can change own password
-        [ ] default password when creating employee
-        [ ] User can change password
-            [ ] NEXT STEP: User has to change password from default
-
-
-    [ ] TimeTrackingUseCase
-        [ ] Clock in
-            [X] User can clock in
-            [X] User can not clock in if already clocked in
-        [ ] Clock out
-            [X] User can clock out
-            [X] User can not clock out if not clocked in
-        [ ] Pause
-            [X] User can clock pause
-            [X] User can not pause if not clocked in
-
-    [ ] GetTimeEntriesUseCase
-        [X] Get all TimeEntries for Employee
-        [ ] Get all TimeEntries for Employee between two dates
+[X] TimeTrackingUseCase
+    [X] Clock in
+        [X] User can clock in
+        [X] User can not clock in if already clocked in
+    [X] Clock out
+        [X] User can clock out
+        [X] User can not clock out if not clocked in
+    [X] Pause
+        [X] User can clock pause
+        [X] User can not pause if not clocked in

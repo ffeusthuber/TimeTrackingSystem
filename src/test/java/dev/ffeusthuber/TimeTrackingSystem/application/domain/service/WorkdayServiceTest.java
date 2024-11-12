@@ -8,6 +8,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Work
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -20,19 +21,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WorkdayServiceTest {
 
-    private static final long EMPLOYEE_ID = 1L;
+    private final long employeeId = 1L;
+    private Employee employee;
+    private WorkdayService workdayService;
+
+    @BeforeEach
+    void setup() {
+        employee = createEmployee(employeeId);
+        workdayService = new WorkdayService(
+                EmployeeRepositoryStub.withEmployee(employee),
+                WorkdayRepositoryStub.withoutWorkdays()
+        );
+    }
 
     @Test
     void canGetLatestWorkdayOfEmployee() {
-        Employee employee = createEmployee();
-        WorkdayService workdayService = new WorkdayService(
-                EmployeeRepositoryStub.withEmployee(employee),
-                WorkdayRepositoryStub.withoutWorkdays());
+        workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
+        workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 2));
 
-        workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
-        workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 2));
-
-        Optional<Workday> latestWorkday = workdayService.getLatestWorkdayForEmployee(EMPLOYEE_ID);
+        Optional<Workday> latestWorkday = workdayService.getLatestWorkdayForEmployee(employeeId);
 
         assertThat(latestWorkday).isPresent();
         assertThat(latestWorkday.get().getWorkDate()).isEqualTo(LocalDate.of(2021, 1, 2));
@@ -41,14 +48,9 @@ public class WorkdayServiceTest {
 
     @Test
     void canGetWorkdayForEmployeeOnSpecificDate() {
-        Employee employee = createEmployee();
-        WorkdayService workdayService = new WorkdayService(
-                EmployeeRepositoryStub.withEmployee(employee),
-                WorkdayRepositoryStub.withoutWorkdays());
+        Workday workday = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
 
-        Workday workday = workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
-
-        Optional<Workday> retrievedWorkday = workdayService.getWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
+        Optional<Workday> retrievedWorkday = workdayService.getWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
 
         assertThat(retrievedWorkday).isPresent();
         assertThat(retrievedWorkday.get()).isEqualTo(workday);
@@ -56,46 +58,56 @@ public class WorkdayServiceTest {
 
     @Test
     void whenTryingToGetWorkdayOnDateWithoutExistingWorkdayNoWorkdayIsReturned() {
-        Employee employee = createEmployee();
-        WorkdayService workdayService = new WorkdayService(
-                EmployeeRepositoryStub.withEmployee(employee),
-                WorkdayRepositoryStub.withoutWorkdays());
-
-        Optional<Workday> workday = workdayService.getWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
+        Optional<Workday> workday = workdayService.getWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
 
         assertThat(workday).isNotPresent();
     }
 
     @Test
     void canGetWorkdaysBetweenTwoDates() {
-        Employee employee = createEmployee();
-        WorkdayService workdayService = new WorkdayService(
-                EmployeeRepositoryStub.withEmployee(employee),
-                WorkdayRepositoryStub.withoutWorkdays());
+        Workday workday0 = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
+        Workday workday1 = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 2));
+        Workday workday2 = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 3));
+        Workday workday3 = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 4));
+        Workday workday4 = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 5));
 
-        Workday workday1 = workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
-        Workday workday2 = workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 2));
-        Workday workday3 = workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 3));
+        List<Workday> workdays = workdayService.getWorkdaysForEmployeeBetweenDates(employeeId, LocalDate.of(2021, 1, 2), LocalDate.of(2021, 1, 4));
 
-        assertThat(workdayService.getWorkdaysForEmployeeBetweenDates(EMPLOYEE_ID, LocalDate.of(2021, 1, 1), LocalDate.of(2021, 1, 3)))
-                .isEqualTo(List.of(workday1, workday2, workday3));
+        assertThat(workdays).containsExactly(workday1, workday2, workday3);
     }
 
     @Test
     void canAddTimeEntryToWorkday() {
-        Employee employee = createEmployee();
-        WorkdayService workdayService = new WorkdayService(
-                EmployeeRepositoryStub.withEmployee(employee),
-                WorkdayRepositoryStub.withoutWorkdays());
+        Workday workday = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
+        TimeEntry timeEntry = new TimeEntry(employeeId, TimeEntryType.CLOCK_IN, ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")));
 
-        Workday workday = workdayService.getOrCreateWorkdayForEmployeeOnDate(EMPLOYEE_ID, LocalDate.of(2021, 1, 1));
-        TimeEntry timeEntry = new TimeEntry(EMPLOYEE_ID, TimeEntryType.CLOCK_IN, ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")));
         workdayService.addTimeEntryToWorkday(timeEntry, workday);
 
         assertThat(workday.getTimeEntries()).contains(timeEntry);
     }
 
-    private Employee createEmployee() {
-        return new Employee(EMPLOYEE_ID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
+
+    @Test
+    void canGetWorkedHoursForEmployeeBetweenDates() {
+        float expectedWorkedHours = 16.0f;
+        Workday workday1 = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
+        Workday workday2 = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 3));
+
+        ZonedDateTime clockInDay1 = ZonedDateTime.of(2021, 1, 1, 9, 0, 0, 0, ZoneId.of("UTC"));
+        ZonedDateTime clockInDay2 = ZonedDateTime.of(2021, 1, 3, 9, 0, 0, 0, ZoneId.of("UTC"));
+
+        workday1.addTimeEntry(new TimeEntry(employeeId, TimeEntryType.CLOCK_IN, clockInDay1));
+        workday1.addTimeEntry(new TimeEntry(employeeId, TimeEntryType.CLOCK_OUT, clockInDay1.plusHours((long)expectedWorkedHours / 2)));
+
+        workday2.addTimeEntry(new TimeEntry(employeeId, TimeEntryType.CLOCK_IN, clockInDay2));
+        workday2.addTimeEntry(new TimeEntry(employeeId, TimeEntryType.CLOCK_OUT, clockInDay2.plusHours((long)expectedWorkedHours / 2)));
+
+        float workedHours = workdayService.getWorkedHoursForEmployeeBetweenDates(employeeId, LocalDate.of(2021, 1, 1), LocalDate.of(2021, 1, 3));
+
+        assertThat(workedHours).isEqualTo(expectedWorkedHours);
+    }
+
+    private Employee createEmployee(long employeeId) {
+        return new Employee(employeeId, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
     }
 }
