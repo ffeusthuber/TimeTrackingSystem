@@ -31,21 +31,7 @@ public class EmployeeService {
     }
 
     public void setClockStateForEmployee(long employeeID, ClockState clockState) {
-        Employee employee = employeeRepository.getEmployeeByID(employeeID);
-
-        switch(clockState) {
-            case CLOCKED_IN:
-                employee.clockIn();
-                break;
-            case CLOCKED_OUT:
-                employee.clockOut();
-                break;
-            case ON_PAUSE:
-                employee.clockPause();
-                break;
-        }
-
-        employeeRepository.updateClockState(employeeID, clockState.toString());
+        employeeRepository.setClockStateForEmployee(employeeID, clockState.toString());
     }
 
     public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {

@@ -38,8 +38,22 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     @Override
-    public void updateClockState(Long employeeID, String clockState) {
-        // not needed for stub
+    public void setClockStateForEmployee(Long employeeID, String clockState) {
+        Employee employee = employees.stream().filter(employee1 -> employee1.getEmployeeID().equals(employeeID))
+                 .findFirst()
+                 .orElseThrow();
+
+        switch(clockState) {
+            case "CLOCKED_IN":
+                employee.clockIn();
+                break;
+            case "CLOCKED_OUT":
+                employee.clockOut();
+                break;
+            case "ON_PAUSE":
+                employee.clockPause();
+                break;
+        }
     }
 
     @Override

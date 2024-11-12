@@ -51,7 +51,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public void updateClockState(Long employeeID, String clockState) {
+    public void setClockStateForEmployee(Long employeeID, String clockState) {
         String sql = "UPDATE Employee SET clock_state = ? WHERE employee_id = ?";
         jdbcTemplate.update(sql, clockState, employeeID);
     }

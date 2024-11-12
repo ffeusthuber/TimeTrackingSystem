@@ -8,7 +8,7 @@ public interface EmployeeRepository {
 
     void save(Employee employee);
 
-    void updateClockState(Long employeeID, String clockState);
+    void setClockStateForEmployee(Long employeeID, String clockState);
 
     List<Employee> getEmployees();
 
