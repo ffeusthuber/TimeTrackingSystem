@@ -17,12 +17,9 @@ import java.time.ZoneId;
 @Controller
 public class TimeTrackingController {
 
-
     private final ReportUseCase reportService;
     private final TimeTrackingUseCase timeTrackingService;
     private final AuthenticationUtils authenticationUtils;
-    private ZoneId zoneId;
-
 
     @Autowired
     public TimeTrackingController(ReportUseCase reportUseCase, TimeTrackingUseCase timeTrackingUseCase, AuthenticationUtils authenticationUtils) {
@@ -31,38 +28,36 @@ public class TimeTrackingController {
         this.authenticationUtils = authenticationUtils;
     }
 
-
     @GetMapping({"/time-tracking","/"})
     public String displayTimeEntriesOfLatestWorkdayOfEmployee(Model model, ZoneId zoneId) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
-        this.zoneId = zoneId;
-        model.addAttribute("timeEntries", reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeID, this.zoneId));
+        model.addAttribute("timeEntries", reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeID, zoneId));
         return "timeTracking";
     }
 
     @PostMapping("/time-tracking/clock-in")
-    public String clockIn(RedirectAttributes redirectAttributes) {
+    public String clockIn(RedirectAttributes redirectAttributes, ZoneId zoneId) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockIn(employeeID);
-        return processClockAction(redirectAttributes, clockResponse, employeeID);
+        return processClockAction(redirectAttributes, clockResponse, employeeID, zoneId);
     }
 
     @PostMapping("/time-tracking/clock-out")
-    public String clockOut(RedirectAttributes redirectAttributes) {
+    public String clockOut(RedirectAttributes redirectAttributes, ZoneId zoneId) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockOut(employeeID);
-        return processClockAction(redirectAttributes, clockResponse, employeeID);
+        return processClockAction(redirectAttributes, clockResponse, employeeID, zoneId);
     }
 
     @PostMapping("/time-tracking/clock-pause")
-    public String clockPause(RedirectAttributes redirectAttributes) {
+    public String clockPause(RedirectAttributes redirectAttributes, ZoneId zoneId) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         ClockResponse clockResponse = timeTrackingService.clockPause(employeeID);
-        return processClockAction(redirectAttributes, clockResponse, employeeID);
+        return processClockAction(redirectAttributes, clockResponse, employeeID, zoneId);
     }
 
-    private String processClockAction(RedirectAttributes redirectAttributes, ClockResponse clockResponse, Long employeeID) {
-        addTimeEntriesToFlashAttributes(redirectAttributes, employeeID);
+    private String processClockAction(RedirectAttributes redirectAttributes, ClockResponse clockResponse, Long employeeID, ZoneId zoneId) {
+        addTimeEntriesToFlashAttributes(redirectAttributes, employeeID, zoneId);
 
         if(clockResponse.getStatus() == ClockResponseStatus.SUCCESS){
             setSuccessFlashAttributes(redirectAttributes, clockResponse);
@@ -73,7 +68,7 @@ public class TimeTrackingController {
         return "redirect:/time-tracking?error";
     }
 
-    private void addTimeEntriesToFlashAttributes(RedirectAttributes redirectAttributes, Long employeeID) {
+    private void addTimeEntriesToFlashAttributes(RedirectAttributes redirectAttributes, Long employeeID, ZoneId zoneId) {
         redirectAttributes.addFlashAttribute("timeEntries", reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeID, zoneId));
     }
 
