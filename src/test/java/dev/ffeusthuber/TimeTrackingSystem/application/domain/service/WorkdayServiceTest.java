@@ -29,7 +29,7 @@ public class WorkdayServiceTest {
     void setup() {
         employee = createEmployee(employeeId);
         workdayService = new WorkdayService(
-                EmployeeRepositoryStub.withEmployee(employee),
+                new EmployeeService(EmployeeRepositoryStub.withEmployee(employee)),
                 WorkdayRepositoryStub.withoutWorkdays()
         );
     }

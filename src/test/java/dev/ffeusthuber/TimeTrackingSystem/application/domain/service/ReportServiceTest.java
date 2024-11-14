@@ -63,8 +63,8 @@ public class ReportServiceTest {
         WorkSchedule workSchedule = WorkSchedule.createDefaultWorkSchedule();
         Employee employee = new Employee(employeeId1, ClockState.CLOCKED_OUT, workSchedule);
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
-        WorkdayService workdayService = new WorkdayService(employeeRepository, WorkdayRepositoryStub.withWorkdays(workday));
         EmployeeService employeeService = new EmployeeService(employeeRepository);
+        WorkdayService workdayService = new WorkdayService(employeeService, WorkdayRepositoryStub.withWorkdays(workday));
         ReportUseCase reportService = new ReportService(workdayService, employeeService);
 
         WeekReport weekReport = reportService.getCurrentWeekReportForEmployee(employeeId1);

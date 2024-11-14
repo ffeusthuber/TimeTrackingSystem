@@ -126,7 +126,7 @@ public class TimeTrackingServiceTest {
         Employee employee = new Employee(employeeID, clockState, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
-        WorkdayService workdayService = new WorkdayService(employeeRepository, workdayRepository);
+        WorkdayService workdayService = new WorkdayService(employeeService, workdayRepository);
         TimeEntryService timeEntryService = new TimeEntryService();
         return new TimeTrackingService(timeEntryService, employeeService, workdayService);
     }
@@ -135,7 +135,7 @@ public class TimeTrackingServiceTest {
         Employee employee = new Employee(employeeID, clockState, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeService employeeService = new EmployeeService(employeeRepository);
-        WorkdayService workdayService = new WorkdayService(employeeRepository, workdayRepository);
+        WorkdayService workdayService = new WorkdayService(employeeService, workdayRepository);
         TimeEntryService timeEntryService = new TimeEntryService();
         return new TimeTrackingService(timeEntryService, employeeService, workdayService);
     }
