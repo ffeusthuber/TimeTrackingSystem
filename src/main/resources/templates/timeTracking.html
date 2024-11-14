@@ -35,10 +35,10 @@
                     <td colspan="4">No time entries to display. Clock in to create your first time entry.</td>
                 </tr>
                 <tr th:each="timeEntry : ${timeEntries}">
-                    <td th:text="${timeEntry.getWeekday}">Weekday</td>
-                    <td th:text="${timeEntry.getDate}">Date</td>
-                    <td th:text="${timeEntry.getTime}">Time</td>
-                    <td th:text="${timeEntry.getTimeEntryType}">Entry Type</td>
+                    <td th:text="${timeEntry.weekDay}">Weekday</td>
+                    <td th:text="${timeEntry.date}">Date</td>
+                    <td th:text="${timeEntry.time}">Time</td>
+                    <td th:text="${timeEntry.timeEntryType}">Entry Type</td>
                 </tr>
                 </tbody>
             </table>

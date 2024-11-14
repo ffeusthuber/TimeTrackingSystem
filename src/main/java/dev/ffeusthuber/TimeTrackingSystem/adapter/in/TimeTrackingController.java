@@ -59,7 +59,7 @@ public class TimeTrackingController {
     private String processClockAction(RedirectAttributes redirectAttributes, ClockResponse clockResponse, Long employeeID, ZoneId zoneId) {
         addTimeEntriesToFlashAttributes(redirectAttributes, employeeID, zoneId);
 
-        if(clockResponse.getStatus() == ClockResponseStatus.SUCCESS){
+        if(clockResponse.status() == ClockResponseStatus.SUCCESS){
             setSuccessFlashAttributes(redirectAttributes, clockResponse);
             return "redirect:/time-tracking?success";
         } else {
@@ -74,7 +74,7 @@ public class TimeTrackingController {
 
     private void setSuccessFlashAttributes(RedirectAttributes redirectAttributes, ClockResponse clockResponse) {
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-        switch (clockResponse.getTimEntryType()) {
+        switch (clockResponse.timeEntryType()) {
             case CLOCK_IN:
                 redirectAttributes.addFlashAttribute("message", "You successfully clocked in!");
                 break;
@@ -89,7 +89,7 @@ public class TimeTrackingController {
 
     private void setErrorFlashAttributes(RedirectAttributes redirectAttributes, ClockResponse clockResponse) {
         redirectAttributes.addFlashAttribute("alertClass", "alert-failure");
-        switch (clockResponse.getClockError()) {
+        switch (clockResponse.clockError()) {
             case EMPLOYEE_ALREADY_CLOCKED_IN:
                 redirectAttributes.addFlashAttribute("message", "You are already clocked in!");
                 break;

@@ -55,7 +55,7 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
         List<TimeEntry> timeEntries = workday.getTimeEntries();
         timeEntries.forEach(timeEntry -> {
             String timeEntrySql = "INSERT INTO Time_entry (workday_id, entry_type, entry_date_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM Time_entry WHERE workday_id = ? AND entry_type = ? AND entry_date_time = ?)";
-            jdbcTemplate.update(timeEntrySql, workdayId, timeEntry.getType().name(), timeEntry.getEntryDateTime(), workdayId, timeEntry.getType().name(), timeEntry.getEntryDateTime());
+            jdbcTemplate.update(timeEntrySql, workdayId, timeEntry.entryType().name(), timeEntry.entryDateTime(), workdayId, timeEntry.entryType().name(), timeEntry.entryDateTime());
         });
 
         return workdayWithId;

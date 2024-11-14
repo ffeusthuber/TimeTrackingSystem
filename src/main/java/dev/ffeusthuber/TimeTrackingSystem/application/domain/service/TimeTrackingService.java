@@ -22,7 +22,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
     @Override
     public ClockResponse clockIn(long employeeID) {
         if (employeeService.isEmployeeClockedIn(employeeID)) {
-            return ClockResponse.error(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
+            return new ClockResponse(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
         }
         return handleClockAction(employeeID, TimeEntryType.CLOCK_IN, ClockState.CLOCKED_IN);
     }
@@ -30,7 +30,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
     @Override
     public ClockResponse clockOut(long employeeID) {
         if (!employeeService.isEmployeeClockedIn(employeeID)) {
-            return ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+            return new ClockResponse(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         }
         return handleClockAction(employeeID, TimeEntryType.CLOCK_OUT, ClockState.CLOCKED_OUT);
     }
@@ -38,7 +38,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
     @Override
     public ClockResponse clockPause(long employeeID) {
         if(!employeeService.isEmployeeClockedIn(employeeID)) {
-            return ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+            return new ClockResponse(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         }
         return handleClockAction(employeeID, TimeEntryType.CLOCK_PAUSE, ClockState.ON_PAUSE);
     }
@@ -50,7 +50,7 @@ public class TimeTrackingService implements TimeTrackingUseCase {
         workdayService.addTimeEntryToWorkday(timeEntry, workday);
         employeeService.setClockStateForEmployee(employeeID, clockState);
 
-        return ClockResponse.success(employeeID, entryType);
+        return new ClockResponse(employeeID, entryType);
     }
 
 }

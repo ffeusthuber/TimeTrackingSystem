@@ -14,7 +14,7 @@ public class EmployeeDTOTest {
 
         EmployeeDTO employeeDTO = new EmployeeDTO(employee);
 
-        assertThat(employeeDTO.getFullName()).isEqualTo("Jane Doe");
-        assertThat(employeeDTO.getRole()).isEqualTo("USER");
+        assertThat(employeeDTO.fullName()).isEqualTo("Jane Doe");
+        assertThat(employeeDTO.role()).isEqualTo("USER");
     }
 }

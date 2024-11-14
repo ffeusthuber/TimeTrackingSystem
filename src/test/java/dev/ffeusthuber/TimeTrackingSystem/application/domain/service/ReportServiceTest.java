@@ -70,9 +70,9 @@ public class ReportServiceTest {
         WeekReport weekReport = reportService.getCurrentWeekReportForEmployee(employeeId1);
 
         assertThat(weekReport).isNotNull();
-        assertThat(weekReport.getWorkdays()).isNotEmpty();
-        assertThat(weekReport.getScheduledWorkHoursForWeek()).isEqualTo(workSchedule.getScheduledWorkHoursForWeek());
-        assertThat(weekReport.getWorkedHoursForWeek()).isEqualTo(0.0f);
-        assertThat(weekReport.getWeekNumber()).isEqualTo(LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear()));
+        assertThat(weekReport.workdays()).isNotEmpty();
+        assertThat(weekReport.scheduledWorkHoursForWeek()).isEqualTo(workSchedule.getScheduledWorkHoursForWeek());
+        assertThat(weekReport.workedHoursForWeek()).isEqualTo(0.0f);
+        assertThat(weekReport.weekNumber()).isEqualTo(LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear()));
     }
 }

@@ -2,8 +2,10 @@ package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockError;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
@@ -17,6 +19,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -61,6 +69,9 @@ public class TimeEntriesMvcTest {
     @Test
     @WithMockUser
     void whenGetTimeEntriesReturnViewWithTimeEntriesInModel() throws Exception {
+        TimeEntryDTO timeEntryDTO = new TimeEntryDTO(new TimeEntry(1, TimeEntryType.CLOCK_IN, ZonedDateTime.now()), ZoneId.of("UTC"));
+        when(reportUseCase.getTimeEntriesOfLatestWorkdayOfEmployee(anyLong(), any())).thenReturn(List.of(timeEntryDTO));
+
         mockMvc.perform(get("/time-tracking"))
                .andExpect(model().attributeExists("timeEntries"));
     }
@@ -69,7 +80,7 @@ public class TimeEntriesMvcTest {
     @WithMockUser
     void whenPostToClockInEmployeeThenClockInEmployee() throws Exception {
         long employeeID = 0L;
-        ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN);
+        ClockResponse clockResponse = new ClockResponse(employeeID, TimeEntryType.CLOCK_IN);
         when(timeTrackingUseCase.clockIn(employeeID)).thenReturn(clockResponse);
 
         mockMvc.perform(post("/time-tracking/clock-in")
@@ -85,7 +96,7 @@ public class TimeEntriesMvcTest {
     @WithMockUser
     void whenUnsuccessfullyClockingInDisplayWarning() throws Exception {
         long employeeID = 0L;
-        ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
+        ClockResponse clockResponse = new ClockResponse(employeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN);
         when(timeTrackingUseCase.clockIn(employeeID)).thenReturn(clockResponse);
 
         mockMvc.perform(post("/time-tracking/clock-in")
@@ -101,7 +112,7 @@ public class TimeEntriesMvcTest {
     @WithMockUser
     void whenPostToClockOutEmployeeThenClockOutEmployee() throws Exception {
         long employeeID = 0L;
-        ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_OUT);
+        ClockResponse clockResponse = new ClockResponse(employeeID, TimeEntryType.CLOCK_OUT);
         when(timeTrackingUseCase.clockOut(employeeID)).thenReturn(clockResponse);
         mockMvc.perform(post("/time-tracking/clock-out")
                                 .with(csrf()))
@@ -116,7 +127,7 @@ public class TimeEntriesMvcTest {
     @WithMockUser
     void whenUnsuccessfullyClockingOutDisplayWarning() throws Exception {
         long employeeID = 0L;
-        ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+        ClockResponse clockResponse = new ClockResponse(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         when(timeTrackingUseCase.clockOut(employeeID)).thenReturn(clockResponse);
 
         mockMvc.perform(post("/time-tracking/clock-out")
@@ -132,7 +143,7 @@ public class TimeEntriesMvcTest {
     @WithMockUser
     void whenPostToClockPauseEmployeeThenClockPauseForEmployee() throws Exception {
         long employeeID = 0L;
-        ClockResponse clockResponse = ClockResponse.success(employeeID, TimeEntryType.CLOCK_PAUSE);
+        ClockResponse clockResponse = new ClockResponse(employeeID, TimeEntryType.CLOCK_PAUSE);
         when(timeTrackingUseCase.clockPause(employeeID)).thenReturn(clockResponse);
         mockMvc.perform(post("/time-tracking/clock-pause")
                                 .with(csrf()))
@@ -147,7 +158,7 @@ public class TimeEntriesMvcTest {
     @WithMockUser
     void whenUnsuccessfullyClockingPauseDisplayWarning() throws Exception {
         long employeeID = 0L;
-        ClockResponse clockResponse = ClockResponse.error(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
+        ClockResponse clockResponse = new ClockResponse(employeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN);
         when(timeTrackingUseCase.clockPause(employeeID)).thenReturn(clockResponse);
 
         mockMvc.perform(post("/time-tracking/clock-pause")

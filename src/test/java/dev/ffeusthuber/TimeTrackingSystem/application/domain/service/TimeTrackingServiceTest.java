@@ -26,7 +26,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockIn(clockedOutEmployeeID);
 
-        assertThat(clockResponse).isEqualTo(ClockResponse.success(clockedOutEmployeeID, TimeEntryType.CLOCK_IN));
+        assertThat(clockResponse).isEqualTo(new ClockResponse(clockedOutEmployeeID, TimeEntryType.CLOCK_IN));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockOut(clockedInEmployeeID);
 
-        assertThat(clockResponse).isEqualTo(ClockResponse.success(clockedInEmployeeID, TimeEntryType.CLOCK_OUT));
+        assertThat(clockResponse).isEqualTo(new ClockResponse(clockedInEmployeeID, TimeEntryType.CLOCK_OUT));
     }
 
     @Test
@@ -46,7 +46,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockPause(clockedInEmployeeID);
 
-        assertThat(clockResponse).isEqualTo(ClockResponse.success(clockedInEmployeeID, TimeEntryType.CLOCK_PAUSE));
+        assertThat(clockResponse).isEqualTo(new ClockResponse(clockedInEmployeeID, TimeEntryType.CLOCK_PAUSE));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockIn(clockedInEmployeeID);
 
-        assertThat(clockResponse).isEqualTo(ClockResponse.error(clockedInEmployeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN));
+        assertThat(clockResponse).isEqualTo(new ClockResponse(clockedInEmployeeID, ClockError.EMPLOYEE_ALREADY_CLOCKED_IN));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockOut(clockedOutEmployeeID);
 
-        assertThat(clockResponse).isEqualTo(ClockResponse.error(clockedOutEmployeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN));
+        assertThat(clockResponse).isEqualTo(new ClockResponse(clockedOutEmployeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class TimeTrackingServiceTest {
 
         ClockResponse clockResponse = timeTrackingUseCase.clockPause(clockedOutEmployeeID);
 
-        assertThat(clockResponse).isEqualTo(ClockResponse.error(clockedOutEmployeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN));
+        assertThat(clockResponse).isEqualTo(new ClockResponse(clockedOutEmployeeID, ClockError.EMPLOYEE_NOT_CLOCKED_IN));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class TimeTrackingServiceTest {
         timeTrackingUseCase.clockOut(employeeID);
         ClockResponse clockResponse = timeTrackingUseCase.clockIn(employeeID);
 
-        assertThat(clockResponse).isEqualTo(ClockResponse.success(employeeID, TimeEntryType.CLOCK_IN));
+        assertThat(clockResponse).isEqualTo(new ClockResponse(employeeID, TimeEntryType.CLOCK_IN));
     }
 
 

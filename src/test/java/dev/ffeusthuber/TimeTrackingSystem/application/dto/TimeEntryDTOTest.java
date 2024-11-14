@@ -17,9 +17,9 @@ public class TimeEntryDTOTest {
         TimeEntry timeEntry = new TimeEntry(1, TimeEntryType.CLOCK_IN, ZonedDateTime.of(LocalDateTime.of(2024, 9, 27, 18, 0), ZoneId.of("UTC")));
         TimeEntryDTO timeEntryDTO = new TimeEntryDTO(timeEntry, ZoneId.of("Europe/Vienna"));
 
-        assertThat(timeEntryDTO.getWeekday()).isEqualTo("FRIDAY");
-        assertThat(timeEntryDTO.getDate()).isEqualTo("27.SEPTEMBER.2024");
-        assertThat(timeEntryDTO.getTime()).isEqualTo("20:00:00");
-        assertThat(timeEntryDTO.getTimeEntryType()).isEqualTo("Clocked in");
+        assertThat(timeEntryDTO.weekDay()).isEqualTo("FRIDAY");
+        assertThat(timeEntryDTO.date()).isEqualTo("27.SEPTEMBER.2024");
+        assertThat(timeEntryDTO.time()).isEqualTo("20:00:00");
+        assertThat(timeEntryDTO.timeEntryType()).isEqualTo("Clocked in");
     }
 }

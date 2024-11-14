@@ -19,7 +19,7 @@ public class TimeEntryTest {
 
         TimeEntry timeEntry = new TimeEntry(employeeID, entryType, entryDateTime);
 
-        assertThat(timeEntry.getEntryDateTime()).isEqualTo(entryDateTime);
+        assertThat(timeEntry.entryDateTime()).isEqualTo(entryDateTime);
     }
 
     @Test

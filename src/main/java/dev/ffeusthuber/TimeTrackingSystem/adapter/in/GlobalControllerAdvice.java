@@ -25,8 +25,8 @@ public class GlobalControllerAdvice {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         EmployeeDTO employeeDTO = employeeManagementService.getEmployee(employeeID);
         if (employeeDTO != null) {
-            model.addAttribute("fullName", employeeDTO.getFullName());
-            model.addAttribute("role", employeeDTO.getRole());
+            model.addAttribute("fullName", employeeDTO.fullName());
+            model.addAttribute("role", employeeDTO.role());
         }
     }
 }

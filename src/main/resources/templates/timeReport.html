@@ -27,19 +27,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:if="${#lists.isEmpty(weekReport.getWorkdays())}">
+                <tr th:if="${#lists.isEmpty(weekReport.workdays())}">
                     <td colspan="4">No workdays to display. Clock in to create your first workday.</td>
                 </tr>
-                <tr th:each="workday : ${weekReport.getWorkdays()}">
+                <tr th:each="workday : ${weekReport.workdays()}">
                     <td th:text="${workday.getFormatedDate}">Date</td>
                     <td th:text="${workday.getFormatedActualWorkTime}">Actual Work Time</td>
                     <td th:text="${workday.getFormatedPauseTime}">Paused Time</td>
                     <td th:text="${workday.getFormatedScheduledWorkTime}">ScheduledWorkTime</td>
                 </tr>
-                <tr th:if="${!#lists.isEmpty(weekReport.getWorkdays())}">
-                    <td colspan="4">In week <span th:text="${weekReport.getWeekNumber()} " class="bold"></span>
-                        you worked for <span th:text="${weekReport.getWorkedHoursForWeek()} " class="bold"></span>
-                        of the <span th:text="${weekReport.getScheduledWorkHoursForWeek()}" class="bold"></span> scheduled hours.</td>
+                <tr th:if="${!#lists.isEmpty(weekReport.workdays())}">
+                    <td colspan="4">In week <span th:text="${weekReport.weekNumber()} " class="bold"></span>
+                        you worked for <span th:text="${weekReport.workedHoursForWeek()} " class="bold"></span>
+                        of the <span th:text="${weekReport.scheduledWorkHoursForWeek()}" class="bold"></span> scheduled hours.</td>
                 </tr>
                 </tbody>
             </table>

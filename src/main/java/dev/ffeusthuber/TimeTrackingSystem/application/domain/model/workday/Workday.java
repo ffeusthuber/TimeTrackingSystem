@@ -69,13 +69,13 @@ public class Workday {
         while (entriesCopy.size() >= 2) {
             skipUntilNextTimeEntryOfType(entriesCopy, timeEntryType);
             if(entriesCopy.size() < 2) break;
-            ZonedDateTime start = entriesCopy.poll().getEntryDateTime();
-            ZonedDateTime end = entriesCopy.poll().getEntryDateTime();
+            ZonedDateTime start = entriesCopy.poll().entryDateTime();
+            ZonedDateTime end = entriesCopy.poll().entryDateTime();
             totalHours += calculateHoursBetween(start, end);
         }
 
-        if(entriesCopy.size() == 1 && entriesCopy.peek().getType() == timeEntryType) {
-            ZonedDateTime timeOfLastEntry = entriesCopy.poll().getEntryDateTime();
+        if(entriesCopy.size() == 1 && entriesCopy.peek().entryType() == timeEntryType) {
+            ZonedDateTime timeOfLastEntry = entriesCopy.poll().entryDateTime();
             ZonedDateTime now = ZonedDateTime.now();
             totalHours += calculateHoursBetween(timeOfLastEntry, now);
         }
@@ -89,7 +89,7 @@ public class Workday {
     }
 
     private void skipUntilNextTimeEntryOfType(Queue<TimeEntry> entriesCopy, TimeEntryType timeEntryType) {
-        while (!entriesCopy.isEmpty() && entriesCopy.peek().getType() != timeEntryType) {
+        while (!entriesCopy.isEmpty() && entriesCopy.peek().entryType() != timeEntryType) {
             entriesCopy.poll();
         }
     }
