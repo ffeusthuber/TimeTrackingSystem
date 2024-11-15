@@ -4,8 +4,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeMan
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WeekReport;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
-import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

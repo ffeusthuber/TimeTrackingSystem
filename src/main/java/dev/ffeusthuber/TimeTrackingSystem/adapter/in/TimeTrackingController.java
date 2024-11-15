@@ -4,7 +4,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.Clo
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponseStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
-import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtils;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

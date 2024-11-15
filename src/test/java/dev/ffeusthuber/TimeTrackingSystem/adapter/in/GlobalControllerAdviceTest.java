@@ -1,5 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.out.AuthenticationUtilsStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
@@ -8,7 +9,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeMan
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
-import dev.ffeusthuber.TimeTrackingSystem.util.AuthenticationUtilsStub;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;

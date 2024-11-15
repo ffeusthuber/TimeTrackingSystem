@@ -1,8 +1,8 @@
-package dev.ffeusthuber.TimeTrackingSystem.util;
+package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 
-public class AuthenticationUtilsStub extends AuthenticationUtils{
+public class AuthenticationUtilsStub extends SpringAuthenticationUtils {
     private final long employeeIDToReturn;
 
     public AuthenticationUtilsStub(EmployeeRepository employeeRepository, long employeeIDToReturn) {

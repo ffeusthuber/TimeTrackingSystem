@@ -1,9 +1,9 @@
-package dev.ffeusthuber.TimeTrackingSystem.util;
+package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
-import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.WorkSchedule;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Tag("io")
-public class AuthenticationUtilsTest {
+public class SpringAuthenticationUtilsTest {
 
     @BeforeEach
     void setUp() {
@@ -33,7 +33,7 @@ public class AuthenticationUtilsTest {
         Employee employee = new Employee(employeeID, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("j.doe@test-mail.com");
-        AuthenticationUtils authenticationUtils = new AuthenticationUtils(employeeRepositoryStub);
+        AuthenticationUtils authenticationUtils = new SpringAuthenticationUtils(employeeRepositoryStub);
 
         assertThat(authenticationUtils.getAuthenticatedEmployeeID()).isEqualTo(employeeID);
     }
