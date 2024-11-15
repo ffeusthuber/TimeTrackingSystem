@@ -1,5 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.in.InitialAdminCreator;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -19,6 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Tag("io")
 public class JdbcWorkdayRepositoryTest {
+
+    @MockBean
+    InitialAdminCreator initialAdminCreator; //needed for application startUp
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

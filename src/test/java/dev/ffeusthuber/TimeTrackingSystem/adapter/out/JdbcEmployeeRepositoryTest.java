@@ -1,5 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.in.InitialAdminCreator;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -24,6 +26,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ActiveProfiles("test")
 @Tag("io")
 public class JdbcEmployeeRepositoryTest {
+
+    @MockBean
+    InitialAdminCreator initialAdminCreator; //needed for application startUp
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -49,7 +54,7 @@ public class JdbcEmployeeRepositoryTest {
     void employeeIsSavedWhenCreatedViaEmployeeManagementService() {
         employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
 
-        assertThat(employeeRepository.getEmployees()).hasSize(1);
+        assertThat(employeeRepository.getAllEmployees()).hasSize(1);
     }
 
     @Test
@@ -79,7 +84,7 @@ public class JdbcEmployeeRepositoryTest {
 
         Employee employee1 = employeeRepository.getEmployeeByEmail(notExistingEmail);
         Employee employee2 = employeeRepository.getEmployeeByID(notExistingEmployeeId);
-        List<Employee> employees = employeeRepository.getEmployees();
+        List<Employee> employees = employeeRepository.getAllEmployees();
         Long employeeId = employeeRepository.getEmployeeIDByEmail(notExistingEmail);
 
         assertThat(employee1).isNull();

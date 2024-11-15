@@ -18,7 +18,7 @@ public class WorkSchedule {
 
     static {
         Properties properties = new Properties();
-        try (InputStream input = WorkSchedule.class.getClassLoader().getResourceAsStream("work-schedule.properties")) {
+        try (InputStream input = WorkSchedule.class.getClassLoader().getResourceAsStream("properties/work-schedule.properties")) {
             if (input == null) {
                 throw new IOException("Unable to find work-schedule.properties");
             }
