@@ -77,11 +77,19 @@ To get a local copy of the project up and running, follow these steps:
     git clone https://github.com/ffeusthuber/TimeTrackingSystem.git
     cd TimeTrackingSystem
     ```
-2. Build the project using Maven:
+2. Configure the properties for the initial admin:
+   * Edit the `initial-admin.properties` file located in `src/main/resources/properties` to setup the initial admin credentials: </br>
+    ```sh
+    admin.firstname=yourFirstName
+    admin.lastname=yourLastName
+    admin.email=yourEmail@admin.com
+    admin.password=yourPassword
+    ```
+3. Build the project using Maven:
     ```sh
     mvn clean install
     ```
-3. Run the application:
+4. Run the application:
     ```sh
     mvn spring-boot:run
     ```
