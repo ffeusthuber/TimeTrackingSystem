@@ -22,7 +22,7 @@ public class EmployeeManagementServiceTest {
 
         employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
 
-        assertThat(employeeRepository.getEmployees()).isNotNull();
+        assertThat(employeeRepository.getAllEmployees()).isNotNull();
     }
 
 

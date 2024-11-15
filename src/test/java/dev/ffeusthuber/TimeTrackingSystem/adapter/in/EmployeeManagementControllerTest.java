@@ -21,7 +21,7 @@ public class EmployeeManagementControllerTest {
             RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
             employeeManagementController.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER", redirectAttributes);
 
-            assertThat(employeeRepositoryStub.getEmployees().size()).isEqualTo(1);
+            assertThat(employeeRepositoryStub.getAllEmployees().size()).isEqualTo(1);
         }
 
 }

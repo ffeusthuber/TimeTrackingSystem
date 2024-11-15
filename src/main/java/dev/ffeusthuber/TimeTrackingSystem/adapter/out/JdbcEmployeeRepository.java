@@ -57,7 +57,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public List<Employee> getEmployees() {
+    public List<Employee> getAllEmployees() {
         String sql = "SELECT e.*, ws.* " +
                 "FROM Employee e " +
                 "JOIN Work_schedule ws ON e.employee_id = ws.employee_id ";

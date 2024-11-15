@@ -57,7 +57,7 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     @Override
-    public List<Employee> getEmployees() {
+    public List<Employee> getAllEmployees() {
         return employees;
     }
 

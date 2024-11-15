@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.util.List;
 
 @Service
 public class EmployeeService {
@@ -19,6 +20,24 @@ public class EmployeeService {
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
         bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    }
+
+    public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
+        EmployeeRole employeeRole = EmployeeRole.valueOf(role);
+        String encryptedPassword = bCryptPasswordEncoder.encode(password);
+        Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole, WorkSchedule.createDefaultWorkSchedule());
+
+        employeeRepository.save(employee);
+        employee.setEmployeeID(employeeRepository.getEmployeeIDByEmail(email));
+        return employee;
+    }
+
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.getAllEmployees();
+    }
+
+    public Employee getEmployeeById(long employeeID) {
+        return employeeRepository.getEmployeeByID(employeeID);
     }
 
     public ClockState getClockStateForEmployee(Long employeeID) {
@@ -34,22 +53,9 @@ public class EmployeeService {
         employeeRepository.setClockStateForEmployee(employeeID, clockState.toString());
     }
 
-    public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
-        EmployeeRole employeeRole = EmployeeRole.valueOf(role);
-        String encryptedPassword = bCryptPasswordEncoder.encode(password);
-        Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole, WorkSchedule.createDefaultWorkSchedule());
-
-        employeeRepository.save(employee);
-        employee.setEmployeeID(employeeRepository.getEmployeeIDByEmail(email));
-        return employee;
-    }
-
-    public Employee getEmployeeById(long employeeID) {
-        return employeeRepository.getEmployeeByID(employeeID);
-    }
-
     public float getScheduledHoursForEmployeeOnWeekDay(long employeeId, DayOfWeek dayOfWeek) {
         Employee employee = employeeRepository.getEmployeeByID(employeeId);
         return employee.getWorkSchedule().getScheduledWorkHoursForDay(dayOfWeek);
     }
+
 }
