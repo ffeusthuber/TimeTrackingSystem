@@ -40,6 +40,44 @@
                     </select>
                 </div>
 
+                <fieldset id="scheduler">
+                    <legend>Work Hours</legend>
+                    <div class="work-hour-input">
+                        <label for="workHoursMonday">Monday</label>
+                        <input type="number" step="0.25" name="dailyWorkHours" id="workHoursMonday" th:value="${defaultWorkSchedule.hoursMonday}" min="0" max="24" required><br>
+                    </div>
+
+                    <div class="work-hour-input">
+                        <label for="workHoursTuesday">Tuesday</label>
+                        <input type="number" step="0.25" name="dailyWorkHours" id="workHoursTuesday" th:value="${defaultWorkSchedule.hoursTuesday}" min="0" max="24" required><br>
+                    </div>
+
+                    <div class="work-hour-input">
+                        <label for="workHoursWednesday">Wednesday</label>
+                        <input type="number" step="0.25" name="dailyWorkHours" id="workHoursWednesday" th:value="${defaultWorkSchedule.hoursWednesday}" min="0" max="24" required><br>
+                    </div>
+
+                    <div class="work-hour-input">
+                        <label for="workHoursThursday">Thursday</label>
+                        <input type="number" step="0.25" name="dailyWorkHours" id="workHoursThursday" th:value="${defaultWorkSchedule.hoursThursday}" min="0" max="24" required><br>
+                    </div>
+
+                    <div class="work-hour-input">
+                        <label for="workHoursFriday">Friday</label>
+                        <input type="number" step="0.25" name="dailyWorkHours" id="workHoursFriday" th:value="${defaultWorkSchedule.hoursFriday}" min="0" max="24" required><br>
+                    </div>
+
+                    <div class="work-hour-input">
+                        <label for="workHoursSaturday">Saturday</label>
+                        <input type="number" step="0.25" name="dailyWorkHours" id="workHoursSaturday" th:value="${defaultWorkSchedule.hoursSaturday}" min="0" max="24" required><br>
+                    </div>
+
+                    <div class="work-hour-input">
+                        <label for="workHoursSunday">Sunday</label>
+                        <input type="number" step="0.25" name="dailyWorkHours" id="workHoursSunday" th:value="${defaultWorkSchedule.hoursSunday}" min="0" max="24" required><br>
+                    </div>
+                </fieldset>
+
 
                 <input type="submit" value="Submit">
             </form>

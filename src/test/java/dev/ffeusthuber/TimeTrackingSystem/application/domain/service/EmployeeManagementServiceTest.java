@@ -5,6 +5,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Empl
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.WorkSchedule;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.EmployeeDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.Test;
@@ -20,21 +21,31 @@ public class EmployeeManagementServiceTest {
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService);
 
-        employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
+        employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER", new WorkScheduleDTO(8, 8, 8, 8, 8, 0, 0));
 
         assertThat(employeeRepository.getAllEmployees()).isNotNull();
     }
 
 
     @Test
-    void canGetEmployeeById() {
+    void canGetEmployeeDetailsById() {
         Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub));
 
-        EmployeeDTO employeeDTO = employeeManagementService.getEmployee(1L);
+        EmployeeDTO employeeDTO = employeeManagementService.getEmployeeDetails(1L);
 
         assertThat(employeeDTO.fullName()).isEqualTo("Jane Doe");
         assertThat(employeeDTO.role()).isEqualTo("USER");
+    }
+
+    @Test
+    void canGetDefaultWorkSchedule() {
+        EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withoutEmployees());
+        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService);
+
+        WorkScheduleDTO workScheduleDTO = employeeManagementService.getDefaultWorkSchedule();
+
+        assertThat(workScheduleDTO).isEqualTo(new WorkScheduleDTO(WorkSchedule.createDefaultWorkSchedule()));
     }
 }

@@ -1,6 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
@@ -15,7 +16,9 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,6 +48,8 @@ public class EmployeeManagementMvcTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void whenGetToCreateEmployeeAsAdminReturnCreateEmployeeView() throws Exception {
+        WorkScheduleDTO workScheduleDTO = new WorkScheduleDTO(8, 8, 8, 8, 8, 0, 0);
+        when(employeeManagementService.getDefaultWorkSchedule()).thenReturn(workScheduleDTO);
         mockMvc.perform(get("/create-employee"))
                .andExpect(status().isOk())
                .andExpect(view().name("createEmployee"));
@@ -66,7 +71,8 @@ public class EmployeeManagementMvcTest {
                                 .param("lastName", "Doe")
                                 .param("email", "j.doe@test-mail.com")
                                 .param("password", "password")
-                                .param("role", "USER"))
+                                .param("role", "USER")
+                                .param("dailyWorkHours", "8", "8", "8", "8", "8", "0", "0"))
                .andExpect(redirectedUrl("/create-employee?success"))
                .andExpect(flash().attribute("alertClass", "alert-success"))
                .andExpect(flash().attributeExists("message"));
@@ -79,7 +85,7 @@ public class EmployeeManagementMvcTest {
         String duplicateEmail = "duplicateEmail@test-mail.com";
         doThrow(new DuplicateKeyException("Duplicate email"))
                 .when(employeeManagementService)
-                .createEmployee("Jane", "Doe", duplicateEmail, "password", "USER");
+                .createEmployee(anyString(), anyString(), eq(duplicateEmail), anyString(), anyString(), any());
 
         mockMvc.perform(post("/create-employee")
                                 .with(csrf())
@@ -87,7 +93,8 @@ public class EmployeeManagementMvcTest {
                                 .param("lastName", "Doe")
                                 .param("email", duplicateEmail)
                                 .param("password", "password")
-                                .param("role", "USER"))
+                                .param("role", "USER")
+                                .param("dailyWorkHours", "8", "8", "8", "8", "8", "0", "0"))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/create-employee?error"))
                .andExpect(flash().attribute("alertClass", "alert-failure"))

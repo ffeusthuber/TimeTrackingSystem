@@ -4,6 +4,7 @@ import dev.ffeusthuber.TimeTrackingSystem.adapter.in.InitialAdminCreator;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeService;
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -16,8 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,6 +36,7 @@ public class JdbcEmployeeRepositoryTest {
     private EmployeeRepository employeeRepository;
 
     private EmployeeManagementUseCase employeeManagementService;
+    private final String email = "j.doe@test-mail.com";
 
     @BeforeEach
     void setUp() {
@@ -52,15 +52,14 @@ public class JdbcEmployeeRepositoryTest {
 
     @Test
     void employeeIsSavedWhenCreatedViaEmployeeManagementService() {
-        employeeManagementService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER");
+        createEmployee();
 
         assertThat(employeeRepository.getAllEmployees()).hasSize(1);
     }
 
     @Test
     void canGetEmployeeIdFromEmail(){
-        String email = "j.doe@test-mail.com";
-        employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
+        createEmployee();
 
         Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
@@ -69,8 +68,7 @@ public class JdbcEmployeeRepositoryTest {
 
     @Test
     void canGetEmployeeFromEmail(){
-        String email = "j.doe@test-mail.com";
-        employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
+        createEmployee();
 
         Employee employee = employeeRepository.getEmployeeByEmail(email);
 
@@ -79,39 +77,34 @@ public class JdbcEmployeeRepositoryTest {
 
     @Test
     void emptySearchResultsGetHandledCorrectly(){
-        String notExistingEmail = "not existing email";
-        long notExistingEmployeeId = -1L;
+        String nonExistingEmail = "not existing email";
+        long nonExistingEmployeeId = -1L;
 
-        Employee employee1 = employeeRepository.getEmployeeByEmail(notExistingEmail);
-        Employee employee2 = employeeRepository.getEmployeeByID(notExistingEmployeeId);
-        List<Employee> employees = employeeRepository.getAllEmployees();
-        Long employeeId = employeeRepository.getEmployeeIDByEmail(notExistingEmail);
-
-        assertThat(employee1).isNull();
-        assertThat(employee2).isNull();
-        assertThat(employees).isEmpty();
-        assertThat(employeeId).isNull();
+        assertThat(employeeRepository.getEmployeeByEmail(nonExistingEmail)).isNull();
+        assertThat(employeeRepository.getEmployeeByID(nonExistingEmployeeId)).isNull();
+        assertThat(employeeRepository.getAllEmployees()).isEmpty();
+        assertThat(employeeRepository.getEmployeeIDByEmail(nonExistingEmail)).isNull();
     }
 
     @Test
     void canGetEmployeeByID() {
-        String email = "j.doe@test-mail.com";
-        Employee expectedEmployee = employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
+        Employee expectedEmployee = createEmployee();
         Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
         Employee actualEmployee = employeeRepository.getEmployeeByID(employeeId);
-        System.out.println("WorkSchedule :" + actualEmployee.getWorkSchedule()); // why null?
 
         assertThat(actualEmployee).isEqualTo(expectedEmployee);
     }
 
     @Test
     void tryingToCreateEmployeeWithTheSameEmailAsAnotherThrowsDuplicateKeyException() {
-        String email = "j.doe@test-mail.com";
+        createEmployee();
 
-        employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER");
-
-        assertThatThrownBy(() -> employeeManagementService.createEmployee("John", "Doe", email, "password", "USER"))
+        assertThatThrownBy(this::createEmployee)
                 .isInstanceOf(DuplicateKeyException.class);
+    }
+
+    private Employee createEmployee() {
+        return employeeManagementService.createEmployee("Jane", "Doe", email, "password", "USER", new WorkScheduleDTO(8, 8, 8, 8, 8, 0, 0));
     }
 }

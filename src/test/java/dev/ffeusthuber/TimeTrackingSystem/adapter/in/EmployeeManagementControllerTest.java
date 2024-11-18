@@ -19,7 +19,8 @@ public class EmployeeManagementControllerTest {
             EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService( new EmployeeService(employeeRepositoryStub));
             EmployeeManagementController employeeManagementController = new EmployeeManagementController(employeeManagementService);
             RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
-            employeeManagementController.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER", redirectAttributes);
+            float[] workHours = {8,8,8,8,8,0,0};
+            employeeManagementController.createEmployee("Jane", "Doe", "j.doe@test-mail.com", "password", "USER", workHours,redirectAttributes);
 
             assertThat(employeeRepositoryStub.getAllEmployees().size()).isEqualTo(1);
         }

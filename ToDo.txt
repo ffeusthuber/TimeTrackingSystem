@@ -22,6 +22,7 @@ In Work:
         [X] Add POST endpoint to save new employee from form
         [X] implement message on success
         [X] implement message on failure page
+        [X] admin can set workSchedule when creating employee
         [ ] Save multiple employees at once (from CSV)
 
 [ ] Fill userdata in sidebar

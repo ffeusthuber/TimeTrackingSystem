@@ -1,8 +1,10 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
+import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +20,8 @@ public class EmployeeManagementController {
     }
 
     @GetMapping("/create-employee")
-    public String createEmployee() {
+    public String displayEmployeeForm(Model model) {
+        model.addAttribute("defaultWorkSchedule", employeeManagementService.getDefaultWorkSchedule());
         return "createEmployee";
     }
 
@@ -29,18 +32,34 @@ public class EmployeeManagementController {
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam String role,
+            @RequestParam float[] dailyWorkHours, // starting from Monday
             RedirectAttributes redirectAttributes) {
 
         try {
-            employeeManagementService.createEmployee(firstName, lastName, email, password, role);
+            WorkScheduleDTO workScheduleDTO = parseToWorkScheduleDTO(dailyWorkHours);
+            employeeManagementService.createEmployee(firstName, lastName, email, password, role, workScheduleDTO);
+
+            addRedirectAttributes(redirectAttributes, "Employee created successfully!", "alert-success");
+            return "redirect:/create-employee?success";
+
         } catch (DuplicateKeyException e) {
-            redirectAttributes.addFlashAttribute("message", "Email already in use!");
-            redirectAttributes.addFlashAttribute("alertClass", "alert-failure");
+            addRedirectAttributes(redirectAttributes, "Email already in use!", "alert-failure");
             return "redirect:/create-employee?error";
         }
-        redirectAttributes.addFlashAttribute("message", "Employee created successfully!");
-        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+    }
 
-        return "redirect:/create-employee?success";
+    private WorkScheduleDTO parseToWorkScheduleDTO(float[] dailyWorkHours) {
+        return new WorkScheduleDTO(dailyWorkHours[0],
+                                   dailyWorkHours[1],
+                                   dailyWorkHours[2],
+                                   dailyWorkHours[3],
+                                   dailyWorkHours[4],
+                                   dailyWorkHours[5],
+                                   dailyWorkHours[6]);
+    }
+
+    private void addRedirectAttributes(RedirectAttributes redirectAttributes, String message, String alertClass) {
+        redirectAttributes.addFlashAttribute("message", message);
+        redirectAttributes.addFlashAttribute("alertClass", alertClass);
     }
 }

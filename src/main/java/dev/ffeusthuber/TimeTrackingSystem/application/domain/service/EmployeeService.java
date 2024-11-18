@@ -22,13 +22,13 @@ public class EmployeeService {
         bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
-    public Employee createEmployee(String firstname, String lastname, String email, String password, String role) {
-        EmployeeRole employeeRole = EmployeeRole.valueOf(role);
+    public Employee createEmployee(String firstname, String lastname, String email, String password, EmployeeRole employeeRole, WorkSchedule workSchedule) {
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
-        Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole, WorkSchedule.createDefaultWorkSchedule());
+        Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole, workSchedule);
 
         employeeRepository.save(employee);
         employee.setEmployeeID(employeeRepository.getEmployeeIDByEmail(email));
+
         return employee;
     }
 

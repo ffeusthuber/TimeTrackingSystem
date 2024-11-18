@@ -23,7 +23,7 @@ public class GlobalControllerAdvice {
     @ModelAttribute
     public void addAttributesForSidebar(Model model) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
-        EmployeeDTO employeeDTO = employeeManagementService.getEmployee(employeeID);
+        EmployeeDTO employeeDTO = employeeManagementService.getEmployeeDetails(employeeID);
         if (employeeDTO != null) {
             model.addAttribute("fullName", employeeDTO.fullName());
             model.addAttribute("role", employeeDTO.role());
