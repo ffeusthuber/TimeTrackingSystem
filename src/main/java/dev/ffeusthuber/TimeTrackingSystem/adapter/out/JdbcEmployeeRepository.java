@@ -88,6 +88,12 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
+    public void updatePasswordForEmployee(long employeeId, String encryptedPassword) {
+        String sql = "UPDATE Employee SET password = ? WHERE employee_id = ?";
+        jdbcTemplate.update(sql, encryptedPassword, employeeId);
+    }
+
+    @Override
     public Employee getEmployeeByID(long employeeID) {
         try {
             String sql = "SELECT e.*, ws.*" +

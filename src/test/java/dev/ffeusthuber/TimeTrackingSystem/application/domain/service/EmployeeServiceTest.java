@@ -103,4 +103,29 @@ public class EmployeeServiceTest {
         assertThat(passwordEncoder.matches(rawPassword, encryptedPassword)).isTrue();
     }
 
+    @Test
+    void changedPasswordIsEncrypted() {
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withoutEmployees();
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        String rawOldPassword = "OldPassword";
+        String rawNewPassword = "NewPassword";
+        Employee createdEmployee = employeeService.createEmployee("Jane", "Doe", "j.doe@test-mail.com", rawOldPassword, EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
+
+        employeeService.setPasswordForEmployee(createdEmployee.getEmployeeID(), rawNewPassword);
+
+        String encryptedPassword = employeeRepository.getEmployeeByID(createdEmployee.getEmployeeID()).getPassword();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        assertThat(passwordEncoder.matches(rawNewPassword, encryptedPassword)).isTrue();
+    }
+
+    @Test
+    void canCheckIfPasswordIsCorrectForEmployee(){
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withoutEmployees();
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        String password = "password";
+        Employee createdEmployee = employeeService.createEmployee("Jane", "Doe", "j.doe@mail.com", password, EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
+
+        assertThat(employeeService.isCorrectPasswordForEmployee(createdEmployee.getEmployeeID(), password)).isTrue();
+        assertThat(employeeService.isCorrectPasswordForEmployee(createdEmployee.getEmployeeID(), "wrongPassword")).isFalse();
+    }
 }

@@ -58,4 +58,13 @@ public class EmployeeService {
         return employee.getWorkSchedule().getScheduledWorkHoursForDay(dayOfWeek);
     }
 
+    public void setPasswordForEmployee(long employeeId, String newPassword) {
+        String encryptedPassword = bCryptPasswordEncoder.encode(newPassword);
+        employeeRepository.updatePasswordForEmployee(employeeId, encryptedPassword);
+    }
+
+    public boolean isCorrectPasswordForEmployee(long employeeId, String password) {
+        Employee employee = getEmployeeById(employeeId);
+        return bCryptPasswordEncoder.matches(password, employee.getPassword());
+    }
 }

@@ -84,4 +84,12 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
                         employee.getWorkSchedule()))
                 .orElse(null);
     }
+
+    @Override
+    public void updatePasswordForEmployee(long employeeId, String encryptedPassword) {
+        Employee employee = employees.stream().filter(employee1 -> employee1.getEmployeeID().equals(employeeId))
+                 .findFirst()
+                 .orElseThrow();
+        employee.setPassword(encryptedPassword);
+    }
 }

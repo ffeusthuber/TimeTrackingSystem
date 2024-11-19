@@ -79,6 +79,10 @@ public class Employee {
         return this.password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public EmployeeRole getRole() {
         return this.role;
     }

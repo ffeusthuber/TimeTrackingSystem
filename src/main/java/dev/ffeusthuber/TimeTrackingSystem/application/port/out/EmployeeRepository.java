@@ -8,8 +8,9 @@ public interface EmployeeRepository {
 
     void save(Employee employee);
     List<Employee> getAllEmployees();
-    void setClockStateForEmployee(Long employeeID, String clockState);
     Employee getEmployeeByID(long employeeID);
-    Long getEmployeeIDByEmail(String email);
     Employee getEmployeeByEmail(String email);
+    Long getEmployeeIDByEmail(String email);
+    void updatePasswordForEmployee(long employeeId, String encryptedPassword);
+    void setClockStateForEmployee(Long employeeID, String clockState);
 }
