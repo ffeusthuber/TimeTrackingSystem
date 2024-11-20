@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WorkdayRepository {
-    Workday saveWorkday(Workday workday);
+    Workday save(Workday workday);
     Optional<Workday> getLatestWorkdayForEmployee(long employeeID);
     Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date);
     List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeId, LocalDate fromIncluding, LocalDate toIncluding);

@@ -41,7 +41,7 @@ public class JdbcWorkdayRepositoryTest {
     @Test
     void saveWorkdayInsertsNewWorkdayAndSetsWorkdayId() {
         Workday workday = new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), 5.5f);
-        Workday savedWorkday = workdayRepository.saveWorkday(workday);
+        Workday savedWorkday = workdayRepository.save(workday);
 
         assertThat(savedWorkday).isNotNull();
         assertThat(savedWorkday.getWorkdayId()).isNotNull();
@@ -50,9 +50,9 @@ public class JdbcWorkdayRepositoryTest {
     @Test
     void saveWorkdayDoesNotInsertDuplicate() {
         Workday workday = new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), 5.5f);
-        workdayRepository.saveWorkday(workday);
+        workdayRepository.save(workday);
         Workday duplicateWorkday = new Workday(EMPLOYEE_ID, LocalDate.of(2020, 1, 1), 6.0f);
-        Workday savedWorkday = workdayRepository.saveWorkday(duplicateWorkday);
+        Workday savedWorkday = workdayRepository.save(duplicateWorkday);
 
         assertThat(savedWorkday.getScheduledHours()).isEqualTo(5.5f);
     }
@@ -111,7 +111,7 @@ public class JdbcWorkdayRepositoryTest {
 
     private void saveWorkdaysToRepository(Workday... workdays) {
         for (Workday workday : workdays) {
-            workdayRepository.saveWorkday(workday);
+            workdayRepository.save(workday);
         }
     }
 }

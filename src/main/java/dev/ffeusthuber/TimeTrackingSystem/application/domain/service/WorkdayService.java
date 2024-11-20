@@ -37,12 +37,12 @@ public class WorkdayService {
     private Workday createAndSaveWorkday(long employeeID, LocalDate workDate) {
         float scheduledHours = employeeService.getScheduledHoursForEmployeeOnWeekDay(employeeID, workDate.getDayOfWeek());
         Workday workday = new Workday(employeeID, workDate, scheduledHours);
-        return workdayRepository.saveWorkday(workday);
+        return workdayRepository.save(workday);
     }
 
     public void addTimeEntryToWorkday(TimeEntry timeEntry, Workday workday) {
         workday.addTimeEntry(timeEntry);
-        workdayRepository.saveWorkday(workday);
+        workdayRepository.save(workday);
     }
 
     public List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeId, LocalDate fromIncluding, LocalDate toIncluding) {

@@ -27,24 +27,7 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
     }
 
     @Override
-    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date) {
-        try {
-            String sql = "SELECT * FROM Workday WHERE employee_id = ? AND date = ?";
-            Workday workday = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToWorkday(rs), employeeID, date);
-            return Optional.ofNullable(workday);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-
-    @Override
-    public List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeID, LocalDate fromIncluding, LocalDate toIncluding) {
-        String sql = "SELECT * FROM Workday WHERE employee_id = ? AND date between ? and ?";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToWorkday(rs), employeeID, fromIncluding, toIncluding);
-    }
-
-    @Override
-    public Workday saveWorkday(Workday workday) {
+    public Workday save(Workday workday) {
         String sql = "INSERT INTO Workday (employee_id, date, hours_scheduled) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM Workday WHERE employee_id = ? AND date = ?)";
         jdbcTemplate.update(sql, workday.getEmployeeId(), workday.getWorkDate(), workday.getScheduledHours(), workday.getEmployeeId(), workday.getWorkDate());
 
@@ -61,6 +44,22 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
         return workdayWithId;
     }
 
+    @Override
+    public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date) {
+        try {
+            String sql = "SELECT * FROM Workday WHERE employee_id = ? AND date = ?";
+            Workday workday = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToWorkday(rs), employeeID, date);
+            return Optional.ofNullable(workday);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeID, LocalDate fromIncluding, LocalDate toIncluding) {
+        String sql = "SELECT * FROM Workday WHERE employee_id = ? AND date between ? and ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToWorkday(rs), employeeID, fromIncluding, toIncluding);
+    }
 
     @Override
     public Optional<Workday> getLatestWorkdayForEmployee(long employeeID) {
