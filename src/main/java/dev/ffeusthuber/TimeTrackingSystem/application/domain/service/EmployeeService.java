@@ -26,23 +26,22 @@ public class EmployeeService {
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
         Employee employee = new Employee(null, firstname, lastname, email, encryptedPassword, employeeRole, workSchedule);
 
-        employeeRepository.save(employee);
-        employee.setEmployeeID(employeeRepository.getEmployeeIDByEmail(email));
-
-        return employee;
+        return employeeRepository.save(employee);
     }
 
     public List<Employee> getAllEmployees() {
         return employeeRepository.getAllEmployees();
     }
 
-    public Employee getEmployeeById(long employeeID) {
-        return employeeRepository.getEmployeeByID(employeeID);
+    public Employee getEmployeeByID(long employeeID) {
+        return employeeRepository.getEmployeeByID(employeeID)
+                                 .orElseThrow(() -> new IllegalStateException("Employee not found"));
     }
 
     public ClockState getClockStateForEmployee(Long employeeID) {
-        Employee employee = employeeRepository.getEmployeeByID(employeeID);
-        return employee.getClockState();
+        return employeeRepository.getEmployeeByID(employeeID)
+                                 .map(Employee::getClockState)
+                                 .orElseThrow(() -> new IllegalStateException("Employee not found"));
     }
 
     public boolean isEmployeeClockedIn(long employeeID) {
@@ -53,9 +52,10 @@ public class EmployeeService {
         employeeRepository.setClockStateForEmployee(employeeID, clockState.toString());
     }
 
-    public float getScheduledHoursForEmployeeOnWeekDay(long employeeId, DayOfWeek dayOfWeek) {
-        Employee employee = employeeRepository.getEmployeeByID(employeeId);
-        return employee.getWorkSchedule().getScheduledWorkHoursForDay(dayOfWeek);
+    public float getScheduledHoursForEmployeeOnWeekDay(long employeeID, DayOfWeek dayOfWeek) {
+        return employeeRepository.getEmployeeByID(employeeID)
+                                 .map(employee -> employee.getWorkSchedule().getScheduledWorkHoursForDay(dayOfWeek))
+                                 .orElseThrow(() -> new IllegalStateException("Employee not found"));
     }
 
     public void setPasswordForEmployee(long employeeId, String newPassword) {
@@ -64,7 +64,7 @@ public class EmployeeService {
     }
 
     public boolean isCorrectPasswordForEmployee(long employeeId, String password) {
-        Employee employee = getEmployeeById(employeeId);
+        Employee employee = getEmployeeByID(employeeId);
         return bCryptPasswordEncoder.matches(password, employee.getPassword());
     }
 }

@@ -38,7 +38,7 @@ public class ReportService implements ReportUseCase {
     @Override
     public WeekReport getCurrentWeekReportForEmployee(long employeeId) {
         List<WorkdayDTO> workdays = getWorkdayDTOsForCurrentWeekForEmployee(employeeId);
-        Employee employee = employeeService.getEmployeeById(employeeId);
+        Employee employee = employeeService.getEmployeeByID(employeeId);
         float scheduledHoursForWeek = employee.getWorkSchedule().getScheduledWorkHoursForWeek();
         float workedHours = getWorkedHoursForCurrentWeek(employeeId);
 

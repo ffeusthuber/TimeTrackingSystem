@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -27,7 +28,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public void save(Employee employee) {
+    public Employee save(Employee employee) {
         String sql = "INSERT INTO Employee (first_name, last_name, email, password, role, clock_state) VALUES (?, ?, ?, ?, ?,?)";
         jdbcTemplate.update(sql,
                             employee.getFirstName(),
@@ -37,8 +38,14 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
                             employee.getRole().name(),
                             employee.getClockState().name());
 
+        String idQuery = "SELECT employee_id FROM Employee WHERE email = ?";
+        Long employeeId = jdbcTemplate.queryForObject(idQuery, Long.class, employee.getEmail());
+        if (employeeId == null) {
+            throw new IllegalStateException("Failed to retrieve saved employee ID");
+        }
+        employee.setEmployeeID(employeeId);
+
         String sqlWorkSchedule = "INSERT INTO Work_schedule (employee_id, hours_monday, hours_tuesday, hours_wednesday, hours_thursday, hours_friday, hours_saturday, hours_sunday) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        Long employeeId = getEmployeeIDByEmail(employee.getEmail());
         jdbcTemplate.update(sqlWorkSchedule,
                             employeeId,
                             employee.getWorkSchedule().getScheduledWorkHoursForDay(DayOfWeek.MONDAY),
@@ -48,6 +55,8 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
                             employee.getWorkSchedule().getScheduledWorkHoursForDay(DayOfWeek.FRIDAY),
                             employee.getWorkSchedule().getScheduledWorkHoursForDay(DayOfWeek.SATURDAY),
                             employee.getWorkSchedule().getScheduledWorkHoursForDay(DayOfWeek.SUNDAY));
+
+        return employee;
     }
 
     @Override
@@ -75,15 +84,16 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public Employee getEmployeeByEmail(String email) {
+    public Optional<Employee> getEmployeeByEmail(String email) {
         try {
             String sql = "SELECT e.*, ws.*" +
                     "FROM Employee e " +
                     "JOIN Work_schedule ws ON e.employee_id = ws.employee_id " +
                     "WHERE e.email = ?";
-            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), email);
+            Employee employee = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), email);
+            return Optional.ofNullable(employee);
         } catch (EmptyResultDataAccessException e ){
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -94,15 +104,16 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public Employee getEmployeeByID(long employeeID) {
+    public Optional<Employee> getEmployeeByID(long employeeID) {
         try {
             String sql = "SELECT e.*, ws.*" +
                     "FROM Employee e " +
                     "JOIN Work_schedule ws ON e.employee_id = ws.employee_id " +
                     "WHERE e.employee_id = ?";
-            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), employeeID);
+            Employee employee = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToEmployee(rs), employeeID);
+            return Optional.ofNullable(employee);
         } catch (EmptyResultDataAccessException e ){
-            return null;
+            return Optional.empty();
         }
     }
 

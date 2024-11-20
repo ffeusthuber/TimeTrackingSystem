@@ -1,5 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.in.InitialAdminCreator;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.EmployeeRole;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.WorkSchedule;
@@ -11,9 +12,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,6 +26,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ActiveProfiles("test")
 @Tag("io")
 public class JdbcEmployeeRepositoryTest {
+
+    @MockBean
+    InitialAdminCreator initialAdminCreator; //needed for application startUp
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -62,9 +69,9 @@ public class JdbcEmployeeRepositoryTest {
     void canGetEmployeeFromEmail(){
         saveNewEmployee();
 
-        Employee employee = employeeRepository.getEmployeeByEmail(email);
+        Optional<Employee> employee = employeeRepository.getEmployeeByEmail(email);
 
-        assertThat(employee).isNotNull();
+        assertThat(employee).isPresent();
     }
 
     @Test
@@ -72,8 +79,8 @@ public class JdbcEmployeeRepositoryTest {
         String nonExistingEmail = "not existing email";
         long nonExistingEmployeeId = -1L;
 
-        assertThat(employeeRepository.getEmployeeByEmail(nonExistingEmail)).isNull();
-        assertThat(employeeRepository.getEmployeeByID(nonExistingEmployeeId)).isNull();
+        assertThat(employeeRepository.getEmployeeByEmail(nonExistingEmail)).isEqualTo(Optional.empty());
+        assertThat(employeeRepository.getEmployeeByID(nonExistingEmployeeId)).isEqualTo(Optional.empty());
         assertThat(employeeRepository.getAllEmployees()).isEmpty();
         assertThat(employeeRepository.getEmployeeIDByEmail(nonExistingEmail)).isNull();
     }
@@ -81,10 +88,10 @@ public class JdbcEmployeeRepositoryTest {
     @Test
     void canGetEmployeeByID() {
         saveNewEmployee();
-        Employee expectedEmployee = employeeRepository.getEmployeeByEmail(email);
+        Optional<Employee> expectedEmployee = employeeRepository.getEmployeeByEmail(email);
         Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
 
-        Employee actualEmployee = employeeRepository.getEmployeeByID(employeeId);
+        Optional<Employee> actualEmployee = employeeRepository.getEmployeeByID(employeeId);
 
         assertThat(actualEmployee).isEqualTo(expectedEmployee);
     }
@@ -105,8 +112,10 @@ public class JdbcEmployeeRepositoryTest {
 
         employeeRepository.updatePasswordForEmployee(employeeId, newPassword);
 
-        Employee updatedEmployee = employeeRepository.getEmployeeByID(employeeId);
-        assertThat(updatedEmployee.getPassword()).isEqualTo(newPassword);
+        Optional<Employee> updatedEmployee = employeeRepository.getEmployeeByID(employeeId);
+        assertThat(updatedEmployee).isPresent();
+        assertThat(updatedEmployee.get().getPassword()).isEqualTo(newPassword);
+
     }
 
     private void saveNewEmployee() {

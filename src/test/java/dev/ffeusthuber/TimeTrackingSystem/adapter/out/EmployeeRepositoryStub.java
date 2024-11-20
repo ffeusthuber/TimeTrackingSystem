@@ -5,6 +5,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepositor
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EmployeeRepositoryStub implements EmployeeRepository {
     List<Employee> employees;
@@ -14,7 +15,7 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     public static EmployeeRepositoryStub withEmployees(List<Employee> employees) {
-        return new EmployeeRepositoryStub(employees);
+        return new EmployeeRepositoryStub(new ArrayList<>(employees));
     }
 
     public static EmployeeRepository withoutEmployees() {
@@ -22,19 +23,21 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     public static EmployeeRepository withEmployee(Employee employee) {
-        return new EmployeeRepositoryStub(List.of(employee));
+        return new EmployeeRepositoryStub(new ArrayList<>(List.of(employee)));
     }
 
     @Override
-    public Employee getEmployeeByID(long employeeID) {
-        return employees.stream().filter((employee -> employee.getEmployeeID().equals(employeeID)))
-                 .findFirst()
-                 .orElseThrow();
+    public Optional<Employee> getEmployeeByID(long employeeID) {
+        return Optional.of(employees.stream().filter((employee -> employee.getEmployeeID().equals(employeeID)))
+                                    .findFirst()
+                                    .orElseThrow());
     }
 
     @Override
-    public void save(Employee employee) {
+    public Employee save(Employee employee) {
         employees.add(employee);
+        employee.setEmployeeID((long) employees.indexOf(employee));
+        return employee;
     }
 
     @Override
@@ -70,19 +73,18 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     @Override
-    public Employee getEmployeeByEmail(String email) {
+    public Optional<Employee> getEmployeeByEmail(String email) {
         return employees.stream().filter(employee -> employee.getEmail().equals(email))
-                .findFirst()
-                .map(employee -> new Employee(
-                        employee.getEmployeeID(),
-                        employee.getFirstName(),
-                        employee.getLastName(),
-                        employee.getEmail(),
-                        employee.getPassword(),
-                        employee.getRole(),
-                        employee.getClockState(),
-                        employee.getWorkSchedule()))
-                .orElse(null);
+                        .findFirst()
+                        .map(employee -> new Employee(
+                                                    employee.getEmployeeID(),
+                                                    employee.getFirstName(),
+                                                    employee.getLastName(),
+                                                    employee.getEmail(),
+                                                    employee.getPassword(),
+                                                    employee.getRole(),
+                                                    employee.getClockState(),
+                                                    employee.getWorkSchedule()));
     }
 
     @Override

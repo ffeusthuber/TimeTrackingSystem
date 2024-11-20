@@ -24,7 +24,7 @@ public class ChangePasswordServiceTest {
 
         changePasswordService.changePasswordForEmployee(employeeId, oldPassword, newPassword);
 
-        String updatedPassword = employee.getPassword();
+        String updatedPassword = employeeService.getEmployeeByID(employeeId).getPassword();
         assertThat(passwordEncoder.matches(newPassword, updatedPassword)).isTrue();
     }
 
@@ -41,7 +41,7 @@ public class ChangePasswordServiceTest {
 
         changePasswordService.changePasswordForEmployee(employeeId, wrongOldPassword, newPassword);
 
-        String password = employee.getPassword();
+        String password = employeeService.getEmployeeByID(employeeId).getPassword();
         assertThat(passwordEncoder.matches(oldPassword, password)).isTrue();
     }
 }

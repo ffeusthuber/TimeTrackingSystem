@@ -25,7 +25,7 @@ public class EmployeeManagementService implements EmployeeManagementUseCase {
 
     @Override
     public EmployeeDTO getEmployeeDetails(long employeeID) {
-        Employee employee = employeeService.getEmployeeById(employeeID);
+        Employee employee = employeeService.getEmployeeByID(employeeID);
         return new EmployeeDTO(employee);
     }
 

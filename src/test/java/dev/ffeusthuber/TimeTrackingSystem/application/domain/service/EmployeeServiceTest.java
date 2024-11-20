@@ -37,12 +37,12 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void canGetEmployeeById() {
+    void canGetEmployeeByID() {
         Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
         EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
         EmployeeService employeeService = new EmployeeService(employeeRepositoryStub);
 
-        Employee foundEmployee = employeeService.getEmployeeById(1L);
+        Employee foundEmployee = employeeService.getEmployeeByID(1L);
 
         assertThat(foundEmployee).isEqualTo(employee);
     }
@@ -87,7 +87,7 @@ public class EmployeeServiceTest {
 
         employeeService.setClockStateForEmployee(employeeId, ClockState.CLOCKED_IN);
 
-        assertThat(employeeRepository.getEmployeeByID(employeeId).getClockState()).isEqualTo(ClockState.CLOCKED_IN);
+        assertThat(employeeService.getEmployeeByID(employeeId).getClockState()).isEqualTo(ClockState.CLOCKED_IN);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class EmployeeServiceTest {
 
         employeeService.setPasswordForEmployee(createdEmployee.getEmployeeID(), rawNewPassword);
 
-        String encryptedPassword = employeeRepository.getEmployeeByID(createdEmployee.getEmployeeID()).getPassword();
+        String encryptedPassword = employeeService.getEmployeeByID(createdEmployee.getEmployeeID()).getPassword();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         assertThat(passwordEncoder.matches(rawNewPassword, encryptedPassword)).isTrue();
     }
