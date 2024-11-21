@@ -1,6 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.WrongPasswordException;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ChangePasswordUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
 import org.junit.jupiter.api.Tag;
@@ -12,9 +14,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = SettingsController.class)
 @Import(SecurityConfiguration.class)
@@ -30,11 +36,54 @@ public class SettingsMvcTest {
     @MockBean
     AuthenticationUtils authenticationUtils;
 
+    @MockBean
+    ChangePasswordUseCase changePasswordUseCase;
+
     @Test
     @WithMockUser(roles = "USER")
     void whenGetToChangePasswordReturnChangePasswordView() throws Exception {
         mockMvc.perform(get("/change-password"))
                .andExpect(status().isOk())
                .andExpect(view().name("changePassword"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void successfulPostToChangePasswordLeadsToSuccess() throws Exception {
+        mockMvc.perform(post("/change-password")
+                                .with(csrf())
+                                .param("currentPassword", "currentPassword")
+                                .param("newPassword", "newPassword")
+                                .param("confirmNewPassword", "newPassword"))
+               .andExpect(redirectedUrl("/change-password?success"))
+               .andExpect(flash().attribute("alertClass", "alert-success"))
+               .andExpect(flash().attributeExists("message"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void postToChangePasswordWithNonMatchingNewPasswordsLeadsToError() throws Exception {
+        mockMvc.perform(post("/change-password")
+                                .with(csrf())
+                                .param("currentPassword", "currentPassword")
+                                .param("newPassword", "newPassword")
+                                .param("confirmNewPassword", "nonMatchingNewPassword"))
+               .andExpect(redirectedUrl("/change-password?error"))
+               .andExpect(flash().attribute("alertClass", "alert-failure"))
+               .andExpect(flash().attributeExists("message"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void postToChangePasswordWithWrongCurrentPasswordLeadsToError() throws Exception {
+        doThrow(new WrongPasswordException()).when(changePasswordUseCase).changePasswordForEmployee(anyLong(), anyString(), anyString());
+        mockMvc.perform(post("/change-password")
+                                .with(csrf())
+                                .param("currentPassword", "wrongCurrentPassword")
+                                .param("newPassword", "newPassword")
+                                .param("confirmNewPassword", "newPassword"))
+               .andExpect(redirectedUrl("/change-password?error"))
+               .andExpect(flash().attribute("alertClass", "alert-failure"))
+               .andExpect(flash().attributeExists("message"));
     }
 }
