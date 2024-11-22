@@ -1,4 +1,6 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry;
+package dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase;
+
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 
 public record ClockResponse (
         ClockResponseStatus status,

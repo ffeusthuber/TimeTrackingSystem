@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.ChangePasswordResponse;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ChangePasswordUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

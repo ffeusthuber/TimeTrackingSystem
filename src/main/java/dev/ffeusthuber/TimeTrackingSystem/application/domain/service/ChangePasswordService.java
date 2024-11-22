@@ -1,6 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ChangePasswordUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordResponseStatus;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordUseCase;
 import org.springframework.stereotype.Service;
 
 @Service

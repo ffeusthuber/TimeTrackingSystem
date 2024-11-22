@@ -1,6 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.port.in.user;
-
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
+package dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase;
 
 public interface TimeTrackingUseCase {
     ClockResponse clockIn(long employeeID);

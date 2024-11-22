@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry;
+package dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase;
 
 public enum ClockError {
     EMPLOYEE_ALREADY_CLOCKED_IN,

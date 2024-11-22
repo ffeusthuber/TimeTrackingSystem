@@ -3,7 +3,7 @@ package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WeekReport;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
 import org.junit.jupiter.api.Tag;

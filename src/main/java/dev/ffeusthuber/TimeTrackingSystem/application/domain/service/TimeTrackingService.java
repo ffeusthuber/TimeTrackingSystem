@@ -1,8 +1,12 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.*;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.ClockError;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.ClockResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.TimeTrackingUseCase;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

@@ -1,9 +1,9 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponse;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockResponseStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.TimeTrackingUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.ClockResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.ClockResponseStatus;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
