@@ -1,7 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.ChangePasswordResponse;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.WrongPasswordException;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ChangePasswordUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
@@ -14,9 +14,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static dev.ffeusthuber.TimeTrackingSystem.application.domain.service.ChangePasswordResponseStatus.SUCCESS;
+import static dev.ffeusthuber.TimeTrackingSystem.application.domain.service.ChangePasswordResponseStatus.WRONG_PASSWORD;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -50,6 +52,7 @@ public class SettingsMvcTest {
     @Test
     @WithMockUser(roles = "USER")
     void successfulPostToChangePasswordLeadsToSuccess() throws Exception {
+        when(changePasswordUseCase.changePasswordForEmployee(anyLong(), anyString(), anyString())).thenReturn(new ChangePasswordResponse(SUCCESS));
         mockMvc.perform(post("/change-password")
                                 .with(csrf())
                                 .param("currentPassword", "currentPassword")
@@ -76,7 +79,7 @@ public class SettingsMvcTest {
     @Test
     @WithMockUser(roles = "USER")
     void postToChangePasswordWithWrongCurrentPasswordLeadsToError() throws Exception {
-        doThrow(new WrongPasswordException()).when(changePasswordUseCase).changePasswordForEmployee(anyLong(), anyString(), anyString());
+        when(changePasswordUseCase.changePasswordForEmployee(anyLong(), anyString(), anyString())).thenReturn(new ChangePasswordResponse(WRONG_PASSWORD));
         mockMvc.perform(post("/change-password")
                                 .with(csrf())
                                 .param("currentPassword", "wrongCurrentPassword")

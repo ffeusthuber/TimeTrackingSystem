@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class ChangePasswordServiceTest {
 
@@ -18,7 +17,6 @@ public class ChangePasswordServiceTest {
     private long employeeId;
     private final String oldPassword = "oldPassword";
     private final String newPassword = "newPassword";
-    private final String wrongOldPassword = "wrongOldPassword";
     private EmployeeService employeeService;
     private ChangePasswordUseCase changePasswordService;
 
@@ -38,19 +36,19 @@ public class ChangePasswordServiceTest {
 
     @Test
     void canChangePasswordWhenCorrectOldPasswordIsGiven() {
-        changePasswordService.changePasswordForEmployee(employeeId, oldPassword, newPassword);
+        ChangePasswordResponse changePasswordResponse = changePasswordService.changePasswordForEmployee(employeeId, oldPassword, newPassword);
 
         String updatedPassword = employeeService.getEmployeeByID(employeeId).getPassword();
+        assertThat(changePasswordResponse.status()).isEqualTo(ChangePasswordResponseStatus.SUCCESS);
         assertThat(passwordEncoder.matches(newPassword, updatedPassword)).isTrue();
     }
 
     @Test
     void cannotChangePasswordWhenIncorrectOldPasswordIsGiven() {
-        assertThat(catchThrowable(() -> changePasswordService.changePasswordForEmployee(employeeId, wrongOldPassword, newPassword)))
-                .isInstanceOf(WrongPasswordException.class);
+        ChangePasswordResponse changePasswordResponse = changePasswordService.changePasswordForEmployee(employeeId, "wrongOldPassword", newPassword);
 
         String password = employeeService.getEmployeeByID(employeeId).getPassword();
         assertThat(passwordEncoder.matches(oldPassword, password)).isTrue();
-
+        assertThat(changePasswordResponse.status()).isEqualTo(ChangePasswordResponseStatus.WRONG_PASSWORD);
     }
 }

@@ -13,11 +13,13 @@ public class ChangePasswordService implements ChangePasswordUseCase {
     }
 
     @Override
-    public void changePasswordForEmployee(long employeeId, String oldPassword, String newPassword) {
+    public ChangePasswordResponse changePasswordForEmployee(long employeeId, String oldPassword, String newPassword) {
         if(employeeService.isCorrectPasswordForEmployee(employeeId, oldPassword)) {
             employeeService.setPasswordForEmployee(employeeId, newPassword);
+            return new ChangePasswordResponse(ChangePasswordResponseStatus.SUCCESS);
         } else {
-            throw new WrongPasswordException();
+            return new ChangePasswordResponse(ChangePasswordResponseStatus.WRONG_PASSWORD);
         }
     }
+
 }
