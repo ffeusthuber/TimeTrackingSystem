@@ -6,6 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+
 @Controller
 public class ReportController {
 
@@ -20,7 +23,8 @@ public class ReportController {
     @GetMapping("/time-report")
     public String displayReportForCurrentWeek(Model model) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
-        model.addAttribute("weekReport", reportUseCase.getCurrentWeekReportForEmployee(employeeID));
+        int weekNumber = LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear());
+        model.addAttribute("weekReport", reportUseCase.getWeekReportForEmployeeAndWeekNumber(employeeID, weekNumber));
 
         return "timeReport";
     }

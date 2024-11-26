@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,7 +46,7 @@ public class TimeReportMvcTest {
     @WithMockUser
     void whenGetTimeEntriesReturnViewWithTimeEntriesInModel() throws Exception {
         WeekReport weekReport = new WeekReport(1, null, 0, 0);
-        when(reportUseCase.getCurrentWeekReportForEmployee(anyLong())).thenReturn(weekReport);
+        when(reportUseCase.getWeekReportForEmployeeAndWeekNumber(anyLong(),anyInt())).thenReturn(weekReport);
 
         mockMvc.perform(get("/time-report"))
                .andExpect(status().isOk())

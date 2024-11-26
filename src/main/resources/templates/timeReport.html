@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                 <tr th:if="${#lists.isEmpty(weekReport.workdays())}">
-                    <td colspan="4">No workdays to display. Clock in to create your first workday.</td>
+                    <td colspan="4">No workdays to display for this week.</td>
                 </tr>
                 <tr th:each="workday : ${weekReport.workdays()}">
                     <td th:text="${workday.getFormatedDate}">Date</td>

@@ -11,7 +11,6 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workd
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WeekReport;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
-import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.Test;
 
@@ -28,19 +27,19 @@ public class ReportServiceTest {
 
     private final ZoneId defaultZone = ZoneId.of("Europe/Vienna");
     private final ZonedDateTime baseTime = ZonedDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-    private final long employeeId1 = 1L;
+    private final long employeeId = 1L;
     private final float scheduledHours = 8.5f;
 
     @Test
     void canDisplayAllTimeEntriesOfLatestWorkdayOfEmployee() {
-        TimeEntry timeEntry1 = new TimeEntry(employeeId1, TimeEntryType.CLOCK_IN, baseTime);
-        TimeEntry timeEntry2 = new TimeEntry(employeeId1, TimeEntryType.CLOCK_OUT, baseTime.plusHours(8));
+        TimeEntry timeEntry1 = new TimeEntry(employeeId, TimeEntryType.CLOCK_IN, baseTime);
+        TimeEntry timeEntry2 = new TimeEntry(employeeId, TimeEntryType.CLOCK_OUT, baseTime.plusHours(8));
         List<TimeEntry> timeEntries = List.of(timeEntry1,timeEntry2);
-        Workday workday = new Workday(employeeId1, baseTime.toLocalDate(), scheduledHours);
+        Workday workday = new Workday(employeeId, baseTime.toLocalDate(), scheduledHours);
         timeEntries.forEach(workday::addTimeEntry);
         ReportUseCase reportService = new ReportService(new WorkdayService(null, WorkdayRepositoryStub.withWorkdays(workday)), null);
 
-        List<TimeEntryDTO> timeEntriesForEmployee = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeId1, defaultZone);
+        List<TimeEntryDTO> timeEntriesForEmployee = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeId, defaultZone);
 
         assertThat(timeEntriesForEmployee).isEqualTo(List.of(new TimeEntryDTO(timeEntry1, defaultZone),
                                                               new TimeEntryDTO(timeEntry2, defaultZone)));
@@ -52,27 +51,27 @@ public class ReportServiceTest {
         WorkdayService workdayService = new WorkdayService(null, workdayRepository);
         ReportUseCase reportService = new ReportService(workdayService, null);
 
-        List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeId1, defaultZone);
+        List<TimeEntryDTO> timeEntriesForEmployee1 = reportService.getTimeEntriesOfLatestWorkdayOfEmployee(employeeId, defaultZone);
 
         assertThat(timeEntriesForEmployee1).isEmpty();
     }
 
     @Test
-    void canGetCurrentWeekReportForEmployee() {
-        Workday workday = new Workday(employeeId1, LocalDate.now(), scheduledHours);
+    void canGetWeekReportForSpecificWeekForEmployee() {
+        int weekNumber = LocalDate.now().minusWeeks(1).get(WeekFields.ISO.weekOfWeekBasedYear());
+        Workday workday = new Workday(employeeId, LocalDate.now().minusWeeks(1), scheduledHours);
         WorkSchedule workSchedule = WorkSchedule.createDefaultWorkSchedule();
-        Employee employee = new Employee(employeeId1, ClockState.CLOCKED_OUT, workSchedule);
-        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        Employee employee = new Employee(employeeId, ClockState.CLOCKED_OUT, workSchedule);
+        EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withEmployee(employee));
         WorkdayService workdayService = new WorkdayService(employeeService, WorkdayRepositoryStub.withWorkdays(workday));
         ReportUseCase reportService = new ReportService(workdayService, employeeService);
 
-        WeekReport weekReport = reportService.getCurrentWeekReportForEmployee(employeeId1);
+        WeekReport weekReport = reportService.getWeekReportForEmployeeAndWeekNumber(employeeId, weekNumber);
 
         assertThat(weekReport).isNotNull();
         assertThat(weekReport.workdays()).isNotEmpty();
         assertThat(weekReport.scheduledWorkHoursForWeek()).isEqualTo(workSchedule.getScheduledWorkHoursForWeek());
         assertThat(weekReport.workedHoursForWeek()).isEqualTo(0.0f);
-        assertThat(weekReport.weekNumber()).isEqualTo(LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear()));
+        assertThat(weekReport.weekNumber()).isEqualTo(weekNumber);
     }
 }

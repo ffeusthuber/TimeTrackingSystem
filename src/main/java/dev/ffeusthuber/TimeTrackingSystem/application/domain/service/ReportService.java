@@ -36,34 +36,30 @@ public class ReportService implements ReportUseCase {
     }
 
     @Override
-    public WeekReport getCurrentWeekReportForEmployee(long employeeId) {
-        List<WorkdayDTO> workdays = getWorkdayDTOsForCurrentWeekForEmployee(employeeId);
+    public WeekReport getWeekReportForEmployeeAndWeekNumber(long employeeId, int weekNumber) {
+        List<WorkdayDTO> workdays = getWorkdayDTOsForWeekForEmployee(employeeId, weekNumber);
         Employee employee = employeeService.getEmployeeByID(employeeId);
         float scheduledHoursForWeek = employee.getWorkSchedule().getScheduledWorkHoursForWeek();
-        float workedHours = getWorkedHoursForCurrentWeek(employeeId);
+        float workedHours = getWorkedHoursForWeek(employeeId, weekNumber);
 
-        return new WeekReport(getCurrentWeekNumber(), workdays, scheduledHoursForWeek, workedHours);
+        return new WeekReport(weekNumber, workdays, scheduledHoursForWeek, workedHours);
     }
 
-    private List<WorkdayDTO> getWorkdayDTOsForCurrentWeekForEmployee(long employeeId) {
-        return workdayService.getWorkdaysForEmployeeBetweenDates(employeeId, getStartOfWeek(), getEndOfWeek()).stream()
+    private List<WorkdayDTO> getWorkdayDTOsForWeekForEmployee(long employeeId, int weekNumber) {
+        return workdayService.getWorkdaysForEmployeeBetweenDates(employeeId, getStartOfWeek(weekNumber), getEndOfWeek(weekNumber)).stream()
                              .map(WorkdayDTO::new)
                              .toList();
     }
 
-    private float getWorkedHoursForCurrentWeek(long employeeId) {
-        return workdayService.getWorkedHoursForEmployeeBetweenDates(employeeId, getStartOfWeek(), getEndOfWeek());
+    private float getWorkedHoursForWeek(long employeeId, int weekNumber) {
+        return workdayService.getWorkedHoursForEmployeeBetweenDates(employeeId, getStartOfWeek(weekNumber), getEndOfWeek(weekNumber));
     }
 
-    private int getCurrentWeekNumber() {
-        return LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear());
+    private LocalDate getStartOfWeek(int weekNumber) {
+        return LocalDate.now().with(WeekFields.ISO.weekOfWeekBasedYear(), weekNumber).with(DayOfWeek.MONDAY);
     }
 
-    private LocalDate getStartOfWeek() {
-        return LocalDate.now().with(DayOfWeek.MONDAY);
-    }
-
-    private LocalDate getEndOfWeek() {
-        return LocalDate.now().with(DayOfWeek.SUNDAY);
+    private LocalDate getEndOfWeek(int weekNumber) {
+        return LocalDate.now().with(WeekFields.ISO.weekOfWeekBasedYear(), weekNumber).with(DayOfWeek.SUNDAY);
     }
 }
