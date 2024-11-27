@@ -1,6 +1,7 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.WeekOfYear;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WeekReport;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.TimeTrackingUseCase;
@@ -15,8 +16,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.anyInt;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,11 +48,29 @@ public class TimeReportMvcTest {
 
     @Test
     @WithMockUser
-    void whenGetTimeEntriesReturnViewWithTimeEntriesInModel() throws Exception {
-        WeekReport weekReport = new WeekReport(1, null, 0, 0);
-        when(reportUseCase.getWeekReportForEmployeeAndWeekNumber(anyLong(),anyInt())).thenReturn(weekReport);
+    void whenGetWithoutSpecifyingWeekParametersTimeEntriesReturnViewWithCurrentWeekReport() throws Exception {
+        int currentYear = LocalDate.now().get(WeekFields.ISO.weekBasedYear());
+        int currentWeekNumber = LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear());
+        WeekReport weekReport = new WeekReport(new WeekOfYear(currentWeekNumber,currentYear), null, 0, 0);
+        when(reportUseCase.getWeekReportForEmployeeAndWeekOfYear(anyLong(),eq(currentWeekNumber),eq(currentYear))).thenReturn(weekReport);
 
         mockMvc.perform(get("/time-report"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("timeReport"))
+               .andExpect(model().attributeExists("weekReport"));
+    }
+
+    @Test
+    @WithMockUser
+    void whenGetWithValidSpecifyingWeekParametersTimeEntriesReturnViewWithWeekReport() throws Exception {
+        int weekNumber = 5;
+        int year = 2024;
+        WeekReport weekReport = new WeekReport(new WeekOfYear(weekNumber, year), null, 0, 0);
+        when(reportUseCase.getWeekReportForEmployeeAndWeekOfYear(anyLong(), eq(weekNumber),eq(year))).thenReturn(weekReport);
+
+        mockMvc.perform(get("/time-report")
+                                .param("weekNumber", String.valueOf(weekNumber))
+                                .param("year", String.valueOf(year)))
                .andExpect(status().isOk())
                .andExpect(view().name("timeReport"))
                .andExpect(model().attributeExists("weekReport"));

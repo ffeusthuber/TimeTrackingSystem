@@ -58,20 +58,45 @@ public class ReportServiceTest {
 
     @Test
     void canGetWeekReportForSpecificWeekForEmployee() {
-        int weekNumber = LocalDate.now().minusWeeks(1).get(WeekFields.ISO.weekOfWeekBasedYear());
-        Workday workday = new Workday(employeeId, LocalDate.now().minusWeeks(1), scheduledHours);
+        int weekNumber = LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear());
+        int year = LocalDate.now().getYear();
+        System.out.println(weekNumber);
+        System.out.println(year);
+        Workday workday = new Workday(employeeId, LocalDate.now(), scheduledHours);
         WorkSchedule workSchedule = WorkSchedule.createDefaultWorkSchedule();
         Employee employee = new Employee(employeeId, ClockState.CLOCKED_OUT, workSchedule);
         EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withEmployee(employee));
         WorkdayService workdayService = new WorkdayService(employeeService, WorkdayRepositoryStub.withWorkdays(workday));
         ReportUseCase reportService = new ReportService(workdayService, employeeService);
 
-        WeekReport weekReport = reportService.getWeekReportForEmployeeAndWeekNumber(employeeId, weekNumber);
+        WeekReport weekReport = reportService.getWeekReportForEmployeeAndWeekOfYear(employeeId, weekNumber, year);
 
         assertThat(weekReport).isNotNull();
         assertThat(weekReport.workdays()).isNotEmpty();
         assertThat(weekReport.scheduledWorkHoursForWeek()).isEqualTo(workSchedule.getScheduledWorkHoursForWeek());
         assertThat(weekReport.workedHoursForWeek()).isEqualTo(0.0f);
-        assertThat(weekReport.weekNumber()).isEqualTo(weekNumber);
+        assertThat(weekReport.weekOfYear().getWeekNumber()).isEqualTo(weekNumber);
+        assertThat(weekReport.weekOfYear().getYear()).isEqualTo(year);
+    }
+
+    @Test
+    void canGetWeekReportForSpecificWeekOfDifferentYearForEmployee() {
+        int weekNumber = LocalDate.now().minusYears(1).get(WeekFields.ISO.weekOfWeekBasedYear());
+        int year = LocalDate.now().minusYears(1).getYear();
+        Workday workday = new Workday(employeeId, LocalDate.now(), scheduledHours);
+        WorkSchedule workSchedule = WorkSchedule.createDefaultWorkSchedule();
+        Employee employee = new Employee(employeeId, ClockState.CLOCKED_OUT, workSchedule);
+        EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withEmployee(employee));
+        WorkdayService workdayService = new WorkdayService(employeeService, WorkdayRepositoryStub.withWorkdays(workday));
+        ReportUseCase reportService = new ReportService(workdayService, employeeService);
+
+        WeekReport weekReport = reportService.getWeekReportForEmployeeAndWeekOfYear(employeeId, weekNumber, year);
+
+        assertThat(weekReport).isNotNull();
+        assertThat(weekReport.workdays()).isEmpty();
+        assertThat(weekReport.scheduledWorkHoursForWeek()).isEqualTo(workSchedule.getScheduledWorkHoursForWeek());
+        assertThat(weekReport.workedHoursForWeek()).isEqualTo(0.0f);
+        assertThat(weekReport.weekOfYear().getWeekNumber()).isEqualTo(weekNumber);
+        assertThat(weekReport.weekOfYear().getYear()).isEqualTo(year);
     }
 }

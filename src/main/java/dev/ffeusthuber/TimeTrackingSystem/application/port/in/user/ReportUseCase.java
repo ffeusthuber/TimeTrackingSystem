@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ReportUseCase {
     List<TimeEntryDTO> getTimeEntriesOfLatestWorkdayOfEmployee(long employeeID, ZoneId zoneId);
-    WeekReport getWeekReportForEmployeeAndWeekNumber(long employeeId, int weekNumber);
+    WeekReport getWeekReportForEmployeeAndWeekOfYear(long employeeId, int weekNumber, int year);
 }

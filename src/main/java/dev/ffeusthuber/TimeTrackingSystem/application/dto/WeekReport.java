@@ -1,15 +1,17 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.dto;
 
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.WeekOfYear;
+
 import java.util.List;
 
 public record WeekReport(
-        int weekNumber,
+        WeekOfYear weekOfYear,
         List<WorkdayDTO> workdays,
         float scheduledWorkHoursForWeek,
         float workedHoursForWeek) {
 
-    public WeekReport(int weekNumber, List<WorkdayDTO> workdays, float scheduledWorkHoursForWeek, float workedHoursForWeek) {
-        this.weekNumber = weekNumber;
+    public WeekReport(WeekOfYear weekOfYear, List<WorkdayDTO> workdays, float scheduledWorkHoursForWeek, float workedHoursForWeek) {
+        this.weekOfYear = weekOfYear;
         this.workdays = workdays;
         this.scheduledWorkHoursForWeek = roundToOneDecimalPlace(scheduledWorkHoursForWeek);
         this.workedHoursForWeek = roundToOneDecimalPlace(workedHoursForWeek);
