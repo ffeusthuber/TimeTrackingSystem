@@ -51,7 +51,7 @@ public class TimeReportMvcTest {
     void whenGetWithoutSpecifyingWeekParametersTimeEntriesReturnViewWithCurrentWeekReport() throws Exception {
         int currentYear = LocalDate.now().get(WeekFields.ISO.weekBasedYear());
         int currentWeekNumber = LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear());
-        WeekReport weekReport = new WeekReport(new WeekOfYear(currentWeekNumber,currentYear), null, 0, 0);
+        WeekReport weekReport = new WeekReport(new WeekOfYear(currentWeekNumber,currentYear), null, 0, 0, null);
         when(reportUseCase.getWeekReportForEmployeeAndWeekOfYear(anyLong(),eq(currentWeekNumber),eq(currentYear))).thenReturn(weekReport);
 
         mockMvc.perform(get("/time-report"))
@@ -65,7 +65,7 @@ public class TimeReportMvcTest {
     void whenGetWithValidSpecifyingWeekParametersTimeEntriesReturnViewWithWeekReport() throws Exception {
         int weekNumber = 5;
         int year = 2024;
-        WeekReport weekReport = new WeekReport(new WeekOfYear(weekNumber, year), null, 0, 0);
+        WeekReport weekReport = new WeekReport(new WeekOfYear(weekNumber, year), null, 0, 0, null);
         when(reportUseCase.getWeekReportForEmployeeAndWeekOfYear(anyLong(), eq(weekNumber),eq(year))).thenReturn(weekReport);
 
         mockMvc.perform(get("/time-report")

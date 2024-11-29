@@ -37,12 +37,25 @@ public class ReportService implements ReportUseCase {
 
     @Override
     public WeekReport getWeekReportForEmployeeAndWeekOfYear(long employeeId, int weekNumber, int year) {
-        WeekOfYear weekOfYear = new WeekOfYear(weekNumber, year);
+        WeekOfYear weekOfYear;
+        String errorMessage = null;
+
+        try {
+            weekOfYear = new WeekOfYear(weekNumber, year);
+        } catch (IllegalArgumentException exception) {
+            weekOfYear = getCurrentWeekOfYear();
+            errorMessage = exception.getMessage();
+        }
+
         List<WorkdayDTO> workdays = getWorkdayDTOsForWeekForEmployee(employeeId, weekOfYear);
         float scheduledHoursForWeek = getScheduledHoursForWeek(employeeId);
         float workedHours = getWorkedHoursForWeek(employeeId, weekOfYear);
 
-        return new WeekReport(weekOfYear, workdays, scheduledHoursForWeek, workedHours);
+        return new WeekReport(weekOfYear, workdays, scheduledHoursForWeek, workedHours, errorMessage);
+    }
+
+    private WeekOfYear getCurrentWeekOfYear() {
+        return new WeekOfYear(LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear()), LocalDate.now().getYear());
     }
 
     private List<WorkdayDTO> getWorkdayDTOsForWeekForEmployee(long employeeId, WeekOfYear weekOfYear) {
