@@ -44,7 +44,7 @@ public class ReportService implements ReportUseCase {
             weekOfYear = new WeekOfYear(weekNumber, year);
         } catch (IllegalArgumentException exception) {
             weekOfYear = getCurrentWeekOfYear();
-            errorMessage = exception.getMessage();
+            errorMessage = exception.getMessage() + " Defaulting to current week.";
         }
 
         List<WorkdayDTO> workdays = getWorkdayDTOsForWeekForEmployee(employeeId, weekOfYear);
@@ -75,15 +75,15 @@ public class ReportService implements ReportUseCase {
 
     private LocalDate getStartOfWeek(WeekOfYear weekOfYear) {
         return LocalDate.now()
-                        .withYear(weekOfYear.getYear())
-                        .with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear.getWeekNumber())
+                        .withYear(weekOfYear.year())
+                        .with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear.weekNumber())
                         .with(DayOfWeek.MONDAY);
     }
 
     private LocalDate getEndOfWeek(WeekOfYear weekOfYear) {
         return LocalDate.now()
-                        .withYear(weekOfYear.getYear())
-                        .with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear.getWeekNumber())
+                        .withYear(weekOfYear.year())
+                        .with(WeekFields.ISO.weekOfWeekBasedYear(), weekOfYear.weekNumber())
                         .with(DayOfWeek.SUNDAY);
     }
 }

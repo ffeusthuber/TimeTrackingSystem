@@ -22,9 +22,5 @@ public record WeekReport(
     private float roundToOneDecimalPlace(float value) {
         return Math.round(value * 10) / 10.0f;
     }
-
-    public String errorMessage() {
-        return errorMessage;
-    }
 }
 

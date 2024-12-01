@@ -11,7 +11,7 @@ public record WeekOfYear(int weekNumber, int year) {
     private void validateWeekNumber(int weekNumber, int year) {
         int numberOfWeeksInYear = getNumberOfWeeksInYear(year);
         if (weekNumber < 1 || weekNumber > numberOfWeeksInYear) {
-            throw new IllegalArgumentException("Week number must be between 1 and " + numberOfWeeksInYear + " for year " + year);
+            throw new IllegalArgumentException("Week number must be between 1 and " + numberOfWeeksInYear + " for year " + year + ".");
         }
     }
 

@@ -73,8 +73,8 @@ public class ReportServiceTest {
         assertThat(weekReport.workdays()).isNotEmpty();
         assertThat(weekReport.scheduledWorkHoursForWeek()).isEqualTo(workSchedule.getScheduledWorkHoursForWeek());
         assertThat(weekReport.workedHoursForWeek()).isEqualTo(0.0f);
-        assertThat(weekReport.weekOfYear().getWeekNumber()).isEqualTo(currentWeekNumber);
-        assertThat(weekReport.weekOfYear().getYear()).isEqualTo(currentYear);
+        assertThat(weekReport.weekOfYear().weekNumber()).isEqualTo(currentWeekNumber);
+        assertThat(weekReport.weekOfYear().year()).isEqualTo(currentYear);
     }
 
     @Test
@@ -93,8 +93,8 @@ public class ReportServiceTest {
         assertThat(weekReport.workdays()).isEmpty();
         assertThat(weekReport.scheduledWorkHoursForWeek()).isEqualTo(workSchedule.getScheduledWorkHoursForWeek());
         assertThat(weekReport.workedHoursForWeek()).isEqualTo(0.0f);
-        assertThat(weekReport.weekOfYear().getWeekNumber()).isEqualTo(weekNumber);
-        assertThat(weekReport.weekOfYear().getYear()).isEqualTo(year);
+        assertThat(weekReport.weekOfYear().weekNumber()).isEqualTo(weekNumber);
+        assertThat(weekReport.weekOfYear().year()).isEqualTo(year);
     }
 
     @Test
@@ -109,8 +109,8 @@ public class ReportServiceTest {
         WeekReport weekReport = reportService.getWeekReportForEmployeeAndWeekOfYear(employeeId, weekNumber, year);
 
         assertThat(weekReport).isNotNull();
-        assertThat(weekReport.weekOfYear().getWeekNumber()).isEqualTo(currentWeekNumber);
-        assertThat(weekReport.weekOfYear().getYear()).isEqualTo(currentYear);
-        assertThat(weekReport.errorMessage()).isEqualTo("Week number must be between 1 and 52 for year 2021");
+        assertThat(weekReport.weekOfYear().weekNumber()).isEqualTo(currentWeekNumber);
+        assertThat(weekReport.weekOfYear().year()).isEqualTo(currentYear);
+        assertThat(weekReport.errorMessage()).isEqualTo("Week number must be between 1 and 52 for year 2021. Defaulting to current week.");
     }
 }
