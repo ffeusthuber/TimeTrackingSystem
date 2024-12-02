@@ -336,3 +336,39 @@ button i {
     color: #6c757d;
     font-size: 0.9rem;
 }
+
+.container .bottom {
+    width: 100%;
+    display: flex;
+    margin-top: 1rem;
+}
+
+.container .bottom #weekChooser {
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.container .bottom #weekChooser input {
+   height: 2rem;
+   width: 3rem;
+   color: #12171e;
+   text-align: center;
+   appearance:textfield;
+   [&::-webkit-outer-spin-button]:appearance-none;
+   [&::-webkit-inner-spin-button]:appearance:none;
+}
+
+.container .bottom #weekChooser button {
+    background-color: transparent;
+    height: 1.3rem;
+    width: 1.3rem;
+    display: inline-block;
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.container .bottom #weekChooser button i {
+    color: #12171e;
+    font-size: 1.3rem;
+}

@@ -7,48 +7,65 @@
 </head>
 <body>
 
-<div th:replace="~{sidebar.html}"></div>
+    <div th:replace="~{sidebar.html}"></div>
 
-<div class="main-content">
-    <div class="container">
-        <div class="top">
-            <h1>Weekly Time Report</h1>
-            <div class="alert-message">
-                <div th:if="${weekReport.errorMessage}" th:class="alert-failure" role="alert">
-                    <span th:text="${weekReport.errorMessage}"></span>
+    <div class="main-content">
+        <div class="container">
+            <div class="top">
+                <h1>Weekly Time Report</h1>
+                <div class="alert-message">
+                    <div th:if="${weekReport.errorMessage()}" th:class="alert-failure" role="alert">
+                        <span th:text="${weekReport.errorMessage}"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                <tr>
-                    <th>Workday Date</th>
-                    <th>Actual Work Time</th>
-                    <th>Paused Time</th>
-                    <th>Scheduled Work Time</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${#lists.isEmpty(weekReport.workdays())}">
-                    <td colspan="4">No workdays to display for this week.</td>
-                </tr>
-                <tr th:each="workday : ${weekReport.workdays()}">
-                    <td th:text="${workday.getFormatedDate}">Date</td>
-                    <td th:text="${workday.getFormatedActualWorkTime}">Actual Work Time</td>
-                    <td th:text="${workday.getFormatedPauseTime}">Paused Time</td>
-                    <td th:text="${workday.getFormatedScheduledWorkTime}">ScheduledWorkTime</td>
-                </tr>
-                <tr th:if="${!#lists.isEmpty(weekReport.workdays())}">
-                    <td colspan="4">In week <span th:text="${weekReport.weekOfYear().weekNumber()} " class="bold"></span>
-                        you worked for <span th:text="${weekReport.workedHoursForWeek()} " class="bold"></span>
-                        of the <span th:text="${weekReport.scheduledWorkHoursForWeek()}" class="bold"></span> scheduled hours.</td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Workday Date</th>
+                        <th>Actual Work Time</th>
+                        <th>Paused Time</th>
+                        <th>Scheduled Work Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(weekReport.workdays())}">
+                        <td colspan="4">No workdays to display for this week.</td>
+                    </tr>
+                    <tr th:each="workday : ${weekReport.workdays()}">
+                        <td th:text="${workday.getFormatedDate}">Date</td>
+                        <td th:text="${workday.getFormatedActualWorkTime}">Actual Work Time</td>
+                        <td th:text="${workday.getFormatedPauseTime}">Paused Time</td>
+                        <td th:text="${workday.getFormatedScheduledWorkTime}">ScheduledWorkTime</td>
+                    </tr>
+                    <tr th:if="${!#lists.isEmpty(weekReport.workdays())}">
+                        <td colspan="4">In week <span th:text="${weekReport.weekOfYear().weekNumber()} " class="bold"></span>
+                            you worked for <span th:text="${weekReport.workedHoursForWeek()} " class="bold"></span>
+                            of the <span th:text="${weekReport.scheduledWorkHoursForWeek()}" class="bold"></span> scheduled hours.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bottom">
+                <form id="weekChooser" method="get" th:action="@{/time-report}">
+                    <button type="button" id="prevWeek" onclick="changeWeek(-1)">
+                        <i class='bx bxs-left-arrow'></i>
+                    </button>
+
+                    <input type="number" id="weekNumber" name="weekNumber" th:value="${weekReport.weekOfYear().weekNumber()}" autocomplete="off">
+                    <input type="number" id="year" name="year" th:value="${weekReport.weekOfYear().year()}" autocomplete="off">
+
+                    <button type="button" id="nextWeek" onclick="changeWeek(1)">
+                        <i class='bx bxs-right-arrow'></i>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </body>
+
+<script th:src="@{/weekChooser.js}"></script>
 </html>
