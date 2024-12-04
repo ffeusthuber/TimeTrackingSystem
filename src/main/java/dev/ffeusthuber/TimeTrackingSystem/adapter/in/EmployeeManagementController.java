@@ -48,6 +48,11 @@ public class EmployeeManagementController {
         }
     }
 
+    @GetMapping("/access-denied")
+    public String displayAccessDenied() {
+        return "accessDenied";
+    }
+
     private WorkScheduleDTO parseToWorkScheduleDTO(float[] dailyWorkHours) {
         return new WorkScheduleDTO(dailyWorkHours[0],
                                    dailyWorkHours[1],

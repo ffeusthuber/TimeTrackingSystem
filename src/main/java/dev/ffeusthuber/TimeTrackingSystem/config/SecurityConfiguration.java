@@ -25,6 +25,8 @@ public class SecurityConfiguration {
                 })
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .exceptionHandling(exceptionHandling ->
+                                           exceptionHandling.accessDeniedPage("/access-denied"))
                 .build();
     }
 

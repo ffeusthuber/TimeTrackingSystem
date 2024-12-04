@@ -59,7 +59,23 @@ public class EmployeeManagementMvcTest {
     @WithMockUser(roles = "USER")
     void whenGetToCreateEmployeeAsUserStatusForbidden() throws Exception {
         mockMvc.perform(get("/create-employee"))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isForbidden())
+               .andExpect(forwardedUrl("/access-denied"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void whenPostToCreateEmployeeAsUserStatusForbidden() throws Exception {
+        mockMvc.perform(post("/create-employee")
+                                .with(csrf())
+                                .param("firstName", "Jane")
+                                .param("lastName", "Doe")
+                                .param("email", "j.doe@test-mail.com")
+                                .param("password", "password")
+                                .param("role", "USER")
+                                .param("dailyWorkHours", "8", "8", "8", "8", "8", "0", "0"))
+               .andExpect(status().isForbidden())
+               .andExpect(forwardedUrl("/access-denied"));
     }
 
     @Test
