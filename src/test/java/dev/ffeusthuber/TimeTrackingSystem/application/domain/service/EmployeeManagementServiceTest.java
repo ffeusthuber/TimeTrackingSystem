@@ -10,6 +10,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.Employe
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmployeeManagementServiceTest {
@@ -47,5 +49,17 @@ public class EmployeeManagementServiceTest {
         WorkScheduleDTO workScheduleDTO = employeeManagementService.getDefaultWorkSchedule();
 
         assertThat(workScheduleDTO).isEqualTo(new WorkScheduleDTO(WorkSchedule.createDefaultWorkSchedule()));
+    }
+
+    @Test
+    void canGetEmployeeList(){
+        Employee employee = new Employee(1L, "Jane", "Doe", "j.doe@test-mail.com", "password", EmployeeRole.USER, WorkSchedule.createDefaultWorkSchedule());
+        EmployeeRepository employeeRepositoryStub = EmployeeRepositoryStub.withEmployee(employee);
+        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(new EmployeeService(employeeRepositoryStub));
+        List<EmployeeDTO> expectedList = List.of(new EmployeeDTO(employee));
+
+        List<EmployeeDTO> actualList = employeeManagementService.getEmployeeList();
+
+        assertThat(actualList).isEqualTo(expectedList);
     }
 }

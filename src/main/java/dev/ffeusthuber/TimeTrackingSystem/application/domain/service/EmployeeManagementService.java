@@ -8,6 +8,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeManagementService implements EmployeeManagementUseCase {
     private final EmployeeService employeeService;
@@ -27,6 +29,13 @@ public class EmployeeManagementService implements EmployeeManagementUseCase {
     public EmployeeDTO getEmployeeDetails(long employeeID) {
         Employee employee = employeeService.getEmployeeByID(employeeID);
         return new EmployeeDTO(employee);
+    }
+
+    @Override
+    public List<EmployeeDTO> getEmployeeList() {
+        return employeeService.getAllEmployees().stream()
+                              .map(EmployeeDTO::new)
+                              .toList();
     }
 
     @Override
