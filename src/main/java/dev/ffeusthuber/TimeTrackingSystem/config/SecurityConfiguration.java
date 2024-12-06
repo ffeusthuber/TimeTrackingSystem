@@ -20,6 +20,7 @@ public class SecurityConfiguration {
                 .csrf( csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .authorizeHttpRequests(authorizeRequests -> {
                     authorizeRequests.requestMatchers("/create-employee").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers("/employees").hasRole("ADMIN");
                     authorizeRequests.requestMatchers("/h2-console/**").permitAll();
                     authorizeRequests.anyRequest().authenticated();
                 })

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Time Tracking System</title>
+    <link th:href="@{/style.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <div th:replace="~{sidebar.html}"></div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="top">
+                <h1>Employee List</h1>
+                <div class="alert-message">
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Clock State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(employees)}">
+                            <td colspan="2">No employees saved. Create your first employee.</td>
+                        </tr>
+                        <tr th:each="employee : ${employees}">
+                            <td th:text="${employee.fullName()}">Full Name</td>
+                            <td th:text="${employee.clockState()}">Clock State</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="bottom">
+                <button class="btn" th:onclick="window.location.href='/create-employee'">Create Employee</button>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -19,6 +19,12 @@ public class EmployeeManagementController {
         this.employeeManagementService = employeeManagementService;
     }
 
+    @GetMapping("/employees")
+    public String displayEmployeeList(Model model) {
+        model.addAttribute("employees", employeeManagementService.getEmployeeList());
+        return "employees";
+    }
+
     @GetMapping("/create-employee")
     public String displayEmployeeForm(Model model) {
         model.addAttribute("defaultWorkSchedule", employeeManagementService.getDefaultWorkSchedule());

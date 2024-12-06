@@ -1,13 +1,16 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.dto;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
 
-public record EmployeeDTO(String fullName, String role, ClockState clockState) {
+public record EmployeeDTO(String fullName, String role, String clockState) {
 
     public EmployeeDTO(Employee employee) {
         this(employee.getFirstName() + " " + employee.getLastName(),
              employee.getRole().toString(),
-             employee.getClockState());
+             switch (employee.getClockState()) {
+                 case CLOCKED_IN -> "Clocked in";
+                 case CLOCKED_OUT -> "Clocked out";
+                 case ON_PAUSE -> "On Pause";
+             });
     }
 }

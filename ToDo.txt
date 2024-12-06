@@ -1,13 +1,18 @@
 In Work:
 
+[ ] Admin can delete employee
+[ ] Admin can change employee details
+
+
+
+----------------------------------------------------------------------------------
+
 [ ] TimeReport
     [ ] Display report for
         [X] current week
         [ ] month
     [ ] Display remaining flextime
 
-
-----------------------------------------------------------------------------------
 
 [ ] User/Admin can change own password
     [ ] default password when creating employee
