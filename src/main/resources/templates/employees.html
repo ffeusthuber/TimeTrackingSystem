@@ -22,6 +22,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Employee ID</th>
                             <th>Full Name</th>
                             <th>Clock State</th>
                         </tr>
@@ -31,6 +32,7 @@
                             <td colspan="2">No employees saved. Create your first employee.</td>
                         </tr>
                         <tr th:each="employee : ${employees}">
+                            <td th:text="${employee.employeeId}">Employee ID</td>
                             <td th:text="${employee.fullName()}">Full Name</td>
                             <td th:text="${employee.clockState()}">Clock State</td>
                         </tr>
@@ -38,7 +40,7 @@
                 </table>
             </div>
             <div class="bottom">
-                <button class="btn" th:onclick="window.location.href='/create-employee'">Create Employee</button>
+                <button class="btn" th:onclick="window.location.href='/create-employee'">Create New Employee</button>
             </div>
 
         </div>
