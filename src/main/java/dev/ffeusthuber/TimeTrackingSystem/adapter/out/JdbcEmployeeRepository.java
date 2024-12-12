@@ -60,6 +60,15 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
+    public void delete(long employeeId) {
+        String sqlWorkSchedule = "DELETE FROM Work_schedule WHERE employee_id = ?";
+        jdbcTemplate.update(sqlWorkSchedule, employeeId);
+
+        String sql = "DELETE FROM Employee WHERE employee_id = ?";
+        jdbcTemplate.update(sql, employeeId);
+    }
+
+    @Override
     public void setClockStateForEmployee(Long employeeID, String clockState) {
         String sql = "UPDATE Employee SET clock_state = ? WHERE employee_id = ?";
         jdbcTemplate.update(sql, clockState, employeeID);

@@ -41,6 +41,11 @@ public class EmployeeRepositoryStub implements EmployeeRepository {
     }
 
     @Override
+    public void delete(long employeeId) {
+        employees.removeIf(employee -> employee.getEmployeeID().equals(employeeId));
+    }
+
+    @Override
     public void setClockStateForEmployee(Long employeeID, String clockState) {
         Employee employee = employees.stream().filter(employee1 -> employee1.getEmployeeID().equals(employeeID))
                  .findFirst()

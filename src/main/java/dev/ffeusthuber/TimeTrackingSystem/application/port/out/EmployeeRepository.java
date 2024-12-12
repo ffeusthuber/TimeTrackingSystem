@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface EmployeeRepository {
 
     Employee save(Employee employee);
+    void delete(long employeeId);
     List<Employee> getAllEmployees();
     Optional<Employee> getEmployeeByID(long employeeID);
     Optional<Employee> getEmployeeByEmail(String email);

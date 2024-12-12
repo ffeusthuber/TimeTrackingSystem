@@ -66,6 +66,16 @@ public class JdbcEmployeeRepositoryTest {
     }
 
     @Test
+    void employeeCanBeDeleted() {
+        saveNewEmployee();
+        Long employeeId = employeeRepository.getEmployeeIDByEmail(email);
+
+        employeeRepository.delete(employeeId);
+
+        assertThat(employeeRepository.getAllEmployees()).hasSize(0);
+    }
+
+    @Test
     void canGetEmployeeFromEmail(){
         saveNewEmployee();
 
