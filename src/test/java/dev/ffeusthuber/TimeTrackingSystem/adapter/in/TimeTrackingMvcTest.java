@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(TimeTrackingController.class)
 @Import(SecurityConfiguration.class)
 @Tag("io")
-public class TimeEntriesMvcTest {
+public class TimeTrackingMvcTest {
 
     @MockBean
     TimeTrackingUseCase timeTrackingUseCase;
