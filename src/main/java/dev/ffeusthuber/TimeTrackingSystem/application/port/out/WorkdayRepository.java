@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface WorkdayRepository {
     Workday save(Workday workday);
+    List<Workday> getAllWorkdaysOfEmployee(long employeeId);
+    void deleteAllWorkdaysOfEmployee(long employeeId);
     Optional<Workday> getLatestWorkdayForEmployee(long employeeID);
     Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date);
     List<Workday> getWorkdaysForEmployeeBetweenDates(long employeeId, LocalDate fromIncluding, LocalDate toIncluding);

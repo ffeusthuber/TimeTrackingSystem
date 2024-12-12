@@ -1,6 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.out;
 
 import dev.ffeusthuber.TimeTrackingSystem.adapter.in.InitialAdminCreator;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;
+import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntryType;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +15,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +49,23 @@ public class JdbcWorkdayRepositoryTest {
 
         assertThat(savedWorkday).isNotNull();
         assertThat(savedWorkday.getWorkdayId()).isNotNull();
+        assertThat(workdayRepository.getAllWorkdaysOfEmployee(EMPLOYEE_ID)).containsExactly(savedWorkday);
     }
+
+
+    @Test
+    void canDeleteAllWorkdaysOfEmployeeIncludingTimeEntries() {
+        Workday workday1 = new Workday(EMPLOYEE_ID, LocalDate.of(2021, 1, 1), 5.5f);
+        workday1.addTimeEntry(new TimeEntry(workday1.getWorkdayId(), TimeEntryType.CLOCK_IN, ZonedDateTime.of(2021, 1, 1, 8, 0, 0, 0, ZoneId.of("UTC"))));
+        Workday workday2 = new Workday(EMPLOYEE_ID, LocalDate.of(2021, 1, 2), 5.5f);
+        Workday workday3 = new Workday(EMPLOYEE_ID, LocalDate.of(2021, 1, 3), 5.5f);
+        saveWorkdaysToRepository(workday1, workday2, workday3);
+
+        workdayRepository.deleteAllWorkdaysOfEmployee(EMPLOYEE_ID);
+
+        assertThat(workdayRepository.getAllWorkdaysOfEmployee(EMPLOYEE_ID)).isEmpty();
+    }
+
 
     @Test
     void saveWorkdayDoesNotInsertDuplicate() {

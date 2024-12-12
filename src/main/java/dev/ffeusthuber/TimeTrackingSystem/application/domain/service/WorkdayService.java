@@ -55,4 +55,8 @@ public class WorkdayService {
                 .mapToDouble(Workday::calculateWorkedHours)
                 .sum();
     }
+
+    public void deleteAllWorkdaysOfEmployee(long employeeId) {
+        workdayRepository.deleteAllWorkdaysOfEmployee(employeeId);
+    }
 }

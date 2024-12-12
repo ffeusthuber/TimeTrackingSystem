@@ -45,7 +45,6 @@ public class WorkdayServiceTest {
         assertThat(latestWorkday.get().getWorkDate()).isEqualTo(LocalDate.of(2021, 1, 2));
     }
 
-
     @Test
     void canGetWorkdayForEmployeeOnSpecificDate() {
         Workday workday = workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
@@ -105,6 +104,16 @@ public class WorkdayServiceTest {
         float workedHours = workdayService.getWorkedHoursForEmployeeBetweenDates(employeeId, LocalDate.of(2021, 1, 1), LocalDate.of(2021, 1, 3));
 
         assertThat(workedHours).isEqualTo(expectedWorkedHours);
+    }
+
+    @Test
+    void canDeleteAllWorkdaysOfEmployee() {
+        workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 1));
+        workdayService.getOrCreateWorkdayForEmployeeOnDate(employeeId, LocalDate.of(2021, 1, 2));
+
+        workdayService.deleteAllWorkdaysOfEmployee(employeeId);
+
+        assertThat(workdayService.getWorkdaysForEmployeeBetweenDates(employeeId, LocalDate.of(2021, 1, 1), LocalDate.of(2021, 1, 2))).isEmpty();
     }
 
     private Employee createEmployee(long employeeId) {

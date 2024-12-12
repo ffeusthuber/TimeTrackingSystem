@@ -45,6 +45,24 @@ public class JdbcWorkdayRepository implements WorkdayRepository {
     }
 
     @Override
+    public List<Workday> getAllWorkdaysOfEmployee(long employeeID) {
+        String sql = "SELECT * FROM Workday WHERE employee_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToWorkday(rs), employeeID);
+    }
+
+    @Override
+    public void deleteAllWorkdaysOfEmployee(long employeeId) {
+        List<Workday> workdays = getAllWorkdaysOfEmployee(employeeId);
+        workdays.forEach(workday -> {
+            String sql = "DELETE FROM Time_entry WHERE workday_id = ?";
+            jdbcTemplate.update(sql, workday.getWorkdayId());
+        });
+
+        String sql = "DELETE FROM Workday WHERE employee_id = ?";
+        jdbcTemplate.update(sql, employeeId);
+    }
+
+    @Override
     public Optional<Workday> getWorkdayForEmployeeOnDate(long employeeID, LocalDate date) {
         try {
             String sql = "SELECT * FROM Workday WHERE employee_id = ? AND date = ?";
