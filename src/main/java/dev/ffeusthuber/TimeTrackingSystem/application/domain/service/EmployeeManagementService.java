@@ -13,9 +13,11 @@ import java.util.List;
 @Service
 public class EmployeeManagementService implements EmployeeManagementUseCase {
     private final EmployeeService employeeService;
+    private final WorkdayService workdayService;
 
-    public EmployeeManagementService(EmployeeService employeeService) {
+    public EmployeeManagementService(EmployeeService employeeService, WorkdayService workdayService) {
         this.employeeService = employeeService;
+        this.workdayService = workdayService;
     }
 
     @Override
@@ -23,6 +25,12 @@ public class EmployeeManagementService implements EmployeeManagementUseCase {
         EmployeeRole role = EmployeeRole.valueOf(employeeRole);
         WorkSchedule workSchedule = workScheduleDTO.toWorkSchedule();
         return employeeService.createEmployee(firstname, lastname, email, password, role, workSchedule);
+    }
+
+    @Override
+    public void deleteEmployee(long employeeId) {
+        workdayService.deleteAllWorkdaysOfEmployee(employeeId);
+        employeeService.deleteEmployee(employeeId);
     }
 
     @Override

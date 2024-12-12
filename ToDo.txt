@@ -1,6 +1,6 @@
 In Work:
 
-[ ] Admin can delete employee
+[X] Admin can delete employee
 [ ] Admin can change employee details
 
 

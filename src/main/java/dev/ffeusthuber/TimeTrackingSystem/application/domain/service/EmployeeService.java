@@ -67,4 +67,8 @@ public class EmployeeService {
         Employee employee = getEmployeeByID(employeeId);
         return bCryptPasswordEncoder.matches(password, employee.getPassword());
     }
+
+    public void deleteEmployee(long employeeId) {
+        employeeRepository.delete(employeeId);
+    }
 }
