@@ -6,6 +6,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -57,6 +58,13 @@ public class EmployeeManagementController {
     @GetMapping("/access-denied")
     public String displayAccessDenied() {
         return "accessDenied";
+    }
+
+    @PostMapping("/delete-employee/{employeeId}")
+    public String deleteEmployee(@PathVariable Long employeeId, RedirectAttributes redirectAttributes) {
+        employeeManagementService.deleteEmployee(employeeId);
+        addRedirectAttributes(redirectAttributes, "Employee deleted successfully!", "alert-success");
+        return "redirect:/employees?success";
     }
 
     private WorkScheduleDTO parseToWorkScheduleDTO(float[] dailyWorkHours) {

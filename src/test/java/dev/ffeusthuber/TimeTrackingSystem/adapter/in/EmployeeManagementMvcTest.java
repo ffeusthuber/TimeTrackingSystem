@@ -17,8 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -92,7 +91,6 @@ public class EmployeeManagementMvcTest {
                .andExpect(redirectedUrl("/create-employee?success"))
                .andExpect(flash().attribute("alertClass", "alert-success"))
                .andExpect(flash().attributeExists("message"));
-
     }
 
     @Test
@@ -114,6 +112,17 @@ public class EmployeeManagementMvcTest {
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/create-employee?error"))
                .andExpect(flash().attribute("alertClass", "alert-failure"))
+               .andExpect(flash().attributeExists("message"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void successfulPostToDeleteEmployeeLeadsToSuccess() throws Exception {
+        doNothing().when(employeeManagementService).deleteEmployee(1);
+        mockMvc.perform(post("/delete-employee/1")
+                                .with(csrf()))
+               .andExpect(redirectedUrl("/employees?success"))
+               .andExpect(flash().attribute("alertClass", "alert-success"))
                .andExpect(flash().attributeExists("message"));
     }
 }
