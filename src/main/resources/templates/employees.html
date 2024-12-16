@@ -14,7 +14,9 @@
             <div class="top">
                 <h1>Employee List</h1>
                 <div class="alert-message">
-                    <div></div>
+                    <div th:if="${message}" th:class="'alert ' + ${alertClass}" role="alert">
+                        <span th:text="${message}"></span>
+                    </div>
                 </div>
             </div>
 
@@ -25,6 +27,7 @@
                             <th>Employee ID</th>
                             <th>Full Name</th>
                             <th>Clock State</th>
+                            <th>Delete Employee</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,6 +38,13 @@
                             <td th:text="${employee.employeeId}">Employee ID</td>
                             <td th:text="${employee.fullName()}">Full Name</td>
                             <td th:text="${employee.clockState()}">Clock State</td>
+                            <td>
+                                <form th:action="@{/delete-employee/{id}(id=${employee.employeeId})}" method="post">
+                                    <button type="submit" class="delete-button">
+                                        <i class='bx bxs-x-circle'></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
