@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EmployeeManagementUseCase {
     Employee createEmployee(String firstname, String lastname, String email, String password, String employeeRole, WorkScheduleDTO workSchedule);
-    void deleteEmployee(long employeeId);
+    DeleteEmployeeResponse deleteEmployee(long employeeId);
     EmployeeDTO getEmployeeDetails(long employeeID);
     List<EmployeeDTO> getEmployeeList();
     WorkScheduleDTO getDefaultWorkSchedule();

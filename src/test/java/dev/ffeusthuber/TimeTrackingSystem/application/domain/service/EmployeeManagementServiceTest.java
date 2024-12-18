@@ -9,6 +9,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Work
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workday;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.EmployeeDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.DeleteEmployeeResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.DeleteEmployeeResponseStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
@@ -42,9 +44,10 @@ public class EmployeeManagementServiceTest {
                                                                                               WorkdayRepositoryStub.withoutWorkdays(),
                                                                                               new AuthenticationUtilsStub(employeeId));
 
-        employeeManagementService.deleteEmployee(employeeId);
+        DeleteEmployeeResponse deleteEmployeeResponse = employeeManagementService.deleteEmployee(employeeId);
 
         assertThat(employeeRepository.getAllEmployees()).containsExactly(employee);
+        assertThat(deleteEmployeeResponse).isEqualTo(new DeleteEmployeeResponse(DeleteEmployeeResponseStatus.NOT_ALLOWED));
     }
 
     @Test
@@ -57,10 +60,11 @@ public class EmployeeManagementServiceTest {
         WorkdayRepositoryStub workdayRepository = WorkdayRepositoryStub.withWorkdays(workdayOfEmployee, workdayOfOtherEmployee);
         EmployeeManagementService employeeManagementService = createEmployeeManagementService(employeeRepository, workdayRepository, new AuthenticationUtilsStub(loggedInEmployeeId));
 
-        employeeManagementService.deleteEmployee(idOfEmployeeToDelete);
+        DeleteEmployeeResponse deleteEmployeeResponse = employeeManagementService.deleteEmployee(idOfEmployeeToDelete);
 
         assertThat(employeeRepository.getAllEmployees()).isEmpty();
         assertThat(workdayRepository.getAllWorkdaysOfEmployee(idOfEmployeeToDelete)).isEmpty();
+        assertThat(deleteEmployeeResponse).isEqualTo(new DeleteEmployeeResponse(DeleteEmployeeResponseStatus.SUCCESS));
     }
 
     @Test

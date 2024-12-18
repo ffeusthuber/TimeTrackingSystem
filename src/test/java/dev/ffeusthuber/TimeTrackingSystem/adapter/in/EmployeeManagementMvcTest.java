@@ -3,6 +3,8 @@ package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.DeleteEmployeeResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.DeleteEmployeeResponseStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
@@ -17,7 +19,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -118,7 +121,7 @@ public class EmployeeManagementMvcTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void successfulPostToDeleteEmployeeLeadsToSuccess() throws Exception {
-        doNothing().when(employeeManagementService).deleteEmployee(1);
+        when(employeeManagementService.deleteEmployee(1)).thenReturn(new DeleteEmployeeResponse(DeleteEmployeeResponseStatus.SUCCESS));
         mockMvc.perform(post("/delete-employee/1")
                                 .with(csrf()))
                .andExpect(redirectedUrl("/employees?success"))

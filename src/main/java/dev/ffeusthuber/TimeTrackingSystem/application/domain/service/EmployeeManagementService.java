@@ -5,6 +5,8 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Empl
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.WorkSchedule;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.EmployeeDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.DeleteEmployeeResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.DeleteEmployeeResponseStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import org.springframework.stereotype.Service;
@@ -31,11 +33,13 @@ public class EmployeeManagementService implements EmployeeManagementUseCase {
     }
 
     @Override
-    public void deleteEmployee(long employeeId) {
+    public DeleteEmployeeResponse deleteEmployee(long employeeId) {
         if(employeeId != authenticationUtils.getAuthenticatedEmployeeID()) {
             workdayService.deleteAllWorkdaysOfEmployee(employeeId);
             employeeService.deleteEmployee(employeeId);
+            return new DeleteEmployeeResponse(DeleteEmployeeResponseStatus.SUCCESS);
         }
+        return new DeleteEmployeeResponse(DeleteEmployeeResponseStatus.NOT_ALLOWED);
     }
 
     @Override

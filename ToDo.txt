@@ -1,6 +1,7 @@
 In Work:
 
 [X] Admin can delete employee
+    [X] Admins can´t delete themselves
 [ ] Admin can change employee details
 
 

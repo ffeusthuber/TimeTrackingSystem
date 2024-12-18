@@ -1,6 +1,8 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.DeleteEmployeeResponse;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.DeleteEmployeeResponseStatus;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
@@ -62,7 +64,12 @@ public class EmployeeManagementController {
 
     @PostMapping("/delete-employee/{employeeId}")
     public String deleteEmployee(@PathVariable Long employeeId, RedirectAttributes redirectAttributes) {
-        employeeManagementService.deleteEmployee(employeeId);
+        DeleteEmployeeResponse deleteEmployeeResponse= employeeManagementService.deleteEmployee(employeeId);
+        if (deleteEmployeeResponse.status() == DeleteEmployeeResponseStatus.NOT_ALLOWED) {
+            addRedirectAttributes(redirectAttributes, "You are not allowed to delete yourself!",
+                                  "alert-failure");
+            return "redirect:/employees?error";
+        }
         addRedirectAttributes(redirectAttributes, "Employee deleted successfully!", "alert-success");
         return "redirect:/employees?success";
     }
