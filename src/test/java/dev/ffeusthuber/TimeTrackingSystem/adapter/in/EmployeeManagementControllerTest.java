@@ -1,5 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.out.AuthenticationUtilsStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.WorkdayRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
@@ -30,7 +31,7 @@ public class EmployeeManagementControllerTest {
     private EmployeeManagementController createEmployeeManagementController(EmployeeRepository employeeRepository) {
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         WorkdayService workdayService = new WorkdayService(employeeService, WorkdayRepositoryStub.withoutWorkdays());
-        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService, workdayService);
+        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService, workdayService, new AuthenticationUtilsStub(1L));
         return new EmployeeManagementController(employeeManagementService);
     }
 

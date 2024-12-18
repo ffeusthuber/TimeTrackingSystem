@@ -6,6 +6,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Work
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.EmployeeDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +15,12 @@ import java.util.List;
 public class EmployeeManagementService implements EmployeeManagementUseCase {
     private final EmployeeService employeeService;
     private final WorkdayService workdayService;
+    private final AuthenticationUtils authenticationUtils;
 
-    public EmployeeManagementService(EmployeeService employeeService, WorkdayService workdayService) {
+    public EmployeeManagementService(EmployeeService employeeService, WorkdayService workdayService, AuthenticationUtils authenticationUtils) {
         this.employeeService = employeeService;
         this.workdayService = workdayService;
+        this.authenticationUtils = authenticationUtils;
     }
 
     @Override
@@ -29,8 +32,10 @@ public class EmployeeManagementService implements EmployeeManagementUseCase {
 
     @Override
     public void deleteEmployee(long employeeId) {
-        workdayService.deleteAllWorkdaysOfEmployee(employeeId);
-        employeeService.deleteEmployee(employeeId);
+        if(employeeId != authenticationUtils.getAuthenticatedEmployeeID()) {
+            workdayService.deleteAllWorkdaysOfEmployee(employeeId);
+            employeeService.deleteEmployee(employeeId);
+        }
     }
 
     @Override

@@ -28,8 +28,8 @@ public class GlobalControllerAdviceTest {
         WorkdayRepository workdayRepository = WorkdayRepositoryStub.withoutWorkdays();
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         WorkdayService workdayService = new WorkdayService(employeeService, workdayRepository);
-        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService, workdayService);
-        GlobalControllerAdvice globalControllerAdvice = new GlobalControllerAdvice(employeeManagementService, new AuthenticationUtilsStub(employeeRepository, employeeID));
+        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService, workdayService, new AuthenticationUtilsStub(employeeID));
+        GlobalControllerAdvice globalControllerAdvice = new GlobalControllerAdvice(employeeManagementService, new AuthenticationUtilsStub(employeeID));
         Model model = new ExtendedModelMap();
 
         globalControllerAdvice.addAttributesForSidebar(model);

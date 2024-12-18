@@ -1,5 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
+import dev.ffeusthuber.TimeTrackingSystem.adapter.out.AuthenticationUtilsStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.EmployeeRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.adapter.out.WorkdayRepositoryStub;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
@@ -9,6 +10,7 @@ import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.workday.Workd
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.EmployeeDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WorkScheduleDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.admin.EmployeeManagementUseCase;
+import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
 import org.junit.jupiter.api.Test;
@@ -32,18 +34,33 @@ public class EmployeeManagementServiceTest {
     }
 
     @Test
-    void whenDeletingEmployeeAlsoAllCorrespondingWorkdaysGetDeleted() {
+    void adminsCanNotDeleteThemselves() {
         long employeeId = 1L;
-        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(createEmployee(employeeId));
-        Workday workdayOfEmployee = new Workday(employeeId, LocalDate.now(), 8);
-        Workday workdayOfOtherEmployee = new Workday(employeeId + 1, LocalDate.now(), 8);
-        WorkdayRepositoryStub workdayRepository = WorkdayRepositoryStub.withWorkdays(workdayOfEmployee, workdayOfOtherEmployee);
-        EmployeeManagementService employeeManagementService = createEmployeeManagementService(employeeRepository, workdayRepository);
+        Employee employee = createEmployee(employeeId);
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(employee);
+        EmployeeManagementService employeeManagementService = createEmployeeManagementService(employeeRepository,
+                                                                                              WorkdayRepositoryStub.withoutWorkdays(),
+                                                                                              new AuthenticationUtilsStub(employeeId));
 
         employeeManagementService.deleteEmployee(employeeId);
 
+        assertThat(employeeRepository.getAllEmployees()).containsExactly(employee);
+    }
+
+    @Test
+    void whenDeletingEmployeeAlsoAllCorrespondingWorkdaysGetDeleted() {
+        long loggedInEmployeeId = 1L;
+        long idOfEmployeeToDelete = 2L;
+        EmployeeRepository employeeRepository = EmployeeRepositoryStub.withEmployee(createEmployee(idOfEmployeeToDelete));
+        Workday workdayOfEmployee = new Workday(idOfEmployeeToDelete, LocalDate.now(), 8);
+        Workday workdayOfOtherEmployee = new Workday(idOfEmployeeToDelete + 1, LocalDate.now(), 8);
+        WorkdayRepositoryStub workdayRepository = WorkdayRepositoryStub.withWorkdays(workdayOfEmployee, workdayOfOtherEmployee);
+        EmployeeManagementService employeeManagementService = createEmployeeManagementService(employeeRepository, workdayRepository, new AuthenticationUtilsStub(loggedInEmployeeId));
+
+        employeeManagementService.deleteEmployee(idOfEmployeeToDelete);
+
         assertThat(employeeRepository.getAllEmployees()).isEmpty();
-        assertThat(workdayRepository.getAllWorkdaysOfEmployee(employeeId)).isEmpty();
+        assertThat(workdayRepository.getAllWorkdaysOfEmployee(idOfEmployeeToDelete)).isEmpty();
     }
 
     @Test
@@ -60,7 +77,9 @@ public class EmployeeManagementServiceTest {
     @Test
     void canGetDefaultWorkSchedule() {
         EmployeeService employeeService = new EmployeeService(EmployeeRepositoryStub.withoutEmployees());
-        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService, new WorkdayService(employeeService, WorkdayRepositoryStub.withoutWorkdays()));
+        EmployeeManagementUseCase employeeManagementService = new EmployeeManagementService(employeeService,
+                                                                                            new WorkdayService(employeeService, WorkdayRepositoryStub.withoutWorkdays()),
+                                                                                            new AuthenticationUtilsStub(1L));
 
         WorkScheduleDTO workScheduleDTO = employeeManagementService.getDefaultWorkSchedule();
 
@@ -90,6 +109,12 @@ public class EmployeeManagementServiceTest {
     private static EmployeeManagementService createEmployeeManagementService(EmployeeRepository employeeRepository, WorkdayRepository workdayRepository) {
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         WorkdayService workdayService = new WorkdayService(employeeService, workdayRepository);
-        return new EmployeeManagementService(employeeService, workdayService);
+        return new EmployeeManagementService(employeeService, workdayService, new AuthenticationUtilsStub(1L));
+    }
+
+    private static EmployeeManagementService createEmployeeManagementService(EmployeeRepository employeeRepository, WorkdayRepository workdayRepository, AuthenticationUtils authenticationUtils) {
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        WorkdayService workdayService = new WorkdayService(employeeService, workdayRepository);
+        return new EmployeeManagementService(employeeService, workdayService, authenticationUtils);
     }
 }
