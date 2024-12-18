@@ -128,4 +128,15 @@ public class EmployeeManagementMvcTest {
                .andExpect(flash().attribute("alertClass", "alert-success"))
                .andExpect(flash().attributeExists("message"));
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void unsuccessfulPostToDeleteEmployeeLeadsToError() throws Exception {
+        when(employeeManagementService.deleteEmployee(1)).thenReturn(new DeleteEmployeeResponse(DeleteEmployeeResponseStatus.NOT_ALLOWED));
+        mockMvc.perform(post("/delete-employee/1")
+                                .with(csrf()))
+               .andExpect(redirectedUrl("/employees?error"))
+               .andExpect(flash().attribute("alertClass", "alert-failure"))
+               .andExpect(flash().attributeExists("message"));
+    }
 }
