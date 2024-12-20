@@ -8,7 +8,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -62,8 +61,8 @@ public class EmployeeManagementController {
         return "accessDenied";
     }
 
-    @PostMapping("/delete-employee/{employeeId}")
-    public String deleteEmployee(@PathVariable Long employeeId, RedirectAttributes redirectAttributes) {
+    @PostMapping("/delete-employee")
+    public String deleteEmployee(@RequestParam Long employeeId, RedirectAttributes redirectAttributes) {
         DeleteEmployeeResponse deleteEmployeeResponse= employeeManagementService.deleteEmployee(employeeId);
         if (deleteEmployeeResponse.status() == DeleteEmployeeResponseStatus.NOT_ALLOWED) {
             addRedirectAttributes(redirectAttributes, "You are not allowed to delete yourself!",
