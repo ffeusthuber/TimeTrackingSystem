@@ -14,7 +14,7 @@ public class EmployeeDTOTest {
 
         EmployeeDTO employeeDTO = new EmployeeDTO(employee);
 
-        assertThat(employeeDTO.employeeId()).isEqualTo("1");
+        assertThat(employeeDTO.employeeId()).isEqualTo(1L);
         assertThat(employeeDTO.fullName()).isEqualTo("Jane Doe");
         assertThat(employeeDTO.role()).isEqualTo("USER");
         assertThat(employeeDTO.clockState()).isEqualTo("Clocked out");

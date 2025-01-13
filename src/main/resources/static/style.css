@@ -392,8 +392,8 @@ button i {
 }
 
 .delete-button i {
-    font-size: 1.5rem; /* Specific icon size */
-    color: #d9534f; /* Set icon color (red for delete action) */
+    font-size: 1.5rem;
+    color: #d9534f;
     padding: 0;
     margin: 0;
     height: auto;
@@ -401,5 +401,54 @@ button i {
 }
 
 .delete-button i:hover {
-    color: #c9302c; /* Darker red on hover */
+    color: #c9302c;
+}
+
+#delete-employee-pop-up {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+#delete-employee-pop-up .pop-up-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    width: 20rem;
+    text-align: center;
+}
+
+#delete-employee-pop-up .pop-up-content .pop-up-header{
+    margin-bottom: 0.8rem;
+}
+
+#delete-employee-pop-up .pop-up-content .pop-up-body{
+    display: flex;
+    flex-direction: column;
+}
+
+#delete-employee-pop-up .pop-up-content .pop-up-body p{
+    margin-bottom: 0.8rem;
+}
+
+#delete-employee-pop-up .pop-up-content .pop-up-body .confirmation-buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#delete-employee-pop-up .pop-up-content .pop-up-body .confirmation-buttons button {
+    height: 2.5rem;
+    width: 6rem;
+    background-color: #12171e;
+    color: #fff;
+    border-radius: 0.8rem;
 }

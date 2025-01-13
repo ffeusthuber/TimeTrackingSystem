@@ -2,13 +2,13 @@ package dev.ffeusthuber.TimeTrackingSystem.application.dto;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.employee.Employee;
 
-public record EmployeeDTO(String employeeId,
+public record EmployeeDTO(Long employeeId,
                           String fullName,
                           String role,
                           String clockState) {
 
     public EmployeeDTO(Employee employee) {
-        this(employee.getEmployeeID().toString(),
+        this(employee.getEmployeeID(),
              employee.getFirstName() + " " + employee.getLastName(),
              employee.getRole().toString(),
              switch (employee.getClockState()) {
