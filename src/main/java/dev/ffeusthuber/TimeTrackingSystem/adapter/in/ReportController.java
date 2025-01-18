@@ -26,6 +26,22 @@ public class ReportController {
                                        @RequestParam(required = false, name = "weekNumber") Integer weekNumber,
                                        @RequestParam(required = false, name = "year") Integer year) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
+        populateModelWithWeekReport(model, employeeID, weekNumber, year);
+
+        return "timeReport";
+    }
+
+    @GetMapping("/employees/time-report")
+    public String displayReportForEmployeeAndWeek(Model model,
+                                                  @RequestParam long employeeID,
+                                                  @RequestParam(required = false, name = "weekNumber") Integer weekNumber,
+                                                  @RequestParam(required = false, name = "year") Integer year) {
+
+        populateModelWithWeekReport(model, employeeID, weekNumber, year);
+        return "timeReport";
+    }
+
+    private void populateModelWithWeekReport(Model model, long employeeID, Integer weekNumber, Integer year) {
         int currentYear = LocalDate.now().get(WeekFields.ISO.weekBasedYear());
         int currentWeekNumber = LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear());
 
@@ -33,7 +49,7 @@ public class ReportController {
         weekNumber = (weekNumber == null) ? currentWeekNumber : weekNumber;
 
         model.addAttribute("weekReport", reportUseCase.getWeekReportForEmployeeAndWeekOfYear(employeeID, weekNumber, year));
-
-        return "timeReport";
     }
+
+
 }

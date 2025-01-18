@@ -109,4 +109,18 @@ public class ReportMvcTest {
         assertThat(weekReport).isNotNull();
         assertThat(weekReport.errorMessage()).isEqualTo("Week number must be between 1 and 52 for year 2021");
     }
+
+    @Test
+    @WithMockUser
+    void getWithValidEmployeeIDAndWithoutWithoutSpecifyingWeekParametersReturnsViewWithEmployeesCurrentWeekReport() throws Exception {
+        WeekReport expectedWeekReport = new WeekReport(new WeekOfYear(currentWeekNumber,currentYear), null, 0, 0, null);
+        when(reportUseCase.getWeekReportForEmployeeAndWeekOfYear(eq(mockEmployeeId),eq(currentWeekNumber),eq(currentYear)))
+                .thenReturn(expectedWeekReport);
+
+        mockMvc.perform(get("/employees/time-report")
+                                .param("employeeID", "123"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("timeReport"))
+               .andExpect(model().attribute("weekReport", expectedWeekReport));
+    }
 }
