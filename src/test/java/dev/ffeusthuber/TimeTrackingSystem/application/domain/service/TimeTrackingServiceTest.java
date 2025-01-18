@@ -13,6 +13,10 @@ import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingU
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.timeTrackingUseCase.TimeTrackingUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.EmployeeRepository;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.EmployeeService;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.TimeEntryService;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.TimeTrackingService;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.WorkdayService;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

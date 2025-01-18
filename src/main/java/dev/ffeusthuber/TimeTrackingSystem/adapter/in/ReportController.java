@@ -22,9 +22,9 @@ public class ReportController {
     }
 
     @GetMapping("/time-report")
-    public String displayReportForCurrentWeek(Model model,
-                                              @RequestParam(required = false, name = "weekNumber") Integer weekNumber,
-                                              @RequestParam(required = false, name = "year") Integer year) {
+    public String displayReportForWeek(Model model,
+                                       @RequestParam(required = false, name = "weekNumber") Integer weekNumber,
+                                       @RequestParam(required = false, name = "year") Integer year) {
         long employeeID = authenticationUtils.getAuthenticatedEmployeeID();
         int currentYear = LocalDate.now().get(WeekFields.ISO.weekBasedYear());
         int currentWeekNumber = LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear());

@@ -1,9 +1,9 @@
 package dev.ffeusthuber.TimeTrackingSystem.adapter.in;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordResponse;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.AuthenticationUtils;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.EmployeeManagementService;
 import dev.ffeusthuber.TimeTrackingSystem.config.SecurityConfiguration;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

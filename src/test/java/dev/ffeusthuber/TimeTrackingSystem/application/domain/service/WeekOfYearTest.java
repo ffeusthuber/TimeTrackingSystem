@@ -1,5 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
 
+import dev.ffeusthuber.TimeTrackingSystem.application.service.WeekOfYear;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

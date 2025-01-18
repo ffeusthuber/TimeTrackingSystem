@@ -1,12 +1,14 @@
 In Work:
 
-[X] Admin can delete employee
-    [X] Admins can´t delete themselves
-[ ] Admin can change employee details
+[ ] Admin can show reports of employees
+
 
 
 
 ----------------------------------------------------------------------------------
+[X] Admin can delete employee
+    [X] Admins can´t delete themselves
+[ ] Admin can change employee details
 
 [ ] TimeReport
     [ ] Display report for

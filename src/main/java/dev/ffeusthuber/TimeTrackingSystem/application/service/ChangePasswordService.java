@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
+package dev.ffeusthuber.TimeTrackingSystem.application.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordResponse;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.changePasswordUseCase.ChangePasswordResponseStatus;

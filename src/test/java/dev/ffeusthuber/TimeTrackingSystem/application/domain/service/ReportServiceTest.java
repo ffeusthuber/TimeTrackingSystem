@@ -12,6 +12,9 @@ import dev.ffeusthuber.TimeTrackingSystem.application.dto.TimeEntryDTO;
 import dev.ffeusthuber.TimeTrackingSystem.application.dto.WeekReport;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.in.user.ReportUseCase;
 import dev.ffeusthuber.TimeTrackingSystem.application.port.out.WorkdayRepository;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.EmployeeService;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.ReportService;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.WorkdayService;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

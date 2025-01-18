@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
+package dev.ffeusthuber.TimeTrackingSystem.application.service;
 
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.ClockState;
 import dev.ffeusthuber.TimeTrackingSystem.application.domain.model.timeEntry.TimeEntry;

@@ -1,6 +1,6 @@
 package dev.ffeusthuber.TimeTrackingSystem.application.dto;
 
-import dev.ffeusthuber.TimeTrackingSystem.application.domain.service.WeekOfYear;
+import dev.ffeusthuber.TimeTrackingSystem.application.service.WeekOfYear;
 
 import java.util.List;
 

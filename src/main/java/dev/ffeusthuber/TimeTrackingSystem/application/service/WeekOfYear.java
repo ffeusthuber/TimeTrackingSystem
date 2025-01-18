@@ -1,4 +1,4 @@
-package dev.ffeusthuber.TimeTrackingSystem.application.domain.service;
+package dev.ffeusthuber.TimeTrackingSystem.application.service;
 
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
