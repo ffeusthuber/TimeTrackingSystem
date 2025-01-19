@@ -1,6 +1,8 @@
 In Work:
 
 [ ] Admin can show reports of employees
+    [X] can show current weekReport of employees
+    [ ] can show every weekReport of employees
 
 
 

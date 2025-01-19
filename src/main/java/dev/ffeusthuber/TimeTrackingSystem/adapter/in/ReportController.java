@@ -36,8 +36,8 @@ public class ReportController {
                                                   @RequestParam long employeeID,
                                                   @RequestParam(required = false, name = "weekNumber") Integer weekNumber,
                                                   @RequestParam(required = false, name = "year") Integer year) {
-
         populateModelWithWeekReport(model, employeeID, weekNumber, year);
+
         return "timeReport";
     }
 

@@ -5,6 +5,10 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+a {
+    text-decoration: none;
+}
+
 .user-img {
     width: 50px;
     border-radius: 100%;
@@ -373,7 +377,7 @@ button i {
     font-size: 1.3rem;
 }
 
-.delete-button {
+.employee-list-button {
     cursor: pointer;
     background-color: transparent;
     border: none;
@@ -386,22 +390,22 @@ button i {
     justify-content: center;
 }
 
-.delete-button:hover {
+.employee-list-button:hover {
     background-color: #f5f5f5;
     border-radius: 50%;
 }
 
-.delete-button i {
+.employee-list-button i {
     font-size: 1.5rem;
-    color: #d9534f;
+    color: #12171e;
     padding: 0;
     margin: 0;
     height: auto;
     width: auto;
 }
 
-.delete-button i:hover {
-    color: #c9302c;
+.employee-list-button i:hover {
+    color: #1a1f27;
 }
 
 #delete-employee-pop-up {

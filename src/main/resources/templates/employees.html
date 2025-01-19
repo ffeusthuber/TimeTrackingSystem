@@ -27,24 +27,30 @@
                             <th>Employee ID</th>
                             <th>Full Name</th>
                             <th>Clock State</th>
+                            <th>Show Time Report</th>
                             <th>Delete Employee</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:if="${#lists.isEmpty(employees)}">
-                            <td colspan="4">No employees saved. Create your first employee.</td>
+                            <td colspan="5">No employees saved. Create your first employee.</td>
                         </tr>
                         <tr th:each="employee : ${employees}">
                             <td th:text="${employee.employeeId}">Employee ID</td>
                             <td th:text="${employee.fullName()}">Full Name</td>
                             <td th:text="${employee.clockState()}">Clock State</td>
                             <td>
-                                <button class="delete-button"
+                                <a class="employee-list-button" th:href="@{/employees/time-report(employeeID=${employee.employeeId})}">
+                                    <i class='bx bxs-report'></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a class="employee-list-button"
                                         th:data-employee-id="${employee.employeeId}"
                                         th:data-employee-name="${employee.fullName()}"
-                                        onclick="openPopUp(this.getAttribute('data-employee-id'), this.getAttribute('data-employee-name'))">
+                                        th:onclick="openPopUp(this.getAttribute('data-employee-id'), this.getAttribute('data-employee-name'))">
                                     <i class='bx bxs-x-circle'></i>
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
